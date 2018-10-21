@@ -5,7 +5,7 @@
 #ifndef RAYTRACER1_DIELECTRIC_H
 #define RAYTRACER1_DIELECTRIC_H
 
-#include "../scene_geometry/hitable.h"
+#include "scene_geometry/hitable.h"
 #include "material.h"
 
 class dielectric : public material {

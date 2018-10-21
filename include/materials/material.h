@@ -6,7 +6,7 @@
 #define RAYTRACER1_MATERIAL_H
 
 //#include "../ray.h"
-#include "../scene_geometry/hitable.h"
+#include "scene_geometry/hitable.h"
 
 class material {
 public:

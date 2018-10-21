@@ -2,7 +2,7 @@
 // Created by Steve Hwan on 10/8/18.
 //
 
-#include "moving_sphere.h"
+#include "scene_geometry/moving_sphere.h"
 
 vec3 moving_sphere::center(float time) const {
     return center0 + ((time - time0) / (time1 - time0)) * (center1 - center0);

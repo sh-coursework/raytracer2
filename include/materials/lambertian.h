@@ -5,7 +5,7 @@
 #ifndef RAYTRACER1_LAMBERTIAN_H
 #define RAYTRACER1_LAMBERTIAN_H
 
-#include "../scene_geometry/hitable.h"
+#include "scene_geometry/hitable.h"
 #include "material.h"
 
 class lambertian : public material {

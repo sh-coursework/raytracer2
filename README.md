@@ -23,10 +23,10 @@ In raytracer2, I'm working through the second book,
   than ppm, and also wanted to get some experience with
   openimageio.
   Halfway implementation - uses both ppm and jpg.
+* First pass reorganization to use include and src subdirs.
 
 Stuff I plan to work on:
 * Get rid of "new" - convert to smart pointers
-* Move includes into their own area
 * Move render settings (resolution, samples) to an external
   file with yaml and/or argparse
 * Clean up variable and class names

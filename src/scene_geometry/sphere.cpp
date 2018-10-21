@@ -2,8 +2,8 @@
 // Created by Steve Hwan on 10/1/18.
 //
 
-#include "../aabb.h"
-#include "sphere.h"
+#include "aabb.h"
+#include "scene_geometry/sphere.h"
 
 bool sphere::hit(const ray& r, float tmin, float tmax, hit_record& rec) const {
     auto oc = r.origin() - center;

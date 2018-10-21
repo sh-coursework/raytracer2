@@ -5,8 +5,8 @@
 #ifndef RAYTRACER1_HITABLE_H
 #define RAYTRACER1_HITABLE_H
 
-#include "../aabb.h"
-#include "../ray.h"
+#include "aabb.h"
+#include "ray.h"
 
 class material;  // why not include the real material class?
 

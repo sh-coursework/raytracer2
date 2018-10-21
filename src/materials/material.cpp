@@ -2,7 +2,7 @@
 // Created by Steve Hwan on 10/2/18.
 //
 
-#include "material.h"
+#include "materials/material.h"
 
 vec3 reflect(const vec3& v, const vec3& n) {
     return v-2*dot(v, n) * n;

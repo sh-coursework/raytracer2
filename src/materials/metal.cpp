@@ -2,7 +2,7 @@
 // Created by Steve Hwan on 10/2/18.
 //
 
-#include "metal.h"
+#include "materials/metal.h"
 
 
 metal::metal(const vec3& a, float f) : albedo(a) {

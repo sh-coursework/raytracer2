@@ -5,7 +5,7 @@
 #ifndef RAYTRACER2_BVH_NODE_H
 #define RAYTRACER2_BVH_NODE_H
 
-#include "../aabb.h"
+#include "aabb.h"
 #include "hitable.h"
 
 class bvh_node : public hitable {
