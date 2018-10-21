@@ -5,7 +5,7 @@
 #ifndef RAYTRACER1_CAMERA_H
 #define RAYTRACER1_CAMERA_H
 
-#include "ray.h"
+#include "ray_engine/ray.h"
 
 vec3 random_in_unit_disk();
 

@@ -4,7 +4,7 @@
 
 #include <algorithm>
 
-#include "aabb.h"
+#include "ray_engine/aabb.h"
 
 // version 1 from book
 //bool aabb::hit(const ray& r, float tmin, float tmax) const {

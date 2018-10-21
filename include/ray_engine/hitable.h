@@ -5,10 +5,11 @@
 #ifndef RAYTRACER1_HITABLE_H
 #define RAYTRACER1_HITABLE_H
 
-#include "aabb.h"
-#include "ray.h"
+#include "vec3.h"
+#include "ray_engine/aabb.h"
+#include "ray_engine/ray.h"
 
-class material;  // why not include the real material class?
+class material;  // avoid circular hitable / material
 
 struct hit_record {
     float t;

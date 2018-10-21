@@ -5,7 +5,10 @@
 #ifndef RAYTRACER1_SPHERE_H
 #define RAYTRACER1_SPHERE_H
 
-#include "hitable.h"
+#include "materials/material.h"
+#include "ray_engine/hitable.h"
+#include "ray_engine/aabb.h"
+#include "vec3.h"
 
 class sphere : public hitable {
 public:

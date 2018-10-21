@@ -5,8 +5,8 @@
 #ifndef RAYTRACER2_BVH_NODE_H
 #define RAYTRACER2_BVH_NODE_H
 
-#include "aabb.h"
-#include "hitable.h"
+#include "ray_engine/aabb.h"
+#include "ray_engine/hitable.h"
 
 class bvh_node : public hitable {
 public:

@@ -5,7 +5,7 @@
 #ifndef RAYTRACER2_MOVING_SPHERE_H
 #define RAYTRACER2_MOVING_SPHERE_H
 
-#include "hitable.h"
+#include "ray_engine/hitable.h"
 
 class moving_sphere : public hitable {
 public:

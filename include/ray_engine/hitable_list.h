@@ -5,7 +5,8 @@
 #ifndef RAYTRACER1_HITABLE_LIST_H
 #define RAYTRACER1_HITABLE_LIST_H
 
-#include "hitable.h"
+#include "ray_engine/hitable.h"
+#include "ray_engine/aabb.h"
 
 class hitable_list : public hitable {
 public:

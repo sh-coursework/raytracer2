@@ -5,7 +5,7 @@
 #ifndef RAYTRACER1_METAL_H
 #define RAYTRACER1_METAL_H
 
-#include "scene_geometry/hitable.h"
+#include "ray_engine/hitable.h"
 #include "material.h"
 
 class metal : public material {

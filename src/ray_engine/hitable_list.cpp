@@ -3,8 +3,8 @@
 //
 
 #include <boost/range/irange.hpp>
-#include "aabb.h"
-#include "scene_geometry/hitable_list.h"
+
+#include "ray_engine/hitable_list.h"
 
 
 bool hitable_list::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {

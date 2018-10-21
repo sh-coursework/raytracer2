@@ -8,32 +8,14 @@
 
 #include "scene_geometry/sphere.h"
 #include "scene_geometry/moving_sphere.h"
-#include "scene_geometry/hitable_list.h"
-#include "scene_geometry/bvh_node.h"
+#include "ray_engine/hitable_list.h"
+#include "ray_engine/bvh_node.h"
+#include "ray_engine/ray.h"
+#include "ray_engine/ray_engine.h"
 #include "materials/lambertian.h"
 #include "materials/metal.h"
 #include "materials/dielectric.h"
 #include "camera.h"
-
-vec3 color(const ray& r, hitable *world, int depth) {
-    hit_record rec;
-    if (world->hit(r, 0.001f, MAXFLOAT, rec)) {
-        ray scattered;
-        vec3 attenuation;
-
-        // auto target = rec.p + rec.normal + random_in_unit_sphere();
-        // return 0.5f * color( ray(rec.p, target - rec.p), world);
-        if (depth < 50 && rec.mat_ptr->scatter(r, rec, attenuation, scattered)) {
-            return attenuation * color(scattered, world, depth+1);
-        } else {
-            return vec3(0.0f, 0.0f, 0.0f);
-        }
-    } else {
-        auto unit_direction = unit_vector(r.direction());
-        auto t = 0.5f * (unit_direction.y() + 1.0f);
-        return (1.0f - t) * vec3(1.0f, 1.0f, 1.0f) + t * vec3(0.5f, 0.7f, 1.0f);
-    }
-}
 
 hitable *random_scene(float t_min, float t_max, bool use_bvh) {
     // Should hitable be a unique pointer or something?
@@ -77,7 +59,7 @@ int main() {
     auto resolution_x = 200;
     auto resolution_y = 100;
     const auto channels = 3;
-    auto number_samples_per_pixel = 100;
+    auto number_samples_per_pixel = 10;
     auto use_bvh = true;
     const char *image_filename = "temp.jpg";
 

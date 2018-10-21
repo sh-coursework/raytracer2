@@ -3,7 +3,7 @@
 //
 
 #include <math.h>
-#include "scene_geometry/bvh_node.h"
+#include "ray_engine/bvh_node.h"
 
 
 int box_x_compare (const void * a, const void * b) {
