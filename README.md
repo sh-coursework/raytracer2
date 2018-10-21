@@ -31,5 +31,6 @@ Stuff I plan to work on:
   file with yaml and/or argparse
 * Clean up variable and class names
 * Investigate boost/stl vector for hitable_list
+* Address more of CLion's Clang tidy warnings.
 
 
