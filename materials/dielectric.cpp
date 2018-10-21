@@ -24,13 +24,13 @@ bool dielectric::scatter(const ray& r_in, const hit_record& rec, vec3& attenuati
     if (refract(r_in.direction(), outward_normal, ni_over_nt, refracted)) {
         reflect_prob = schlick(cosine, ref_idx);
     } else {
-        scattered = ray(rec.p, reflected);
+        scattered = ray(rec.p, reflected, r_in.time());
         reflect_prob = 1.0;
     }
     if (drand48() < reflect_prob) {
-        scattered = ray(rec.p, reflected);
+        scattered = ray(rec.p, reflected, r_in.time());
     } else {
-        scattered = ray(rec.p, refracted);
+        scattered = ray(rec.p, refracted, r_in.time());
     }
     return true;
 }

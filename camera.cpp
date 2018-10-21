@@ -12,7 +12,11 @@ vec3 random_in_unit_disk() {
     return p;
 }
 
-camera::camera(vec3 lookfrom, vec3 lookat, vec3 vup, float vfov, float aspect, float aperture, float focus_dist) {  // vfov is top to bottom in degrees
+camera::camera(vec3 lookfrom, vec3 lookat, vec3 vup, float vfov, float aspect, float aperture, float focus_dist,
+        float t0, float t1) {  // vfov is top to bottom in degrees
+    time0 = t0;
+    time1 = t1;
+
     lens_radius = aperture / 2.0f;
     auto theta = vfov * float(M_PI) / 180.f;
     auto half_height = tanf(theta/2.0f);
@@ -32,5 +36,6 @@ camera::camera(vec3 lookfrom, vec3 lookat, vec3 vup, float vfov, float aspect, f
 ray camera::get_ray(float s, float t) {
     auto rd = lens_radius * random_in_unit_disk();
     auto offset = u * rd.x() + v * rd.y();
-    return ray(origin + offset, lower_left_corner + s * horizontal + t * vertical - origin - offset);
+    auto time = time0 + float(drand48() * (time1 - time0));
+    return ray(origin + offset, lower_left_corner + s * horizontal + t * vertical - origin - offset, time);
 }
