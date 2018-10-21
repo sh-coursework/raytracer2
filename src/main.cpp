@@ -59,7 +59,7 @@ int main() {
     auto resolution_x = 200;
     auto resolution_y = 100;
     const auto channels = 3;
-    auto number_samples_per_pixel = 10;
+    auto number_samples_per_pixel = 100;
     auto use_bvh = true;
     const char *image_filename = "temp.jpg";
 
