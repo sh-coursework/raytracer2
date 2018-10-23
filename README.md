@@ -24,11 +24,12 @@ In raytracer2, I'm working through the second book,
   openimageio.
   Halfway implementation - uses both ppm and jpg.
 * First pass reorganization to use include and src subdirs.
+* Moved render settings into a separate module, and added
+  commmand line parser and config file parser to make testing
+  easier.
 
 Stuff I plan to work on:
 * Get rid of "new" - convert to smart pointers
-* Move render settings (resolution, samples) to an external
-  file with yaml and/or argparse
 * Clean up variable and class names
 * Investigate boost/stl vector for hitable_list
 * Address more of CLion's Clang tidy warnings.
