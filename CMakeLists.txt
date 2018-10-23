@@ -16,6 +16,7 @@ set(SOURCE_CPPS
         src/materials/lambertian.cpp
         src/materials/metal.cpp
         src/materials/dielectric.cpp
+        src/textures/checker_texture.cpp
 
         src/ray_engine/ray.cpp
         src/ray_engine/hitable_list.cpp

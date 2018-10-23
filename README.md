@@ -16,6 +16,7 @@ In raytracer2, I'm working through the second book,
 ## Work in raytracer2
 * Book 2, Chapter 1 - motion blur
 * Book 2, Chapter 2 - BVH (Bounding Volume Hierarchies)
+* Book 2, Chapter 3 - Textures, checkered sphere scene
 * Render time progress output
 * **boost** - initially for irange, bu you never know.
   I could easily imagine wanting to use vector or more.
@@ -33,5 +34,8 @@ Stuff I plan to work on:
 * Clean up variable and class names
 * Investigate boost/stl vector for hitable_list
 * Address more of CLion's Clang tidy warnings.
+* External definition of scene
+* OLS shaders?
+* One day... multithreading.
 
 

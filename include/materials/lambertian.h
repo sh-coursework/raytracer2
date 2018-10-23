@@ -6,14 +6,15 @@
 #define RAYTRACER1_LAMBERTIAN_H
 
 #include "ray_engine/hitable.h"
-#include "material.h"
+#include "materials/material.h"
+#include "textures/texture.h"
 
 class lambertian : public material {
 public:
-    lambertian(const vec3& a) : albedo(a) {}
+    lambertian(Texture *a) : albedo(a) {}
     virtual bool scatter(const ray& r_in, const hit_record& rec, vec3& attenuation, ray& scattered) const;
 
-    vec3 albedo;
+    Texture *albedo;
 };
 
 

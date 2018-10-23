@@ -17,6 +17,8 @@
 #include "materials/lambertian.h"
 #include "materials/metal.h"
 #include "materials/dielectric.h"
+#include "textures/constant_texture.h"
+#include "textures/checker_texture.h"
 #include "camera.h"
 #include "render_settings.h"
 
@@ -27,34 +29,45 @@ namespace
 }
 
 
-hitable *random_scene(float t_min, float t_max, bool use_bvh) {
+hitable *random_scene(float t_min, float t_max, bool use_bvh)
+{
     // Should hitable be a unique pointer or something?
     // Would ownership transfer as a return value?
     auto n = 50000;
     hitable **list = new hitable*[n+1];  // array of (hitable *)
-    list[0] = new sphere(vec3(0.0f, -1000.0f, 0.0f), 1000.0f, new lambertian(vec3(0.5f, 0.5f, 0.5f)));
+    Texture *checker = new CheckerTexture(
+            new ConstantTexture(vec3(0.2, 0.3, 0.1)),
+            new ConstantTexture(vec3(0.9, 0.9, 0.9))
+            );
+    list[0] = new sphere(vec3(0.0f, -1000.0f, 0.0f), 1000.0f,
+                         new lambertian(checker));
     auto i = 1;
 
-    for (auto a: boost::irange(-10, 10)) {
-        for (auto b: boost::irange(-10, 10)) {
+    for (auto a: boost::irange(-10, 10))
+    {
+        for (auto b: boost::irange(-10, 10))
+        {
             auto choose_mat = float(drand48());
             auto center = vec3(a + 0.9f * drand48(), 0.2f, b + 0.9f * drand48());
-            if (choose_mat < 0.8) { // diffuse
+            if (choose_mat < 0.8)  // diffuse
+            {
                 list[i++] = new moving_sphere(center, center + vec3(0, 0.5 * drand48(), 0),
                         0.0, 1.0,
                         0.2f,
-                        new lambertian(vec3(drand48()*drand48(), drand48()*drand48(), drand48()*drand48())));
-            } else if (choose_mat < 0.95) { // metal
+                        new lambertian(new ConstantTexture(vec3(drand48()*drand48(), drand48()*drand48(), drand48()*drand48()))));
+            } else if (choose_mat < 0.95)  // metal
+            {
                 list[i++] = new sphere(center, 0.2,
                         new metal(vec3(0.5 * (1.0f + drand48()), 0.5*(1.0f + drand48()), 0.5*(1.0f + drand48())), 0.5 * drand48()));
-            } else {  // glass
+            } else  // glass
+            {
                 list[i++] = new sphere(center, 0.2f, new dielectric(1.5f));
             }
         }
     }
 
     list[i++] = new sphere(vec3(0.0f, 1.0f, 0.0f), 1.0, new dielectric(1.5));
-    list[i++] = new sphere(vec3(-4.0f, 1.0f, 0.0f), 1.0f, new lambertian(vec3(0.4f, 0.2f, 0.2f)));
+    list[i++] = new sphere(vec3(-4.0f, 1.0f, 0.0f), 1.0f, new lambertian(new ConstantTexture(vec3(0.4f, 0.2f, 0.2f))));
     list[i++] = new sphere(vec3(4.0f, 1.0f, 0.0f), 1.0f, new metal(vec3(0.7f, 0.6f, 0.5f), 0.0f));
 
     if (use_bvh)
@@ -63,6 +76,20 @@ hitable *random_scene(float t_min, float t_max, bool use_bvh) {
         return new hitable_list(list, i);
 }
 
+
+hitable *two_spheres()
+{
+    Texture *checker = new CheckerTexture(
+            new ConstantTexture(vec3(0.2, 0.3, 0.1)),
+            new ConstantTexture(vec3(0.9, 0.9, 0.9))
+    );
+    int n = 50;  // Bogus making the hitable list this big...
+    hitable **list = new hitable *[n+1];
+    list[0] = new sphere(vec3(0, -10, 0), 10, new lambertian(checker));
+    list[1] = new sphere(vec3(0,  10, 0), 10, new lambertian(checker));
+
+    return new hitable_list(list, 2);
+}
 
 int main(int argc, char** argv) {
     ///////////////////////////////////////////////////////////////////////
@@ -103,7 +130,6 @@ int main(int argc, char** argv) {
                         render_settings_file_options),
                         parse_results
         );
-
     }
 
     boost::program_options::notify(parse_results);
@@ -116,16 +142,28 @@ int main(int argc, char** argv) {
 
     auto start_time = std::clock();
 
-    hitable *world = random_scene(render_settings.shutter_open, render_settings.shutter_close, render_settings.use_bvh);
+//    hitable *world = random_scene(render_settings.shutter_open, render_settings.shutter_close, render_settings.use_bvh);
+//
+//    // Camera
+//    auto lookfrom = vec3(13.0f, 2.0f, 3.0f);
+//    auto lookat = vec3(0.0f, 0.0f, 0.0f);
+//    auto dist_to_focus = (lookfrom - lookat).length();
+//    auto aperture = 0.0f;
+//    auto cam = camera(lookfrom, lookat, vec3(0.0f, 1.0f, 0.0f),
+//                      20.0f,
+//                      float(render_settings.resolution_x) / float(render_settings.resolution_y),
+//                      aperture, dist_to_focus,
+//                      render_settings.shutter_open, render_settings.shutter_close);
 
-    // Camera
-    auto lookfrom = vec3(13.0f, 2.0f, 3.0f);
-    auto lookat = vec3(0.0f, 0.0f, 0.0f);
-    auto dist_to_focus = (lookfrom - lookat).length();
-    auto aperture = 0.0f;
-    auto cam = camera(lookfrom, lookat, vec3(0.0f, 1.0f, 0.0f),
+    hitable *world = two_spheres();
+    auto two_sphere_lookfrom = vec3(13.0f, 2.0f, 3.0f);
+    auto two_sphere_lookat = vec3(0.0f, 0.0f, 0.0f);
+    auto two_sphere_dist_to_focus = 10.0f;
+    auto two_sphere_aperture = 0.0f;
+    auto cam = camera(two_sphere_lookfrom, two_sphere_lookat, vec3(0.0, 1.0, 0.0),
                       20.0f,
-                      float(render_settings.resolution_x) / float(render_settings.resolution_y), aperture, dist_to_focus,
+                      float(render_settings.resolution_x) / float(render_settings.resolution_y),
+                      two_sphere_aperture, two_sphere_dist_to_focus,
                       render_settings.shutter_open, render_settings.shutter_close);
 
     auto world_built_time = std::clock();
@@ -150,11 +188,14 @@ int main(int argc, char** argv) {
     auto resolution_y = render_settings.resolution_y;
     auto number_samples_per_pixel = render_settings.number_samples_per_pixel;
     // Run though pixels in the image, and write to stdout
-    for (auto row_num: boost::irange(resolution_y - 1, -1, -1)) {  // unclear with -1 as the bottom
-        for (auto column_num: boost::irange(0, resolution_x)) {
+    for (auto row_num: boost::irange(resolution_y - 1, -1, -1))  // unclear with -1 as the bottom
+    {
+        for (auto column_num: boost::irange(0, resolution_x))
+        {
             auto pixel_color = vec3(0.0f, 0.0f, 0.0f);
 
-            for (auto sample_num: boost::irange(0, number_samples_per_pixel)) {
+            for (auto sample_num: boost::irange(0, number_samples_per_pixel))
+            {
                 auto u = float(column_num + drand48()) / float(resolution_x);
                 auto v = float(row_num + drand48()) / float(resolution_y);
 
