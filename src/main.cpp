@@ -14,11 +14,14 @@
 #include "ray_engine/bvh_node.h"
 #include "ray_engine/ray.h"
 #include "ray_engine/ray_engine.h"
+
 #include "materials/lambertian.h"
 #include "materials/metal.h"
 #include "materials/dielectric.h"
 #include "textures/constant_texture.h"
 #include "textures/checker_texture.h"
+#include "textures/noise_texture.h"
+
 #include "camera.h"
 #include "render_settings.h"
 
@@ -77,7 +80,8 @@ hitable *random_scene(float t_min, float t_max, bool use_bvh)
 }
 
 
-hitable *two_spheres()
+hitable *
+two_spheres()
 {
     Texture *checker = new CheckerTexture(
             new ConstantTexture(vec3(0.2, 0.3, 0.1)),
@@ -87,6 +91,18 @@ hitable *two_spheres()
     hitable **list = new hitable *[n+1];
     list[0] = new sphere(vec3(0, -10, 0), 10, new lambertian(checker));
     list[1] = new sphere(vec3(0,  10, 0), 10, new lambertian(checker));
+
+    return new hitable_list(list, 2);
+}
+
+
+hitable *
+two_perlin_spheres()
+{
+    Texture *perlin_textured = new NoiseTexture();
+    hitable **list = new hitable *[2];
+    list[0] = new sphere(vec3(0, -1000, 0), 1000, new lambertian(perlin_textured));
+    list[1] = new sphere(vec3(0,  2, 0), 2, new lambertian(perlin_textured));
 
     return new hitable_list(list, 2);
 }
@@ -155,7 +171,8 @@ int main(int argc, char** argv) {
 //                      aperture, dist_to_focus,
 //                      render_settings.shutter_open, render_settings.shutter_close);
 
-    hitable *world = two_spheres();
+//    hitable *world = two_spheres();
+    hitable *world = two_perlin_spheres();
     auto two_sphere_lookfrom = vec3(13.0f, 2.0f, 3.0f);
     auto two_sphere_lookat = vec3(0.0f, 0.0f, 0.0f);
     auto two_sphere_dist_to_focus = 10.0f;

@@ -9,6 +9,7 @@ include_directories(include ${Boost_INCLUDE_DIRS})
 find_library(OIIO "OpenImageIO" "/usr/local/lib")
 
 set(SOURCE_CPPS
+        src/main.cpp
         src/scene_geometry/sphere.cpp
         src/scene_geometry/moving_sphere.cpp
 
@@ -26,8 +27,7 @@ set(SOURCE_CPPS
 
         src/camera.cpp
         src/render_settings.cpp
-        src/main.cpp
-        )
+        src/textures/perlin_noise.cpp include/textures/noise_texture.cpp include/textures/noise_texture.h)
 
 add_executable(raytracer2 ${SOURCE_CPPS})
 
