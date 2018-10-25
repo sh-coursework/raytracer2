@@ -1,7 +1,10 @@
 #include <ctime>
 #include "float.h"
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
 
 #include <boost/range/irange.hpp>
 #include <boost/program_options.hpp>
@@ -34,17 +37,18 @@ namespace
 
 hitable *random_scene(float t_min, float t_max, bool use_bvh)
 {
-    // Should hitable be a unique pointer or something?
-    // Would ownership transfer as a return value?
-    auto n = 50000;
-    hitable **list = new hitable*[n+1];  // array of (hitable *)
+    // hitable is an abstract base, so I wouldn't know how/what to allocate
+    // up front, and there's not really a default placeholder.
+    // So I want the vector of pointers, not vector of hitables.
+    std::vector<std::shared_ptr<hitable>> scene_list;
+
     Texture *checker = new CheckerTexture(
             new ConstantTexture(vec3(0.2, 0.3, 0.1)),
             new ConstantTexture(vec3(0.9, 0.9, 0.9))
             );
-    list[0] = new sphere(vec3(0.0f, -1000.0f, 0.0f), 1000.0f,
-                         new lambertian(checker));
-    auto i = 1;
+    scene_list.push_back( std::shared_ptr<hitable>(
+            new sphere(vec3(0.0f, -1000.0f, 0.0f), 1000.0f, new lambertian(checker))
+     ));
 
     for (auto a: boost::irange(-10, 10))
     {
@@ -54,29 +58,40 @@ hitable *random_scene(float t_min, float t_max, bool use_bvh)
             auto center = vec3(a + 0.9f * drand48(), 0.2f, b + 0.9f * drand48());
             if (choose_mat < 0.8)  // diffuse
             {
-                list[i++] = new moving_sphere(center, center + vec3(0, 0.5 * drand48(), 0),
-                        0.0, 1.0,
-                        0.2f,
-                        new lambertian(new ConstantTexture(vec3(drand48()*drand48(), drand48()*drand48(), drand48()*drand48()))));
+                scene_list.push_back( std::shared_ptr<hitable>(
+                        new moving_sphere(center, center + vec3(0, 0.5 * drand48(), 0),
+                            0.0, 1.0,
+                            0.2f,
+                            new lambertian(new ConstantTexture(vec3(drand48()*drand48(), drand48()*drand48(), drand48()*drand48()))))
+                ));
             } else if (choose_mat < 0.95)  // metal
             {
-                list[i++] = new sphere(center, 0.2,
-                        new metal(vec3(0.5 * (1.0f + drand48()), 0.5*(1.0f + drand48()), 0.5*(1.0f + drand48())), 0.5 * drand48()));
+                scene_list.push_back( std::shared_ptr<hitable>(
+                        new sphere(center, 0.2, new metal(vec3(0.5 * (1.0f + drand48()), 0.5*(1.0f + drand48()), 0.5*(1.0f + drand48())), 0.5 * drand48()))
+                ));
             } else  // glass
             {
-                list[i++] = new sphere(center, 0.2f, new dielectric(1.5f));
+                scene_list.push_back( std::shared_ptr<hitable>(
+                        new sphere(center, 0.2f, new dielectric(1.5f))
+                ));
             }
         }
     }
 
-    list[i++] = new sphere(vec3(0.0f, 1.0f, 0.0f), 1.0, new dielectric(1.5));
-    list[i++] = new sphere(vec3(-4.0f, 1.0f, 0.0f), 1.0f, new lambertian(new ConstantTexture(vec3(0.4f, 0.2f, 0.2f))));
-    list[i++] = new sphere(vec3(4.0f, 1.0f, 0.0f), 1.0f, new metal(vec3(0.7f, 0.6f, 0.5f), 0.0f));
+    scene_list.push_back( std::shared_ptr<hitable>(
+            new sphere(vec3(0.0f, 1.0f, 0.0f), 1.0, new dielectric(1.5))
+    ));
+    scene_list.push_back( std::shared_ptr<hitable>(
+            new sphere(vec3(-4.0f, 1.0f, 0.0f), 1.0f, new lambertian(new ConstantTexture(vec3(0.4f, 0.2f, 0.2f))))
+    ));
+    scene_list.push_back( std::shared_ptr<hitable>(
+            new sphere(vec3(4.0f, 1.0f, 0.0f), 1.0f, new metal(vec3(0.7f, 0.6f, 0.5f), 0.0f))
+    ));
 
     if (use_bvh)
-        return new bvh_node(list, i, t_min, t_max);
+        return new bvh_node(scene_list.begin(), scene_list.end(), t_min, t_max);
     else
-        return new hitable_list(list, i);
+        return new hitable_list(scene_list);
 }
 
 
@@ -87,12 +102,15 @@ two_spheres()
             new ConstantTexture(vec3(0.2, 0.3, 0.1)),
             new ConstantTexture(vec3(0.9, 0.9, 0.9))
     );
-    int n = 50;  // Bogus making the hitable list this big...
-    hitable **list = new hitable *[n+1];
-    list[0] = new sphere(vec3(0, -10, 0), 10, new lambertian(checker));
-    list[1] = new sphere(vec3(0,  10, 0), 10, new lambertian(checker));
+    std::vector<std::shared_ptr<hitable>> scene_list;
+    scene_list.push_back( std::shared_ptr<hitable>(
+            new sphere(vec3(0, -10, 0), 10, new lambertian(checker))
+    ));
+    scene_list.push_back( std::shared_ptr<hitable>(
+            new sphere(vec3(0,  10, 0), 10, new lambertian(checker))
+    ));
 
-    return new hitable_list(list, 2);
+    return new hitable_list(scene_list);
 }
 
 
@@ -100,11 +118,17 @@ hitable *
 two_perlin_spheres()
 {
     Texture *perlin_textured = new NoiseTexture();
-    hitable **list = new hitable *[2];
-    list[0] = new sphere(vec3(0, -1000, 0), 1000, new lambertian(perlin_textured));
-    list[1] = new sphere(vec3(0,  2, 0), 2, new lambertian(perlin_textured));
+    std::vector<std::shared_ptr<hitable>> scene_list;
+    // For now, assume C++11, not 14 so no "make_unique"
+    scene_list.push_back( std::shared_ptr<hitable>(
+            new sphere(vec3(0, -1000, 0), 1000, new lambertian(perlin_textured))
+    ));
+    scene_list.push_back( std::shared_ptr<hitable>(
+            new sphere(vec3(0,  2, 0), 2, new lambertian(perlin_textured))
+    ));
 
-    return new hitable_list(list, 2);
+//    return new hitable_list(scene_list, 2);
+    return new hitable_list(scene_list);
 }
 
 int main(int argc, char** argv) {
@@ -158,30 +182,30 @@ int main(int argc, char** argv) {
 
     auto start_time = std::clock();
 
-//    hitable *world = random_scene(render_settings.shutter_open, render_settings.shutter_close, render_settings.use_bvh);
-//
-//    // Camera
-//    auto lookfrom = vec3(13.0f, 2.0f, 3.0f);
-//    auto lookat = vec3(0.0f, 0.0f, 0.0f);
-//    auto dist_to_focus = (lookfrom - lookat).length();
-//    auto aperture = 0.0f;
-//    auto cam = camera(lookfrom, lookat, vec3(0.0f, 1.0f, 0.0f),
-//                      20.0f,
-//                      float(render_settings.resolution_x) / float(render_settings.resolution_y),
-//                      aperture, dist_to_focus,
-//                      render_settings.shutter_open, render_settings.shutter_close);
+    hitable *world = random_scene(render_settings.shutter_open, render_settings.shutter_close, render_settings.use_bvh);
 
-//    hitable *world = two_spheres();
-    hitable *world = two_perlin_spheres();
-    auto two_sphere_lookfrom = vec3(13.0f, 2.0f, 3.0f);
-    auto two_sphere_lookat = vec3(0.0f, 0.0f, 0.0f);
-    auto two_sphere_dist_to_focus = 10.0f;
-    auto two_sphere_aperture = 0.0f;
-    auto cam = camera(two_sphere_lookfrom, two_sphere_lookat, vec3(0.0, 1.0, 0.0),
+    // Camera
+    auto lookfrom = vec3(13.0f, 2.0f, 3.0f);
+    auto lookat = vec3(0.0f, 0.0f, 0.0f);
+    auto dist_to_focus = (lookfrom - lookat).length();
+    auto aperture = 0.0f;
+    auto cam = camera(lookfrom, lookat, vec3(0.0f, 1.0f, 0.0f),
                       20.0f,
                       float(render_settings.resolution_x) / float(render_settings.resolution_y),
-                      two_sphere_aperture, two_sphere_dist_to_focus,
+                      aperture, dist_to_focus,
                       render_settings.shutter_open, render_settings.shutter_close);
+
+////    hitable *world = two_spheres();
+//    hitable *world = two_perlin_spheres();
+//    auto two_sphere_lookfrom = vec3(13.0f, 2.0f, 3.0f);
+//    auto two_sphere_lookat = vec3(0.0f, 0.0f, 0.0f);
+//    auto two_sphere_dist_to_focus = 10.0f;
+//    auto two_sphere_aperture = 0.0f;
+//    auto cam = camera(two_sphere_lookfrom, two_sphere_lookat, vec3(0.0, 1.0, 0.0),
+//                      20.0f,
+//                      float(render_settings.resolution_x) / float(render_settings.resolution_y),
+//                      two_sphere_aperture, two_sphere_dist_to_focus,
+//                      render_settings.shutter_open, render_settings.shutter_close);
 
     auto world_built_time = std::clock();
     std::cout << "Time to create scene: "

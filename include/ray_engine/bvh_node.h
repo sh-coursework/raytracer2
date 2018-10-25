@@ -5,22 +5,30 @@
 #ifndef RAYTRACER2_BVH_NODE_H
 #define RAYTRACER2_BVH_NODE_H
 
+#include <vector>
 #include "ray_engine/aabb.h"
 #include "ray_engine/hitable.h"
 
 class bvh_node : public hitable {
 public:
-    bvh_node() {}
-    bvh_node(hitable **l, int n, float time0, float time1);
+    std::shared_ptr<hitable> left;
+    std::shared_ptr<hitable> right;
+    aabb box;
+
+    bvh_node() = default;
+    bvh_node(
+            std::vector<std::shared_ptr<hitable>>::iterator hitable_begin,
+            std::vector<std::shared_ptr<hitable>>::iterator hitable_end,
+            float time0, float time1);
     virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const;
     virtual bool bounding_box(float t0, float t1, aabb& box) const;
-    hitable *left;
-    hitable *right;
-    aabb box;
 };
 
-int box_x_compare (const void * a, const void * b);
-int box_y_compare (const void * a, const void * b);
-int box_z_compare (const void * a, const void * b);
+bool box_x_compare(const std::shared_ptr<hitable> &hitable_a,
+                   const std::shared_ptr<hitable> &hitable_b);
+bool box_y_compare(const std::shared_ptr<hitable> &hitable_a,
+                   const std::shared_ptr<hitable> &hitable_b);
+bool box_z_compare(const std::shared_ptr<hitable> &hitable_a,
+                   const std::shared_ptr<hitable> &hitable_b);
 
 #endif //RAYTRACER2_BVH_NODE_H
