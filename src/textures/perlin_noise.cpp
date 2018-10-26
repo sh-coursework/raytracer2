@@ -8,14 +8,16 @@
 #include "textures/perlin_noise.h"
 
 
-
-
 float
 PerlinNoise::Noise(const vec3& p) const
 {
     auto u = p.x() - float(floor(p.x()));
     auto v = p.y() - float(floor(p.y()));
     auto w = p.z() - float(floor(p.z()));
+    // More Chapter 4 - Hermite cubic smoothing
+    u = u * u * (3 - 2 * u);
+    v = v * v * (3 - 2 * v);
+    w = w * w * (3 - 2 * w);
     // Later in Chapter 4 - smoothed version
     auto i = int(floor(p.x()));
     auto j = int(floor(p.y()));

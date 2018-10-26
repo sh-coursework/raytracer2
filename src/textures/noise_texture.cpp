@@ -8,5 +8,5 @@
 vec3
 NoiseTexture::value(float u, float v, const vec3& p) const
 {
-    return vec3(1.0f, 1.0f, 1.0f) * noise.Noise(p);
+    return vec3(1.0f, 1.0f, 1.0f) * noise.Noise(noise_scale * p);
 }

@@ -14,9 +14,11 @@
 class NoiseTexture : public Texture {
 public:
     NoiseTexture() {}
+    NoiseTexture(float sc) : noise_scale(sc) {};
     virtual vec3 value(float u, float v, const vec3& p) const;
 
     PerlinNoise noise;
+    float noise_scale;
 };
 
 

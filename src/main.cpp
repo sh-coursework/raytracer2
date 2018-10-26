@@ -117,7 +117,7 @@ two_spheres()
 hitable *
 two_perlin_spheres()
 {
-    Texture *perlin_textured = new NoiseTexture();
+    Texture *perlin_textured = new NoiseTexture(5.0f);
     std::vector<std::shared_ptr<hitable>> scene_list;
     // For now, assume C++11, not 14 so no "make_unique"
     scene_list.push_back( std::shared_ptr<hitable>(
