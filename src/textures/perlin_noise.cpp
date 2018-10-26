@@ -8,16 +8,26 @@
 #include "textures/perlin_noise.h"
 
 
+
+
 float
 PerlinNoise::Noise(const vec3& p) const
 {
     auto u = p.x() - float(floor(p.x()));
     auto v = p.y() - float(floor(p.y()));
     auto w = p.z() - float(floor(p.z()));
-    auto i = int(4.0f * p.x()) & 255;
-    auto j = int(4.0f * p.y()) & 255;
-    auto k = int(4.0f * p.z()) & 255;
-    return ran_float[perm_x[i] ^ perm_y[j] ^ perm_z[k]];
+    // Later in Chapter 4 - smoothed version
+    auto i = int(floor(p.x()));
+    auto j = int(floor(p.y()));
+    auto k = int(floor(p.z()));
+    float c[2][2][2];
+    for (auto di: {0, 1})
+        for (auto dj: {0, 1})
+            for (auto dk: {0, 1})
+                c[di][dj][dk] = ran_float[perm_x[(i + di) & 255]
+                                        ^ perm_y[(j + dj) & 255]
+                                        ^ perm_z[(k + dk) & 255]];
+    return trilinear_interp(c, u, v, w);
 }
 
 static float*

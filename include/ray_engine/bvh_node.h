@@ -20,8 +20,8 @@ public:
             std::vector<std::shared_ptr<hitable>>::iterator hitable_begin,
             std::vector<std::shared_ptr<hitable>>::iterator hitable_end,
             float time0, float time1);
-    virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const;
-    virtual bool bounding_box(float t0, float t1, aabb& box) const;
+    virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const override;
+    virtual bool bounding_box(float t0, float t1, aabb& box) const override;
 };
 
 bool box_x_compare(const std::shared_ptr<hitable> &hitable_a,

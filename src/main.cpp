@@ -182,30 +182,30 @@ int main(int argc, char** argv) {
 
     auto start_time = std::clock();
 
-    hitable *world = random_scene(render_settings.shutter_open, render_settings.shutter_close, render_settings.use_bvh);
-
-    // Camera
-    auto lookfrom = vec3(13.0f, 2.0f, 3.0f);
-    auto lookat = vec3(0.0f, 0.0f, 0.0f);
-    auto dist_to_focus = (lookfrom - lookat).length();
-    auto aperture = 0.0f;
-    auto cam = camera(lookfrom, lookat, vec3(0.0f, 1.0f, 0.0f),
-                      20.0f,
-                      float(render_settings.resolution_x) / float(render_settings.resolution_y),
-                      aperture, dist_to_focus,
-                      render_settings.shutter_open, render_settings.shutter_close);
-
-////    hitable *world = two_spheres();
-//    hitable *world = two_perlin_spheres();
-//    auto two_sphere_lookfrom = vec3(13.0f, 2.0f, 3.0f);
-//    auto two_sphere_lookat = vec3(0.0f, 0.0f, 0.0f);
-//    auto two_sphere_dist_to_focus = 10.0f;
-//    auto two_sphere_aperture = 0.0f;
-//    auto cam = camera(two_sphere_lookfrom, two_sphere_lookat, vec3(0.0, 1.0, 0.0),
+//    hitable *world = random_scene(render_settings.shutter_open, render_settings.shutter_close, render_settings.use_bvh);
+//
+//    // Camera
+//    auto lookfrom = vec3(13.0f, 2.0f, 3.0f);
+//    auto lookat = vec3(0.0f, 0.0f, 0.0f);
+//    auto dist_to_focus = (lookfrom - lookat).length();
+//    auto aperture = 0.0f;
+//    auto cam = camera(lookfrom, lookat, vec3(0.0f, 1.0f, 0.0f),
 //                      20.0f,
 //                      float(render_settings.resolution_x) / float(render_settings.resolution_y),
-//                      two_sphere_aperture, two_sphere_dist_to_focus,
+//                      aperture, dist_to_focus,
 //                      render_settings.shutter_open, render_settings.shutter_close);
+
+////    hitable *world = two_spheres();
+    hitable *world = two_perlin_spheres();
+    auto two_sphere_lookfrom = vec3(13.0f, 2.0f, 3.0f);
+    auto two_sphere_lookat = vec3(0.0f, 0.0f, 0.0f);
+    auto two_sphere_dist_to_focus = 10.0f;
+    auto two_sphere_aperture = 0.0f;
+    auto cam = camera(two_sphere_lookfrom, two_sphere_lookat, vec3(0.0, 1.0, 0.0),
+                      20.0f,
+                      float(render_settings.resolution_x) / float(render_settings.resolution_y),
+                      two_sphere_aperture, two_sphere_dist_to_focus,
+                      render_settings.shutter_open, render_settings.shutter_close);
 
     auto world_built_time = std::clock();
     std::cout << "Time to create scene: "

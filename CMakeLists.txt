@@ -27,7 +27,8 @@ set(SOURCE_CPPS
 
         src/camera.cpp
         src/render_settings.cpp
-        src/textures/perlin_noise.cpp include/textures/noise_texture.cpp include/textures/noise_texture.h)
+        src/textures/perlin_noise.cpp
+        src/textures/noise_texture.cpp)
 
 add_executable(raytracer2 ${SOURCE_CPPS})
 

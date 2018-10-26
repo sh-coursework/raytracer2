@@ -2,7 +2,7 @@
 // Created by Steve Hwan on 10/23/18.
 //
 
-#include "noise_texture.h"
+#include "textures/noise_texture.h"
 
 
 vec3
