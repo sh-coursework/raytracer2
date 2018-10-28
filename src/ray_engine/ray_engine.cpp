@@ -11,6 +11,11 @@
 
 
 vec3 color(const ray& r, hitable *world, int depth) {
+    // Added Special 0,0 ray - stop hit test and return full.
+    // (But how expensive is this test on every color call?)
+    if (r.origin().length() == 0.0f and r.direction().length() == 0.0f)
+        return vec3(1.0f, 1.0f, 1.0f);
+
     hit_record rec;
     if (world->hit(r, 0.001f, MAXFLOAT, rec)) {
         ray scattered;

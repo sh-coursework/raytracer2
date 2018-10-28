@@ -21,6 +21,7 @@ public:
     material *mat_ptr;  // I think I actually own the material ptr, but I don't really want to.
 };
 
+void GetSphereUV(const vec3 &p, float& u, float &v);
 
 
 #endif //RAYTRACER1_SPHERE_H

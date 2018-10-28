@@ -17,10 +17,12 @@
 #include "textures/constant_texture.h"
 #include "textures/checker_texture.h"
 #include "textures/noise_texture.h"
+#include "textures/image_texture.h"
 
 #include "materials/lambertian.h"
 #include "materials/metal.h"
 #include "materials/dielectric.h"
+#include "materials/constant_material.h"
 
 #include "scene_generation.h"
 
@@ -50,16 +52,18 @@ hitable *random_scene(float t_min, float t_max, bool use_bvh)
             {
                 scene_list.push_back( std::shared_ptr<hitable>(
                         new moving_sphere(center, center + vec3(0, 0.5 * drand48(), 0),
-                            0.0, 1.0,
-                            0.2f,
-                            new lambertian(new ConstantTexture(
-                                    vec3(drand48() * drand48(), drand48() * drand48(), drand48() * drand48()))))
+                                0.0, 1.0,
+                                0.2f,
+                                new lambertian(new ConstantTexture(
+                                        vec3(drand48() * drand48(), drand48() * drand48(), drand48() * drand48()))))
                 ));
             } else if (choose_mat < 0.95)  // metal
             {
                 scene_list.push_back( std::shared_ptr<hitable>(
-                        new sphere(center, 0.2, new metal(
-                                vec3(0.5 * (1.0f + drand48()), 0.5 * (1.0f + drand48()), 0.5 * (1.0f + drand48())), 0.5 * drand48()))
+                        new sphere(center, 0.2,
+                                new metal(new ConstantTexture(
+                                        vec3(0.5 * (1.0f + drand48()), 0.5 * (1.0f + drand48()), 0.5 * (1.0f + drand48()))),
+                                        0.5 * drand48()))
                 ));
             } else  // glass
             {
@@ -77,7 +81,7 @@ hitable *random_scene(float t_min, float t_max, bool use_bvh)
             new sphere(vec3(-4.0f, 1.0f, 0.0f), 1.0f, new lambertian(new ConstantTexture(vec3(0.4f, 0.2f, 0.2f))))
     ));
     scene_list.push_back( std::shared_ptr<hitable>(
-            new sphere(vec3(4.0f, 1.0f, 0.0f), 1.0f, new metal(vec3(0.7f, 0.6f, 0.5f), 0.0f))
+            new sphere(vec3(4.0f, 1.0f, 0.0f), 1.0f, new metal(new ConstantTexture(vec3(0.7f, 0.6f, 0.5f)), 0.0f))
     ));
 
     if (use_bvh)
@@ -144,6 +148,27 @@ two_marblelike_spheres()
     return two_noise_spheres(noise_textured);
 }
 
+hitable *
+image_sphere_tests()
+{
+    std::string test_filename = "test_data/land_ocean_ice_cloud_2048.jpg";
+    Texture *noise_textured = new MarblelikeTexture(4.0f);
+    Texture *image_textured = new ImageTexture(test_filename);
+
+    std::vector<std::shared_ptr<hitable>> scene_list;
+    // For now, assume C++11, not 14 so no "make_unique"
+    // Big sphere - let's keep the marble
+    scene_list.push_back( std::shared_ptr<hitable>(
+            new sphere(vec3(0, -1000, 0), 1000, new lambertian(noise_textured))
+    ));
+
+    scene_list.push_back( std::shared_ptr<hitable>(
+            new sphere(vec3(0, 2, 0), 2, new ConstantMaterial(image_textured))
+    ));
+
+    return new hitable_list(scene_list);
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 /// Cameras
@@ -180,6 +205,21 @@ camera && two_sphere_cam(const RenderSettings &render_settings)
 }
 
 
+camera && image_sphere_test_cam(const RenderSettings &render_settings)
+{
+    auto two_sphere_lookfrom = vec3(15.0f, 2.0f, 3.0f);
+    auto two_sphere_lookat = vec3(0.0f, 2.0f, 0.0f);
+    auto two_sphere_dist_to_focus = 10.0f;
+    auto two_sphere_aperture = 0.0f;
+    auto cam = camera(two_sphere_lookfrom, two_sphere_lookat, vec3(0.0, 1.0, 0.0),
+                      20.0f,
+                      float(render_settings.resolution_x) / float(render_settings.resolution_y),
+                      two_sphere_aperture, two_sphere_dist_to_focus,
+                      render_settings.shutter_open, render_settings.shutter_close);
+    return std::move(cam); // seems to complain if I do std::move and if I don't
+}
+
+
 //////////////////////////////////////////////////////////////////////////
 /// Scene generation
 //////////////////////////////////////////////////////////////////////////
@@ -193,7 +233,9 @@ camera && two_sphere_cam(const RenderSettings &render_settings)
 std::tuple<hitable *, camera>
 get_scene(const RenderSettings &render_settings)
 {
-    auto w_tmp = two_marblelike_spheres();
-    auto c_tmp = two_sphere_cam(render_settings);
+//    auto w_tmp = two_marblelike_spheres();
+//    auto c_tmp = two_sphere_cam(render_settings);
+    auto w_tmp = image_sphere_tests();
+    auto c_tmp = image_sphere_test_cam(render_settings);
     return std::make_tuple(w_tmp, c_tmp);
 }

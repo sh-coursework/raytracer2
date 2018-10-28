@@ -6,15 +6,15 @@
 #define RAYTRACER1_METAL_H
 
 #include "ray_engine/hitable.h"
-#include "material.h"
+#include "materials/material.h"
+#include "textures/texture.h"
 
 class metal : public material {
 public:
-//    metal(const vec3& a, float f) : albedo(a) { if {f < }}
-    metal(const vec3& a, float f);
+    metal(Texture *a, float f);
     virtual bool scatter(const ray& r_in, const hit_record& rec, vec3& attenuation, ray& scattered) const;
 
-    vec3 albedo;
+    Texture *albedo;
     float fuzz;
 };
 

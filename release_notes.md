@@ -22,6 +22,7 @@ In raytracer2, I'm working through the second book,
 ### Work from book
 * Book 2, Chapter 3 - Textures, checkered sphere scene
 * Book 2, Chapter 4 - Perlin noise, turbulence, marble-like
+* Book 2, Chapter 5 - Image Textures, but using openimageio
 
 ### Other modifications outside of book
 * Render time progress output
@@ -42,6 +43,11 @@ In raytracer2, I'm working through the second book,
 * 10/27/2018 sh-coursework - Added row percent to progress report.
   Moved scene generation(geometry and camera) to module outside
   main. Started using tuple return values and tie.
+* 10/28/2018 sh-coursework - Implemented image texture as openimageio.
+    * Also, changed image texture to do the work of reading the image
+      internally given the filename.
+    * Adjusted metal to point at texture instead of vector,
+      like lambertian does.
 
 
 ## Stuff I plan to work on:
