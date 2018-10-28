@@ -3,41 +3,21 @@
 //
 
 #include <math.h>
+#include <cmath>
 #include <boost/range/irange.hpp>
 
 #include "textures/perlin_noise.h"
 
 
-float
-PerlinNoise::Noise(const vec3& p) const
+static vec3*
+PerlinGenerate()
 {
-    auto u = p.x() - float(floor(p.x()));
-    auto v = p.y() - float(floor(p.y()));
-    auto w = p.z() - float(floor(p.z()));
-    // More Chapter 4 - Hermite cubic smoothing
-    u = u * u * (3 - 2 * u);
-    v = v * v * (3 - 2 * v);
-    w = w * w * (3 - 2 * w);
-    // Later in Chapter 4 - smoothed version
-    auto i = int(floor(p.x()));
-    auto j = int(floor(p.y()));
-    auto k = int(floor(p.z()));
-    float c[2][2][2];
-    for (auto di: {0, 1})
-        for (auto dj: {0, 1})
-            for (auto dk: {0, 1})
-                c[di][dj][dk] = ran_float[perm_x[(i + di) & 255]
-                                        ^ perm_y[(j + dj) & 255]
-                                        ^ perm_z[(k + dk) & 255]];
-    return trilinear_interp(c, u, v, w);
-}
-
-static float*
-PerlinGenerator()
-{
-    auto * p = new float[256];
+    vec3 * p = new vec3[256];
     for (auto i: boost::irange(0, 256))
-        p[i] = drand48();
+        p[i] = unit_vector(vec3(-1.0 + 2.0 * drand48(),
+                                -1.0 + 2.0 * drand48(),
+                                -1.0 + 2.0 * drand48()
+                                ));
     return p;
 }
 
@@ -63,8 +43,47 @@ PerlinGeneratePerm()
     return p;
 }
 
-float *PerlinNoise::ran_float = PerlinGenerator();
+vec3 *PerlinNoise::random_vec3 = PerlinGenerate();
 int *PerlinNoise::perm_x = PerlinGeneratePerm();
 int *PerlinNoise::perm_y = PerlinGeneratePerm();
 int *PerlinNoise::perm_z = PerlinGeneratePerm();
+
+
+float
+PerlinNoise::Noise(const vec3& p) const
+{
+    auto u = p.x() - float(floor(p.x()));
+    auto v = p.y() - float(floor(p.y()));
+    auto w = p.z() - float(floor(p.z()));
+    // More Chapter 4 - Hermite cubic smoothing - moved to trilinearinterp
+    // Later in Chapter 4 - smoothed version
+    auto i = int(floor(p.x()));
+    auto j = int(floor(p.y()));
+    auto k = int(floor(p.z()));
+    vec3 c[2][2][2];
+    for (auto di: {0, 1})
+        for (auto dj: {0, 1})
+            for (auto dk: {0, 1})
+                c[di][dj][dk] = random_vec3[perm_x[(i + di) & 255]
+                                            ^ perm_y[(j + dj) & 255]
+                                            ^ perm_z[(k + dk) & 255]];
+    return perlin_interp(c, u, v, w);
+}
+
+
+float PerlinNoise::Turbulence(const vec3 &p, int depth) const
+{
+    auto accum = 0.0f;
+    auto temp_p = p;
+    auto weight = 1.0f;
+    for (auto i: boost::irange(0, depth))
+    {
+        accum += weight * PerlinNoise::Noise(temp_p);
+        weight *= 0.5;
+        temp_p *= 2.0;
+    }
+    return std::abs(accum);
+}
+
+
 

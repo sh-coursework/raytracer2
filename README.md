@@ -9,6 +9,6 @@ In raytracer2, I'm working through Peter Shirley's second book
 in the series, *"Raytracing, The Next Week"*.
 
 Dependencies:
-* boost
+* boost 1.67.0
 * opeinimageio
 

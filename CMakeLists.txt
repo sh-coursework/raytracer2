@@ -19,6 +19,9 @@ set(SOURCE_CPPS
         src/materials/dielectric.cpp
         src/textures/checker_texture.cpp
 
+        src/textures/perlin_noise.cpp
+        src/textures/noise_texture.cpp
+
         src/ray_engine/ray.cpp
         src/ray_engine/hitable_list.cpp
         src/ray_engine/bvh_node.cpp
@@ -27,8 +30,8 @@ set(SOURCE_CPPS
 
         src/camera.cpp
         src/render_settings.cpp
-        src/textures/perlin_noise.cpp
-        src/textures/noise_texture.cpp)
+        src/scene_generation.cpp
+        )
 
 add_executable(raytracer2 ${SOURCE_CPPS})
 
