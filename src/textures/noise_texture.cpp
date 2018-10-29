@@ -2,9 +2,9 @@
 // Created by Steve Hwan on 10/23/18.
 //
 
-#include <cmath>
-
 #include "textures/noise_texture.h"
+
+#include <cmath>
 
 
 vec3

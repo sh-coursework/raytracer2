@@ -4,6 +4,7 @@
 
 #include "camera.h"
 
+
 vec3 random_in_unit_disk() {
     vec3 p;
     do {

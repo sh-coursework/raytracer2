@@ -2,9 +2,9 @@
 // Created by Steve Hwan on 10/1/18.
 //
 
-#include <boost/range/irange.hpp>
-
 #include "ray_engine/hitable_list.h"
+
+#include <boost/range/irange.hpp>
 
 
 bool hitable_list::hit(const ray& r, float t_min, float t_max, hit_record& rec) const
@@ -28,14 +28,6 @@ bool hitable_list::bounding_box(float t0, float t1, aabb& box) const
         return false;
 
     aabb temp_box;
-    // Special case the first one to avoid putting an "if"
-    // inside the loop iterating through every element or
-    // every bounding box.
-//    bool first_true = vector_list_[0]->bounding_box(t0, t1, temp_box);
-//    if (!first_true)
-//        return false;
-//    else
-//        box = temp_box;
 
     // Special treatment for first element
     auto hitables_it = vector_list_.begin();

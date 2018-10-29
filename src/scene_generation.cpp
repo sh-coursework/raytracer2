@@ -2,29 +2,25 @@
 // Created by Steve Hwan on 10/27/18.
 //
 
+#include "scene_generation.h"
+
 #include <vector>
 
 #include "vec3.h"
-
 #include "ray_engine/hitable.h"
 #include "ray_engine/bvh_node.h"
 #include "ray_engine/hitable_list.h"
-
 #include "scene_geometry/sphere.h"
 #include "scene_geometry/moving_sphere.h"
-
 #include "textures/texture.h"
 #include "textures/constant_texture.h"
 #include "textures/checker_texture.h"
 #include "textures/noise_texture.h"
 #include "textures/image_texture.h"
-
 #include "materials/lambertian.h"
 #include "materials/metal.h"
 #include "materials/dielectric.h"
 #include "materials/constant_material.h"
-
-#include "scene_generation.h"
 
 
 hitable *random_scene(float t_min, float t_max, bool use_bvh)

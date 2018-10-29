@@ -9,12 +9,10 @@
 
 #include <boost/range/irange.hpp>
 #include <boost/program_options.hpp>
-
 #include <OpenImageIO/imageio.h>
 
 #include "ray_engine/ray.h"
 #include "ray_engine/ray_engine.h"
-
 #include "camera.h"
 #include "render_settings.h"
 #include "scene_generation.h"

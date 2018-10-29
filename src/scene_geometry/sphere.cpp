@@ -2,9 +2,9 @@
 // Created by Steve Hwan on 10/1/18.
 //
 
-#include <cmath>
-
 #include "scene_geometry/sphere.h"
+
+#include <cmath>
 
 
 // Arguably, this could go in a math library (as could vec3)

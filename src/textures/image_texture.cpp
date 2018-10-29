@@ -2,13 +2,11 @@
 // Created by Steve Hwan on 10/28/18.
 //
 
+#include "textures/image_texture.h"
+
 #include <algorithm>
 
 #include <OpenImageIO/imageio.h>
-
-
-#include "textures/image_texture.h"
-
 
 
 ImageTexture::ImageTexture(std::string image_file) :

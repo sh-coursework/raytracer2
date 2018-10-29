@@ -2,8 +2,9 @@
 // Created by Steve Hwan on 10/9/18.
 //
 
-#include <cmath>
 #include "ray_engine/bvh_node.h"
+
+#include <cmath>
 
 
 bool box_x_compare(const std::shared_ptr<hitable> &hitable_a,

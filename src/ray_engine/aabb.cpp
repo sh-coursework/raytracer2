@@ -2,9 +2,10 @@
 // Created by Steve Hwan on 10/9/18.
 //
 
-#include <algorithm>
 
 #include "ray_engine/aabb.h"
+
+#include <algorithm>
 
 // version 1 from book
 //bool aabb::hit(const ray& r, float tmin, float tmax) const {

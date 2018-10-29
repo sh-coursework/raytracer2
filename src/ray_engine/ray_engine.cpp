@@ -3,10 +3,6 @@
 //
 
 #include "ray_engine/ray_engine.h"
-
-// Until now, material was through forward declaration.
-// But since I actually do need to access a method in
-// the material, I need to fully include it here.
 #include "materials/material.h"
 
 

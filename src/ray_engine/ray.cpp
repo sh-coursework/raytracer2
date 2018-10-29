@@ -4,6 +4,7 @@
 
 #include "ray_engine/ray.h"
 
+
 vec3 random_in_unit_sphere() {
     vec3 p;
     do {

@@ -2,7 +2,6 @@
 // Created by Steve Hwan on 10/21/18.
 //
 
-
 #include "render_settings.h"
 
 

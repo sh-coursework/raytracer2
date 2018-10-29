@@ -2,10 +2,10 @@
 // Created by Steve Hwan on 10/23/18.
 //
 
+#include "textures/perlin_noise.h"
+
 #include <cmath>
 #include <boost/range/irange.hpp>
-
-#include "textures/perlin_noise.h"
 
 
 static vec3*
