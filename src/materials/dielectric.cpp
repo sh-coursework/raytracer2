@@ -4,7 +4,9 @@
 
 #include "materials/dielectric.h"
 
-bool Dielectric::scatter(const Ray& r_in, const HitRecord& rec, Vec3& attenuation, Ray& scattered) const {
+
+bool Dielectric::scatter(const Ray& r_in, const HitRecord& rec,
+                         Vec3& attenuation, Ray& scattered) const {
     Vec3 outward_normal;
     auto reflected = reflect(r_in.direction(), rec.normal);
     float ni_over_nt;
@@ -15,7 +17,8 @@ bool Dielectric::scatter(const Ray& r_in, const HitRecord& rec, Vec3& attenuatio
     if (dot(r_in.direction(), rec.normal) > 0.0f) {
         outward_normal = -rec.normal;
         ni_over_nt = ref_idx;
-        cosine = ref_idx * dot(r_in.direction(), rec.normal) / r_in.direction().length();
+        cosine = ref_idx * dot(r_in.direction(), rec.normal)
+                 / r_in.direction().length();
     } else {
         outward_normal = rec.normal;
         ni_over_nt = 1.0f / ref_idx;

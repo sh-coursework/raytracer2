@@ -6,8 +6,8 @@
 #define RAYTRACER2_RAY_ENGINE_H
 
 #include "vec3.h"
-#include "ray_engine/hitable.h"
 #include "ray_engine/ray.h"
+#include "ray_engine/hitable.h"
 
 
 // This is the crux of the ray tracing engine

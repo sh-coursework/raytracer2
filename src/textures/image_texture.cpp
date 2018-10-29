@@ -30,7 +30,8 @@ ImageTexture::ImageTexture(std::string image_file) :
 Vec3 ImageTexture::value(float u, float v, const Vec3& p) const
 {
     auto i = std::max(0, std::min(image_resx - 1, int(u * image_resx)));
-    auto j = std::max(0, std::min(image_resy - 1, int((1 - v) * float(image_resy - 0.001))));
+    auto j = std::max(0, std::min(image_resy - 1,
+            int((1 - v) * float(image_resy - 0.001))));
 
     auto r = int(pixels[3 * i  + 3 * image_resx * j]    ) / 255.0f;
     auto g = int(pixels[3 * i  + 3 * image_resx * j + 1]) / 255.0f;

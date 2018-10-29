@@ -11,7 +11,8 @@ bool box_x_compare(const std::shared_ptr<Hitable> &hitable_a,
                    const std::shared_ptr<Hitable> &hitable_b)
 {
     AABB box_left, box_right;
-    if (!hitable_a->bounding_box(0, 0, box_left) || !hitable_b->bounding_box(0, 0, box_right))
+    if (!hitable_a->bounding_box(0, 0, box_left)
+        || !hitable_b->bounding_box(0, 0, box_right))
         std::cerr << "no bounding box in BVHNode constructor\n";
     return bool(box_left.min().x() < box_right.min().x());
 }
@@ -20,7 +21,8 @@ bool box_y_compare(const std::shared_ptr<Hitable> &hitable_a,
                    const std::shared_ptr<Hitable> &hitable_b)
 {
     AABB box_left, box_right;
-    if (!hitable_a->bounding_box(0, 0, box_left) || !hitable_b->bounding_box(0, 0, box_right))
+    if (!hitable_a->bounding_box(0, 0, box_left)
+            || !hitable_b->bounding_box(0, 0, box_right))
         std::cerr << "no bounding box in BVHNode constructor\n";
     return bool(box_left.min().y() < box_right.min().y());
 }
@@ -29,7 +31,8 @@ bool box_z_compare(const std::shared_ptr<Hitable> &hitable_a,
                    const std::shared_ptr<Hitable> &hitable_b)
 {
     AABB box_left, box_right;
-    if (!hitable_a->bounding_box(0, 0, box_left) || !hitable_b->bounding_box(0, 0, box_right))
+    if (!hitable_a->bounding_box(0, 0, box_left)
+            || !hitable_b->bounding_box(0, 0, box_right))
         std::cerr << "no bounding box in BVHNode constructor\n";
     return bool(box_left.min().z() < box_right.min().z());
 }
@@ -60,15 +63,18 @@ BVHNode::BVHNode(
     }
     else {
         left = std::shared_ptr<Hitable>(
-                new BVHNode(hitable_begin, hitable_begin + (n / 2), time0, time1)
+                new BVHNode(hitable_begin, hitable_begin + (n / 2),
+                            time0, time1)
         );
         right = std::shared_ptr<Hitable>(
-                new BVHNode(hitable_begin + (n / 2), hitable_end, time0, time1)
+                new BVHNode(hitable_begin + (n / 2), hitable_end,
+                            time0, time1)
         );
     }
 
     AABB box_left, box_right;
-    if (!left->bounding_box(time0, time1, box_left) || !right->bounding_box(time0, time1, box_right))
+    if (!left->bounding_box(time0, time1, box_left)
+            || !right->bounding_box(time0, time1, box_right))
         std::cerr << "no bounding box in bvh+node constructor\n";
     box = surrounding_box(box_left, box_right);
 }

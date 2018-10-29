@@ -10,7 +10,8 @@ Vec3 MovingSphere::center(float time) const {
     return center0 + ((time - time0) / (time1 - time0)) * (center1 - center0);
 }
 
-bool MovingSphere::hit(const Ray& r, float tmin, float tmax, HitRecord& rec) const {
+bool MovingSphere::hit(const Ray& r, float tmin, float tmax,
+                       HitRecord& rec) const {
     auto oc = r.origin() - center(r.time());
     auto a = dot(r.direction(), r.direction());
     auto b = dot(oc, r.direction());
@@ -42,8 +43,10 @@ bool MovingSphere::hit(const Ray& r, float tmin, float tmax, HitRecord& rec) con
 }
 
 bool MovingSphere::bounding_box(float t0, float t1, AABB& box) const {
-    AABB temp_box0 = AABB(center0 - Vec3(radius, radius, radius), center0 + Vec3(radius, radius, radius));
-    AABB temp_box1 = AABB(center1 - Vec3(radius, radius, radius), center1 + Vec3(radius, radius, radius));
+    AABB temp_box0 = AABB(center0 - Vec3(radius, radius, radius),
+                          center0 + Vec3(radius, radius, radius));
+    AABB temp_box1 = AABB(center1 - Vec3(radius, radius, radius),
+                          center1 + Vec3(radius, radius, radius));
     box = surrounding_box(temp_box0, temp_box1);
     return true;
 }

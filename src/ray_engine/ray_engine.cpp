@@ -18,11 +18,10 @@ Vec3 ColorForRay(const Ray &r, Hitable *world, int depth) {
         Ray scattered;
         Vec3 attenuation;
 
-        if (depth < 50 && rec.mat_ptr->scatter(r, rec, attenuation, scattered)) {
+        if (depth < 50 && rec.mat_ptr->scatter(r, rec, attenuation, scattered))
             return attenuation * ColorForRay(scattered, world, depth + 1);
-        } else {
+        else
             return {0.0f, 0.0f, 0.0f};
-        }
     } else {
         auto unit_direction = unit_vector(r.direction());
         auto t = 0.5f * (unit_direction.y() + 1.0f);

@@ -12,7 +12,6 @@ set(SOURCE_CPPS
         src/scene_geometry/sphere.cpp
         src/scene_geometry/moving_sphere.cpp
 
-        src/materials/material.cpp
         src/materials/lambertian.cpp
         src/materials/metal.cpp
         src/materials/dielectric.cpp
@@ -23,7 +22,6 @@ set(SOURCE_CPPS
         src/textures/noise_texture.cpp
         src/textures/image_texture.cpp
 
-        src/ray_engine/ray.cpp
         src/ray_engine/hitable_list.cpp
         src/ray_engine/bvh_node.cpp
         src/ray_engine/aabb.cpp
@@ -32,6 +30,8 @@ set(SOURCE_CPPS
         src/camera.cpp
         src/render_settings.cpp
         src/scene_generation.cpp
+
+        src/vec3.cpp
         src/main.cpp
         )
 

@@ -16,8 +16,10 @@ public:
     std::vector<std::shared_ptr<Hitable>> vector_list_;
 
     HitableList() = default;
-    explicit HitableList(std::vector<std::shared_ptr<Hitable>> &l) {vector_list_ = std::move(l); }
-    bool hit(const Ray& r, float t_min, float t_max, HitRecord& rec) const override;
+    explicit HitableList(std::vector<std::shared_ptr<Hitable>> &l)
+            {vector_list_ = std::move(l); }
+    bool hit(const Ray& r, float t_min, float t_max,
+             HitRecord& rec) const override;
     bool bounding_box(float t0, float t1, AABB& box) const override;
 };
 

@@ -2,6 +2,8 @@
 // Created by Steve Hwan on 10/2/18.
 //
 
+#include <cmath>
+
 #include "camera.h"
 
 
@@ -13,8 +15,9 @@ Vec3 random_in_unit_disk() {
     return p;
 }
 
-Camera::Camera(Vec3 lookfrom, Vec3 lookat, Vec3 vup, float vfov, float aspect, float aperture, float focus_dist,
-        float t0, float t1) {  // vfov is top to bottom in degrees
+Camera::Camera(Vec3 lookfrom, Vec3 lookat, Vec3 vup, float vfov,
+               float aspect, float aperture, float focus_dist,
+               float t0, float t1) {  // vfov is top to bottom in degrees
     time0 = t0;
     time1 = t1;
 
@@ -28,8 +31,8 @@ Camera::Camera(Vec3 lookfrom, Vec3 lookat, Vec3 vup, float vfov, float aspect, f
     u = unit_vector(cross(vup, w));
     v = cross(w, u);
 
-//    lower_left_corner = Vec3(-half_width, -half_height, -1.0f);
-    lower_left_corner = origin - half_width * focus_dist * u - half_height * focus_dist * v - focus_dist * w;
+    lower_left_corner = origin - half_width * focus_dist * u
+            - half_height * focus_dist * v - focus_dist * w;
     horizontal = 2.0f * half_width * focus_dist * u;
     vertical = 2.0f * half_height * focus_dist * v;
 }
@@ -38,5 +41,7 @@ Ray Camera::get_ray(float s, float t) {
     auto rd = lens_radius * random_in_unit_disk();
     auto offset = u * rd.x() + v * rd.y();
     auto time = time0 + float(drand48() * (time1 - time0));
-    return {origin + offset, lower_left_corner + s * horizontal + t * vertical - origin - offset, time};
+    return {origin + offset,
+            lower_left_corner + s * horizontal + t * vertical - origin - offset,
+            time};
 }

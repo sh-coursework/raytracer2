@@ -60,10 +60,14 @@ In raytracer2, I'm working through the second book,
 ### Code Standards
 * Make class names CapitalizedCamelCase.
 * Put open curly brace on starting line, not by itself on next line.
+* Wrap long lines.
 * More consistency with include order, with self include file first.
+* Keep function name on same line as return value when possible.
+### Other cleanup
+* Moved reflection and unit sphere utility functions into vec3.
 
 ## Stuff I plan to work on:
-* Keep function name on same line as return value when possible.
+* All the names of aabb are bad.
 * Clean up function/method names to CapitalizedCamelCase.
 * Clean up class member names to end with underscore.
 * Clean up variable names to more descriptive.

@@ -14,7 +14,7 @@ public:
     ConstantTexture() = default;
     explicit ConstantTexture(Vec3 c) : color(c) {}
     Vec3 value(float u, float v, const Vec3& p) const override
-    { return color; }
+            { return color; }
 
     Vec3 color;
 };

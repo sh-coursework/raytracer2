@@ -13,12 +13,15 @@
 class Sphere : public Hitable {
 public:
     Sphere() = default;
-    Sphere(Vec3 cen, float r, Material *m) : center(cen), radius(r), mat_ptr(m) {};
-    bool hit(const Ray& r, float tmin, float tmax, HitRecord& rec) const override;
+    Sphere(Vec3 cen, float r, Material *m) : center(cen), radius(r),
+                                             mat_ptr(m) {};
+    bool hit(const Ray& r, float tmin, float tmax,
+             HitRecord& rec) const override;
     bool bounding_box(float t0, float t1, AABB& box) const override;
     Vec3 center;
     float radius;
-    Material *mat_ptr;  // I think I actually own the material ptr, but I don't really want to.
+    Material *mat_ptr;  // I think I actually own the material ptr,
+                        // but I don't really want to.
 };
 
 

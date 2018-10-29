@@ -12,7 +12,8 @@
 class Lambertian : public Material {
 public:
     explicit Lambertian(Texture *a) : albedo(a) {}
-    bool scatter(const Ray& r_in, const HitRecord& rec, Vec3& attenuation, Ray& scattered) const override;
+    bool scatter(const Ray& r_in, const HitRecord& rec, Vec3& attenuation,
+                 Ray& scattered) const override;
 
     Texture *albedo;
 };

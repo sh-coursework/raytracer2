@@ -4,6 +4,7 @@
 
 #ifndef RAYTRACER1_RAY_H
 #define RAYTRACER1_RAY_H
+
 #include "vec3.h"
 
 
@@ -20,7 +21,5 @@ class Ray {
         Vec3 B;
         float _time;
 };
-
-Vec3 random_in_unit_sphere();
 
 #endif //RAYTRACER1_RAY_H

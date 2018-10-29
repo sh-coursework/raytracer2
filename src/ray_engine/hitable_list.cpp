@@ -7,7 +7,8 @@
 #include <boost/range/irange.hpp>
 
 
-bool HitableList::hit(const Ray& r, float t_min, float t_max, HitRecord& rec) const {
+bool HitableList::hit(const Ray& r, float t_min, float t_max,
+                      HitRecord& rec) const {
     HitRecord temp_rec;
     auto hit_anything = false;
     double closest_so_far = t_max;

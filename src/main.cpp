@@ -29,10 +29,13 @@ main(int argc, char** argv) {
     ///////////////////////////////////////////////////////////////////////
     // Options and Render Settings processing
 
-    auto generic_options = boost::program_options::options_description("Generic options");
+    auto generic_options = boost::program_options::options_description(
+            "Generic options");
     generic_options.add_options()
             ("help,h", "produce help message")
-            ("rendersettingsfile,r", boost::program_options::value<std::string>(), "render settings file")
+            ("rendersettingsfile,r",
+                    boost::program_options::value<std::string>(),
+                    "render settings file")
             ;
     auto render_settings = RenderSettings();
     // Returns a unique_ptr
@@ -43,7 +46,8 @@ main(int argc, char** argv) {
 
     boost::program_options::variables_map parse_results;
     boost::program_options::store(
-            boost::program_options::parse_command_line(argc, argv, cmdline_options),
+            boost::program_options::parse_command_line(
+                    argc, argv, cmdline_options),
             parse_results
             );
     // --help option
@@ -55,19 +59,24 @@ main(int argc, char** argv) {
     }
     if (parse_results.count("rendersettingsfile"))
     {
-        std::string render_settings_filename = parse_results["rendersettingsfile"].as<std::string>();
-        std::ifstream render_settings_file_stream(render_settings_filename.c_str());
-        auto render_settings_file_options = boost::program_options::options_description();
+        std::string render_settings_filename
+                = parse_results["rendersettingsfile"].as<std::string>();
+        std::ifstream render_settings_file_stream(
+                render_settings_filename.c_str());
+        auto render_settings_file_options
+                = boost::program_options::options_description();
         render_settings_file_options.add(*render_settings_options);
         boost::program_options::store(
-                boost::program_options::parse_config_file(render_settings_file_stream,
+                boost::program_options::parse_config_file(
+                        render_settings_file_stream,
                         render_settings_file_options),
                         parse_results
         );
     }
 
     boost::program_options::notify(parse_results);
-    // After this, maybe consider pulling in a yaml file to override render settings?
+    // After this, maybe consider pulling in a yaml file to override
+    // render settings?
     // It may be extraneous because the boost parser already gives me the
     // ability to read a config file - for not, that's probably good enough...
 
@@ -89,9 +98,11 @@ main(int argc, char** argv) {
     // Get to the rendering and writing images
 
 
-    float pixels[render_settings.resolution_x * render_settings.resolution_y * render_settings.num_channels];
+    float pixels[render_settings.resolution_x * render_settings.resolution_y
+            * render_settings.num_channels];
 
-    OIIO::ImageOutput *oiio_out = OIIO::ImageOutput::create(render_settings.image_filename);
+    OIIO::ImageOutput *oiio_out = OIIO::ImageOutput::create(
+            render_settings.image_filename);
     if (! oiio_out)
         return WEXITED;
 
@@ -122,8 +133,10 @@ main(int argc, char** argv) {
 
             // "write" image to stdout
             // "gamma correct" - maybe in the future this will be opencolor lut?
-            pixel_color = Vec3(sqrtf(pixel_color[0]), sqrtf(pixel_color[1]), sqrtf(pixel_color[2]));
-            auto pixel_base_index = ((resolution_y - 1 - row_num) * resolution_x + column_num) * render_settings.num_channels;
+            pixel_color = Vec3(sqrtf(pixel_color[0]), sqrtf(pixel_color[1]),
+                    sqrtf(pixel_color[2]));
+            auto pixel_base_index = ((resolution_y - 1 - row_num) * resolution_x
+                    + column_num) * render_settings.num_channels;
             pixels[pixel_base_index    ] = pixel_color[0];
             pixels[pixel_base_index + 1] = pixel_color[1];
             pixels[pixel_base_index + 2] = pixel_color[2];
@@ -133,7 +146,8 @@ main(int argc, char** argv) {
                 << std::setw(6) << std::setprecision(2) << std::fixed
                 << 100.0 * double(row_count + 1) / resolution_y
                 << "%) "
-                << (std::clock() - world_built_time) / double(CLOCKS_PER_SEC) << " seconds";
+                << (std::clock() - world_built_time) / double(CLOCKS_PER_SEC)
+                << " seconds";
         else
             std::cout << ".";
     }
@@ -144,9 +158,10 @@ main(int argc, char** argv) {
             << "\n";
 
     // Write Image
-    // Note: ppm is m_pnm_type 3 - probably 6-3.  So how do I set pnm:binary == 0(false)
+    // Note: ppm is m_pnm_type 3 - probably 6-3.
     // in a spec, how do I set spec.get_int_attribute ?
-    OIIO::ImageSpec spec(resolution_x, resolution_y, render_settings.num_channels, OIIO::TypeDesc::FLOAT);
+    OIIO::ImageSpec spec(resolution_x, resolution_y,
+            render_settings.num_channels, OIIO::TypeDesc::FLOAT);
     spec.attribute("pnm:binary", 0);  // int - just for ppm to turn off binary
     oiio_out->open(render_settings.image_filename, spec);
     oiio_out->write_image(OIIO::TypeDesc::FLOAT, pixels);

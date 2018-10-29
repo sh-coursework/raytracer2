@@ -13,8 +13,9 @@ Vec3 random_in_unit_disk();
 class Camera {
 public:
     Camera() = default;
-    Camera(Vec3 lookfrom ,Vec3 lookat, Vec3 vup, float vfov, float aspect, float aperture, float focus_dist,
-            float t0, float t1);  // vfov is top to bottom in degrees
+    Camera(Vec3 lookfrom ,Vec3 lookat, Vec3 vup, float vfov, float aspect,
+           float aperture, float focus_dist,
+           float t0, float t1);  // vfov is top to bottom in degrees
     Ray get_ray(float u, float v);
 
     Vec3 origin;

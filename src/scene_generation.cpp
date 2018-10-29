@@ -4,6 +4,7 @@
 
 #include "scene_generation.h"
 
+#include <cmath>
 #include <vector>
 
 #include "vec3.h"
@@ -35,7 +36,8 @@ Hitable *random_scene(float t_min, float t_max, bool use_bvh)
             new ConstantTexture(Vec3(0.9, 0.9, 0.9))
             );
     scene_list.push_back( std::shared_ptr<Hitable>(
-            new Sphere(Vec3(0.0f, -1000.0f, 0.0f), 1000.0f, new Lambertian(checker))
+            new Sphere(Vec3(0.0f, -1000.0f, 0.0f), 1000.0f,
+                       new Lambertian(checker))
      ));
 
     for (auto a: boost::irange(-10, 10))
@@ -47,18 +49,23 @@ Hitable *random_scene(float t_min, float t_max, bool use_bvh)
             if (choose_mat < 0.8)  // diffuse
             {
                 scene_list.push_back( std::shared_ptr<Hitable>(
-                        new MovingSphere(center, center + Vec3(0, 0.5 * drand48(), 0),
+                        new MovingSphere(center,
+                                center + Vec3(0, 0.5 * drand48(), 0),
                                 0.0, 1.0,
                                 0.2f,
                                 new Lambertian(new ConstantTexture(
-                                        Vec3(drand48() * drand48(), drand48() * drand48(), drand48() * drand48()))))
+                                        Vec3(drand48() * drand48(),
+                                                drand48() * drand48(),
+                                                drand48() * drand48()))))
                 ));
             } else if (choose_mat < 0.95)  // metal
             {
                 scene_list.push_back( std::shared_ptr<Hitable>(
                         new Sphere(center, 0.2,
                                 new Metal(new ConstantTexture(
-                                        Vec3(0.5 * (1.0f + drand48()), 0.5 * (1.0f + drand48()), 0.5 * (1.0f + drand48()))),
+                                        Vec3(0.5 * (1.0f + drand48()),
+                                                0.5 * (1.0f + drand48()),
+                                                0.5 * (1.0f + drand48()))),
                                         0.5 * drand48()))
                 ));
             } else  // glass
@@ -74,10 +81,12 @@ Hitable *random_scene(float t_min, float t_max, bool use_bvh)
             new Sphere(Vec3(0.0f, 1.0f, 0.0f), 1.0, new Dielectric(1.5))
     ));
     scene_list.push_back( std::shared_ptr<Hitable>(
-            new Sphere(Vec3(-4.0f, 1.0f, 0.0f), 1.0f, new Lambertian(new ConstantTexture(Vec3(0.4f, 0.2f, 0.2f))))
+            new Sphere(Vec3(-4.0f, 1.0f, 0.0f), 1.0f, new Lambertian(
+                    new ConstantTexture(Vec3(0.4f, 0.2f, 0.2f))))
     ));
     scene_list.push_back( std::shared_ptr<Hitable>(
-            new Sphere(Vec3(4.0f, 1.0f, 0.0f), 1.0f, new Metal(new ConstantTexture(Vec3(0.7f, 0.6f, 0.5f)), 0.0f))
+            new Sphere(Vec3(4.0f, 1.0f, 0.0f), 1.0f, new Metal(
+                    new ConstantTexture(Vec3(0.7f, 0.6f, 0.5f)), 0.0f))
     ));
 
     if (use_bvh)
@@ -175,11 +184,13 @@ Camera && random_scene_cam(const RenderSettings &render_settings)
     auto lookat = Vec3(0.0f, 0.0f, 0.0f);
     auto dist_to_focus = (lookfrom - lookat).length();
     auto aperture = 0.0f;
-    auto cam = Camera(lookfrom, lookat, Vec3(0.0f, 1.0f, 0.0f),
-                      20.0f,
-                      float(render_settings.resolution_x) / float(render_settings.resolution_y),
-                      aperture, dist_to_focus,
-                      render_settings.shutter_open, render_settings.shutter_close);
+    auto cam = Camera(lookfrom, lookat,
+            Vec3(0.0f, 1.0f, 0.0f),
+            20.0f,
+            float(render_settings.resolution_x)
+                    / float(render_settings.resolution_y),
+            aperture, dist_to_focus,
+            render_settings.shutter_open, render_settings.shutter_close);
     return std::move(cam); // seems to complain if I do std::move and if I don't
 }
 
@@ -190,11 +201,13 @@ Camera && two_sphere_cam(const RenderSettings &render_settings)
     auto two_sphere_lookat = Vec3(0.0f, 0.0f, 0.0f);
     auto two_sphere_dist_to_focus = 10.0f;
     auto two_sphere_aperture = 0.0f;
-    auto cam = Camera(two_sphere_lookfrom, two_sphere_lookat, Vec3(0.0, 1.0, 0.0),
-                  20.0f,
-                  float(render_settings.resolution_x) / float(render_settings.resolution_y),
-                  two_sphere_aperture, two_sphere_dist_to_focus,
-                  render_settings.shutter_open, render_settings.shutter_close);
+    auto cam = Camera(two_sphere_lookfrom, two_sphere_lookat,
+            Vec3(0.0, 1.0, 0.0),
+            20.0f,
+            float(render_settings.resolution_x)
+                    / float(render_settings.resolution_y),
+            two_sphere_aperture, two_sphere_dist_to_focus,
+            render_settings.shutter_open, render_settings.shutter_close);
     return std::move(cam); // seems to complain if I do std::move and if I don't
 }
 
@@ -205,11 +218,13 @@ Camera && image_sphere_test_cam(const RenderSettings &render_settings)
     auto two_sphere_lookat = Vec3(0.0f, 2.0f, 0.0f);
     auto two_sphere_dist_to_focus = 10.0f;
     auto two_sphere_aperture = 0.0f;
-    auto cam = Camera(two_sphere_lookfrom, two_sphere_lookat, Vec3(0.0, 1.0, 0.0),
-                      20.0f,
-                      float(render_settings.resolution_x) / float(render_settings.resolution_y),
-                      two_sphere_aperture, two_sphere_dist_to_focus,
-                      render_settings.shutter_open, render_settings.shutter_close);
+    auto cam = Camera(two_sphere_lookfrom, two_sphere_lookat,
+            Vec3(0.0, 1.0, 0.0),
+            20.0f,
+            float(render_settings.resolution_x)
+                    / float(render_settings.resolution_y),
+            two_sphere_aperture, two_sphere_dist_to_focus,
+            render_settings.shutter_open, render_settings.shutter_close);
     return std::move(cam); // seems to complain if I do std::move and if I don't
 }
 
