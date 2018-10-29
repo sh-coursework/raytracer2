@@ -12,11 +12,11 @@ class ConstantTexture : public Texture
 {
 public:
     ConstantTexture() = default;
-    explicit ConstantTexture(vec3 c) : color(c) {}
-    vec3 value(float u, float v, const vec3& p) const override
+    explicit ConstantTexture(Vec3 c) : color(c) {}
+    Vec3 value(float u, float v, const Vec3& p) const override
     { return color; }
 
-    vec3 color;
+    Vec3 color;
 };
 
 #endif //RAYTRACER2_CONSTANT_TEXTURE_H

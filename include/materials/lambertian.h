@@ -9,11 +9,10 @@
 #include "materials/material.h"
 #include "textures/texture.h"
 
-class lambertian : public material
-{
+class Lambertian : public Material {
 public:
-    explicit lambertian(Texture *a) : albedo(a) {}
-    bool scatter(const ray& r_in, const hit_record& rec, vec3& attenuation, ray& scattered) const override;
+    explicit Lambertian(Texture *a) : albedo(a) {}
+    bool scatter(const Ray& r_in, const HitRecord& rec, Vec3& attenuation, Ray& scattered) const override;
 
     Texture *albedo;
 };

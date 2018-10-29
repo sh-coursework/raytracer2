@@ -9,14 +9,14 @@
 #include "ray_engine/hitable.h"
 
 
-class material {
+class Material {
 public:
-    virtual bool scatter(const ray& r_in, const hit_record& rec, vec3& attenuation, ray& scattered) const = 0;
+    virtual bool scatter(const Ray& r_in, const HitRecord& rec, Vec3& attenuation, Ray& scattered) const = 0;
 };
 
 
-vec3 reflect(const vec3& v, const vec3& n);
-bool refract(const vec3& v, const vec3& n, float ni_over_nt, vec3& refracted);
+Vec3 reflect(const Vec3& v, const Vec3& n);
+bool refract(const Vec3& v, const Vec3& n, float ni_over_nt, Vec3& refracted);
 float schlick(float cosine, float ref_idx);
 
 

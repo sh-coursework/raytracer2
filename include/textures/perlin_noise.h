@@ -10,17 +10,17 @@
 
 class PerlinNoise {
 public:
-    float Noise(const vec3& p) const;
-    float Turbulence(const vec3& p, int depth=7) const;
+    float Noise(const Vec3& p) const;
+    float Turbulence(const Vec3& p, int depth=7) const;
 
-    static vec3 *random_vec3;
+    static Vec3 *random_vec3;
     static int *perm_x;
     static int *perm_y;
     static int *perm_z;
 };
 
 
-static vec3*
+static Vec3*
 PerlinGenerate();
 
 
@@ -33,7 +33,7 @@ PerlinGeneratePerm();
 
 
 inline float
-perlin_interp(vec3 c[2][2][2], float u, float v, float w)
+perlin_interp(Vec3 c[2][2][2], float u, float v, float w)
 {
     // Chapter 4 - move Hermite cubic smoothing here
     auto uu = u * u * (3.0 - 2.0 * u);
@@ -45,7 +45,7 @@ perlin_interp(vec3 c[2][2][2], float u, float v, float w)
         for (int j: {0, 1})
             for (int k: {0, 1}) {
                 // weight_v is the distance vector, c is gradient
-                vec3 weight_v(u - i, v - j, w - k);
+                Vec3 weight_v(u - i, v - j, w - k);
                 accum += (i * uu + (1 - i) * (1.0f - uu))
                        * (j * vv + (1 - j) * (1.0f - vv))
                        * (k * ww + (1 - k) * (1.0f - ww))

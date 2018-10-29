@@ -76,8 +76,8 @@ main(int argc, char** argv) {
 
     auto start_time = std::clock();
 
-    hitable *world;
-    camera cam;
+    Hitable *world;
+    Camera cam;
     std::tie(world, cam) = get_scene(render_settings);
 
     auto world_built_time = std::clock();
@@ -107,7 +107,7 @@ main(int argc, char** argv) {
         auto row_num = resolution_y - 1 - row_count;
         for (auto column_num: boost::irange(0, resolution_x))
         {
-            auto pixel_color = vec3(0.0f, 0.0f, 0.0f);
+            auto pixel_color = Vec3(0.0f, 0.0f, 0.0f);
 
             for (auto sample_num: boost::irange(0, number_samples_per_pixel))
             {
@@ -116,13 +116,13 @@ main(int argc, char** argv) {
 
                 auto r = cam.get_ray(u, v);
                 auto p = r.point_at_parameter(2.0f);  // p not used
-                pixel_color += color(r, world, 0);
+                pixel_color += ColorForRay(r, world, 0);
             }
             pixel_color /= float(number_samples_per_pixel);
 
             // "write" image to stdout
             // "gamma correct" - maybe in the future this will be opencolor lut?
-            pixel_color = vec3(sqrtf(pixel_color[0]), sqrtf(pixel_color[1]), sqrtf(pixel_color[2]));
+            pixel_color = Vec3(sqrtf(pixel_color[0]), sqrtf(pixel_color[1]), sqrtf(pixel_color[2]));
             auto pixel_base_index = ((resolution_y - 1 - row_num) * resolution_x + column_num) * render_settings.num_channels;
             pixels[pixel_base_index    ] = pixel_color[0];
             pixels[pixel_base_index + 1] = pixel_color[1];

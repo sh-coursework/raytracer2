@@ -11,11 +11,10 @@
 #include "textures/texture.h"
 
 
-class ConstantMaterial : public material
-{
+class ConstantMaterial : public Material {
 public:
     explicit ConstantMaterial(Texture *a) : albedo(a) {}
-    bool scatter(const ray& r_in, const hit_record& rec, vec3& attenuation, ray& scattered) const override;
+    bool scatter(const Ray& r_in, const HitRecord& rec, Vec3& attenuation, Ray& scattered) const override;
 
     Texture *albedo;
 };

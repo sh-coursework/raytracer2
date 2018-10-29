@@ -8,20 +8,20 @@
 #include "boost/range/irange.hpp"
 
 #include "vec3.h"
-#include "ray.h"
+#include "ray_engine/ray.h"
 
 inline float ffmin(float a, float b) { return a < b ? a : b; }
 inline float ffmax(float a, float b) { return a > b ? a : b; }
 
-class aabb {
+class AABB {
 public:
-    aabb() = default;
-    aabb(const vec3& a, const vec3&b) { _min = a; _max = b; }
+    AABB() = default;
+    AABB(const Vec3& a, const Vec3&b) { _min = a; _max = b; }
 
-    vec3 min() const {return _min; }
-    vec3 max() const {return _max; }
+    Vec3 min() const {return _min; }
+    Vec3 max() const {return _max; }
 
-    inline bool hit(const ray& r, float tmin, float tmax) const {
+    inline bool hit(const Ray& r, float tmin, float tmax) const {
         for (auto a: boost::irange(0, 3)) {
             auto invD = 1.0f / r.direction()[a];
             auto t0 = (min()[a] - r.origin()[a]) * invD;
@@ -36,10 +36,10 @@ public:
         return true;
     }
 
-    vec3 _min;
-    vec3 _max;
+    Vec3 _min;
+    Vec3 _max;
 };
 
-aabb surrounding_box(aabb box0, aabb box1);
+AABB surrounding_box(AABB box0, AABB box1);
 
 #endif //RAYTRACER2_AABB_H

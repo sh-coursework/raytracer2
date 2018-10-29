@@ -8,10 +8,10 @@
 #include "ray_engine/hitable.h"
 #include "material.h"
 
-class dielectric : public material {
+class Dielectric : public Material {
 public:
-    explicit dielectric(float ri) : ref_idx(ri) {}
-    bool scatter(const ray& r_in, const hit_record& rec, vec3& attenuation, ray& scattered) const override;
+    explicit Dielectric(float ri) : ref_idx(ri) {}
+    bool scatter(const Ray& r_in, const HitRecord& rec, Vec3& attenuation, Ray& scattered) const override;
 
     float ref_idx;
 };

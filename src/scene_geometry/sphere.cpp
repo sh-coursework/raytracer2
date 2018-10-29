@@ -7,8 +7,8 @@
 #include <cmath>
 
 
-// Arguably, this could go in a math library (as could vec3)
-void GetSphereUV(const vec3 &p, float& u, float &v)
+// Arguably, this could go in a math library (as could Vec3)
+void GetSphereUV(const Vec3 &p, float& u, float &v)
 {
     auto phi = float(atan2(p.z(), p.x()));
     auto theta = float(asin(p.y()));
@@ -17,7 +17,7 @@ void GetSphereUV(const vec3 &p, float& u, float &v)
 }
 
 
-bool sphere::hit(const ray& r, float tmin, float tmax, hit_record& rec) const {
+bool Sphere::hit(const Ray& r, float tmin, float tmax, HitRecord& rec) const {
     auto oc = r.origin() - center;
     auto a = dot(r.direction(), r.direction());
     auto b = dot(oc, r.direction());
@@ -48,8 +48,8 @@ bool sphere::hit(const ray& r, float tmin, float tmax, hit_record& rec) const {
     return false;
 }
 
-bool sphere::bounding_box(float t0, float t1, aabb& box) const {
-    box = aabb(center - vec3(radius, radius, radius), center + vec3(radius, radius, radius));
+bool Sphere::bounding_box(float t0, float t1, AABB& box) const {
+    box = AABB(center - Vec3(radius, radius, radius), center + Vec3(radius, radius, radius));
     return true;
 }
 

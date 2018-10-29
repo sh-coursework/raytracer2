@@ -6,11 +6,11 @@
 
 #include "scene_geometry/sphere.h"  // For the UV math
 
-vec3 moving_sphere::center(float time) const {
+Vec3 MovingSphere::center(float time) const {
     return center0 + ((time - time0) / (time1 - time0)) * (center1 - center0);
 }
 
-bool moving_sphere::hit(const ray& r, float tmin, float tmax, hit_record& rec) const {
+bool MovingSphere::hit(const Ray& r, float tmin, float tmax, HitRecord& rec) const {
     auto oc = r.origin() - center(r.time());
     auto a = dot(r.direction(), r.direction());
     auto b = dot(oc, r.direction());
@@ -41,9 +41,9 @@ bool moving_sphere::hit(const ray& r, float tmin, float tmax, hit_record& rec) c
     return false;
 }
 
-bool moving_sphere::bounding_box(float t0, float t1, aabb& box) const {
-    aabb temp_box0 = aabb(center0 - vec3(radius, radius, radius), center0 + vec3(radius, radius, radius));
-    aabb temp_box1 = aabb(center1 - vec3(radius, radius, radius), center1 + vec3(radius, radius, radius));
+bool MovingSphere::bounding_box(float t0, float t1, AABB& box) const {
+    AABB temp_box0 = AABB(center0 - Vec3(radius, radius, radius), center0 + Vec3(radius, radius, radius));
+    AABB temp_box1 = AABB(center1 - Vec3(radius, radius, radius), center1 + Vec3(radius, radius, radius));
     box = surrounding_box(temp_box0, temp_box1);
     return true;
 }

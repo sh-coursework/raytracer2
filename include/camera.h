@@ -8,20 +8,20 @@
 #include "vec3.h"
 #include "ray_engine/ray.h"
 
-vec3 random_in_unit_disk();
+Vec3 random_in_unit_disk();
 
-class camera {
+class Camera {
 public:
-    camera() = default;
-    camera(vec3 lookfrom ,vec3 lookat, vec3 vup, float vfov, float aspect, float aperture, float focus_dist,
+    Camera() = default;
+    Camera(Vec3 lookfrom ,Vec3 lookat, Vec3 vup, float vfov, float aspect, float aperture, float focus_dist,
             float t0, float t1);  // vfov is top to bottom in degrees
-    ray get_ray(float u, float v);
+    Ray get_ray(float u, float v);
 
-    vec3 origin;
-    vec3 lower_left_corner;
-    vec3 horizontal;
-    vec3 vertical;
-    vec3 u, v, w;
+    Vec3 origin;
+    Vec3 lower_left_corner;
+    Vec3 horizontal;
+    Vec3 vertical;
+    Vec3 u, v, w;
     float time0, time1;
     float lens_radius;
 };

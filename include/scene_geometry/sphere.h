@@ -5,23 +5,24 @@
 #ifndef RAYTRACER1_SPHERE_H
 #define RAYTRACER1_SPHERE_H
 
-#include "materials/material.h"
+#include "vec3.h"
 #include "ray_engine/hitable.h"
 #include "ray_engine/aabb.h"
-#include "vec3.h"
+#include "materials/material.h"
 
-class sphere : public hitable {
+class Sphere : public Hitable {
 public:
-    sphere() = default;
-    sphere(vec3 cen, float r, material *m) : center(cen), radius(r), mat_ptr(m) {};
-    bool hit(const ray& r, float tmin, float tmax, hit_record& rec) const override;
-    bool bounding_box(float t0, float t1, aabb& box) const override;
-    vec3 center;
+    Sphere() = default;
+    Sphere(Vec3 cen, float r, Material *m) : center(cen), radius(r), mat_ptr(m) {};
+    bool hit(const Ray& r, float tmin, float tmax, HitRecord& rec) const override;
+    bool bounding_box(float t0, float t1, AABB& box) const override;
+    Vec3 center;
     float radius;
-    material *mat_ptr;  // I think I actually own the material ptr, but I don't really want to.
+    Material *mat_ptr;  // I think I actually own the material ptr, but I don't really want to.
 };
 
-void GetSphereUV(const vec3 &p, float& u, float &v);
+
+void GetSphereUV(const Vec3 &p, float& u, float &v);
 
 
 #endif //RAYTRACER1_SPHERE_H

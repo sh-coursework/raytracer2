@@ -11,14 +11,14 @@
 #include "ray_engine/hitable.h"
 #include "ray_engine/aabb.h"
 
-class hitable_list : public hitable {
+class HitableList : public Hitable {
 public:
-    std::vector<std::shared_ptr<hitable>> vector_list_;
+    std::vector<std::shared_ptr<Hitable>> vector_list_;
 
-    hitable_list() = default;
-    explicit hitable_list(std::vector<std::shared_ptr<hitable>> &l) {vector_list_ = std::move(l); }
-    bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const override;
-    bool bounding_box(float t0, float t1, aabb& box) const override;
+    HitableList() = default;
+    explicit HitableList(std::vector<std::shared_ptr<Hitable>> &l) {vector_list_ = std::move(l); }
+    bool hit(const Ray& r, float t_min, float t_max, HitRecord& rec) const override;
+    bool bounding_box(float t0, float t1, AABB& box) const override;
 };
 
 

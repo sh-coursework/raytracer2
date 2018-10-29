@@ -4,11 +4,11 @@
 
 #include "materials/material.h"
 
-vec3 reflect(const vec3& v, const vec3& n) {
+Vec3 reflect(const Vec3& v, const Vec3& n) {
     return v-2*dot(v, n) * n;
 }
 
-bool refract(const vec3& v, const vec3& n, float ni_over_nt, vec3& refracted) {
+bool refract(const Vec3& v, const Vec3& n, float ni_over_nt, Vec3& refracted) {
     auto uv = unit_vector(v);
     auto dt = dot(uv, n);
     auto discriminant = 1.0f - ni_over_nt * ni_over_nt * (1.0f - dt * dt);

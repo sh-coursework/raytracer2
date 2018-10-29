@@ -9,10 +9,10 @@
 #include "materials/material.h"
 #include "textures/texture.h"
 
-class metal : public material {
+class Metal : public Material {
 public:
-    metal(Texture *a, float f);
-    bool scatter(const ray& r_in, const hit_record& rec, vec3& attenuation, ray& scattered) const override;
+    Metal(Texture *a, float f);
+    bool scatter(const Ray& r_in, const HitRecord& rec, Vec3& attenuation, Ray& scattered) const override;
 
     Texture *albedo;
     float fuzz;

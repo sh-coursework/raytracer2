@@ -8,7 +8,7 @@
 #include <algorithm>
 
 // version 1 from book
-//bool aabb::hit(const ray& r, float tmin, float tmax) const {
+//bool AABB::hit(const Ray& r, float tmin, float tmax) const {
 //    for (auto a: boost::irange(0, 3)) {
 //        float t0 = ffmin((_min[a] - r.origin()[a]) / r.direction()[a],
 //                         (_max[a] - r.origin()[a]) / r.direction()[a]);
@@ -23,11 +23,11 @@
 //}
 
 
-aabb surrounding_box(aabb box0, aabb box1) {
-    vec3 small( ffmin(box0.min().x(), box1.min().x()),
+AABB surrounding_box(AABB box0, AABB box1) {
+    Vec3 small( ffmin(box0.min().x(), box1.min().x()),
                 ffmin(box0.min().y(), box1.min().y()),
                 ffmin(box0.min().z(), box1.min().z()));
-    vec3 big  ( ffmax(box0.max().x(), box1.max().x()),
+    Vec3 big  ( ffmax(box0.max().x(), box1.max().x()),
                 ffmax(box0.max().y(), box1.max().y()),
                 ffmax(box0.max().z(), box1.max().z()));
     return {small, big};

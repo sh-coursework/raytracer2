@@ -7,9 +7,8 @@
 #include <boost/range/irange.hpp>
 
 
-bool hitable_list::hit(const ray& r, float t_min, float t_max, hit_record& rec) const
-{
-    hit_record temp_rec;
+bool HitableList::hit(const Ray& r, float t_min, float t_max, HitRecord& rec) const {
+    HitRecord temp_rec;
     auto hit_anything = false;
     double closest_so_far = t_max;
     for (auto &curr_hitable: vector_list_) {
@@ -22,12 +21,11 @@ bool hitable_list::hit(const ray& r, float t_min, float t_max, hit_record& rec) 
     return hit_anything;
 }
 
-bool hitable_list::bounding_box(float t0, float t1, aabb& box) const
-{
+bool HitableList::bounding_box(float t0, float t1, AABB& box) const {
     if (vector_list_.empty())
         return false;
 
-    aabb temp_box;
+    AABB temp_box;
 
     // Special treatment for first element
     auto hitables_it = vector_list_.begin();

@@ -4,9 +4,9 @@
 
 #include "materials/lambertian.h"
 
-bool lambertian::scatter(const ray &r_in, const hit_record &rec, vec3 &attenuation, ray &scattered) const {
+bool Lambertian::scatter(const Ray &r_in, const HitRecord &rec, Vec3 &attenuation, Ray &scattered) const {
     auto target = rec.p + rec.normal + random_in_unit_sphere();
-    scattered = ray(rec.p, target - rec.p, r_in.time());
+    scattered = Ray(rec.p, target - rec.p, r_in.time());
     attenuation = albedo->value(rec.u, rec.v, rec.p);
     return true;
 }

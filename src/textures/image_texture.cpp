@@ -27,7 +27,7 @@ ImageTexture::ImageTexture(std::string image_file) :
     OIIO::ImageInput::destroy(in);
 }
 
-vec3 ImageTexture::value(float u, float v, const vec3& p) const
+Vec3 ImageTexture::value(float u, float v, const Vec3& p) const
 {
     auto i = std::max(0, std::min(image_resx - 1, int(u * image_resx)));
     auto j = std::max(0, std::min(image_resy - 1, int((1 - v) * float(image_resy - 0.001))));

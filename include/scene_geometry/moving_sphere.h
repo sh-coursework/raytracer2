@@ -6,18 +6,19 @@
 #define RAYTRACER2_MOVING_SPHERE_H
 
 #include "ray_engine/hitable.h"
+#include "materials/material.h"
 
-class moving_sphere : public hitable {
+class MovingSphere : public Hitable {
 public:
-    moving_sphere() = default;
-    moving_sphere(vec3 cen0, vec3 cen1, float t0, float t1, float r, material *m) : center0(cen0), center1(cen1), time0(t0), time1(t1), radius(r), mat_ptr(m) {};
-    bool hit(const ray& r, float tmin, float tmax, hit_record& rec) const override;
-    bool bounding_box(float t0, float t1, aabb& box) const override;
-    vec3 center(float time) const;
-    vec3 center0, center1;
+    MovingSphere() = default;
+    MovingSphere(Vec3 cen0, Vec3 cen1, float t0, float t1, float r, Material *m) : center0(cen0), center1(cen1), time0(t0), time1(t1), radius(r), mat_ptr(m) {};
+    bool hit(const Ray& r, float tmin, float tmax, HitRecord& rec) const override;
+    bool bounding_box(float t0, float t1, AABB& box) const override;
+    Vec3 center(float time) const;
+    Vec3 center0, center1;
     float time0, time1;
     float radius;
-    material *mat_ptr;  // I think I actually own the material ptr, but I don't really want to.
+    Material *mat_ptr;  // I think I actually own the material ptr, but I don't really want to.
 };
 
 

@@ -4,7 +4,7 @@
 
 #include "textures/checker_texture.h"
 
-vec3 CheckerTexture::value(float u, float v, const vec3& p) const
+Vec3 CheckerTexture::value(float u, float v, const Vec3& p) const
 {
     auto sines = float(sin(10.0 * p.x()) * sin(10.0 * p.y()) * sin(10.0 * p.z()));
     if (sines < 0)

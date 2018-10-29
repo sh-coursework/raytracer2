@@ -34,7 +34,7 @@ In raytracer2, I'm working through the second book,
 * Moved render settings into a separate module, and added
   commmand line parser and config file parser to make testing easier.
 
-* 10/25/2018 sh-coursework - Get rid of raw hitable **,
+* 10/25/2018 sh-coursework - Get rid of raw Hitable **,
   use vector and smart pointers in hitable_list and bvh_node.
   Change bvh_node implementation from qsort to sort.
   Rendering the same scene in bvh mode
@@ -57,12 +57,20 @@ In raytracer2, I'm working through the second book,
 * Single-argument constructors must be marked explicit...
 * Update headers float -> cfloat, math->cmath, stdlib->cstdlib
 * Parameter .. is const-qualified in the function declaration; ...
+### Code Standards
+* Make class names CapitalizedCamelCase.
+* Put open curly brace on starting line, not by itself on next line.
+* More consistency with include order, with self include file first.
 
 ## Stuff I plan to work on:
-* scanline and tile output/traversal, with work-in-progress outputs.
+* Keep function name on same line as return value when possible.
+* Clean up function/method names to CapitalizedCamelCase.
+* Clean up class member names to end with underscore.
+* Clean up variable names to more descriptive.
+* Look for more std container usage.
 * Use smart pointers for all ownership
+* scanline and tile output/traversal, with work-in-progress outputs.
 * shader binding - separate material definition from scene geom
-* Clean up variable and class names
 * Comment/Document
 * External definition of scene - USD?
 * OSL shaders?

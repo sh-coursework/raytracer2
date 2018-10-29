@@ -12,7 +12,7 @@ class CheckerTexture : public Texture {
 public:
     CheckerTexture() { odd = nullptr; even = nullptr; };
     CheckerTexture(Texture *texture0, Texture *texture1): even(texture0), odd(texture1) {}
-    vec3 value(float u, float v, const vec3& p) const override;
+    Vec3 value(float u, float v, const Vec3& p) const override;
 
     Texture *odd;
     Texture *even;

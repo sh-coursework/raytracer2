@@ -7,20 +7,20 @@
 #include "vec3.h"
 
 
-class ray {
+class Ray {
     public:
-        ray() = default;
-        ray(const vec3 &a, const vec3 &b, float ti) { A = a; B = b; _time = ti;}
-        vec3 origin() const { return A; }
-        vec3 direction() const { return B; }
+        Ray() = default;
+        Ray(const Vec3 &a, const Vec3 &b, float ti) { A = a; B = b; _time = ti;}
+        Vec3 origin() const { return A; }
+        Vec3 direction() const { return B; }
         float time() const { return _time; }
-        vec3 point_at_parameter(float t) const { return  A + t*B; }
+        Vec3 point_at_parameter(float t) const { return  A + t * B; }
 
-        vec3 A;
-        vec3 B;
+        Vec3 A;
+        Vec3 B;
         float _time;
 };
 
-vec3 random_in_unit_sphere();
+Vec3 random_in_unit_sphere();
 
 #endif //RAYTRACER1_RAY_H

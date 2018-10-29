@@ -9,14 +9,9 @@
 #include "ray_engine/hitable.h"
 #include "ray_engine/ray.h"
 
-//class ray_engine {
-//
-//};
 
 // This is the crux of the ray tracing engine
-vec3 color(const ray& r, hitable *world, int depth);
-
-
+Vec3 ColorForRay(const Ray &r, Hitable *world, int depth);
 
 
 #endif //RAYTRACER2_RAY_ENGINE_H

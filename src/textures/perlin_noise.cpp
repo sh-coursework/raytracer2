@@ -8,12 +8,12 @@
 #include <boost/range/irange.hpp>
 
 
-static vec3*
+static Vec3*
 PerlinGenerate()
 {
-    vec3 * p = new vec3[256];
+    Vec3 * p = new Vec3[256];
     for (auto i: boost::irange(0, 256))
-        p[i] = unit_vector(vec3(-1.0 + 2.0 * drand48(),
+        p[i] = unit_vector(Vec3(-1.0 + 2.0 * drand48(),
                                 -1.0 + 2.0 * drand48(),
                                 -1.0 + 2.0 * drand48()
                                 ));
@@ -42,14 +42,14 @@ PerlinGeneratePerm()
     return p;
 }
 
-vec3 *PerlinNoise::random_vec3 = PerlinGenerate();
+Vec3 *PerlinNoise::random_vec3 = PerlinGenerate();
 int *PerlinNoise::perm_x = PerlinGeneratePerm();
 int *PerlinNoise::perm_y = PerlinGeneratePerm();
 int *PerlinNoise::perm_z = PerlinGeneratePerm();
 
 
 float
-PerlinNoise::Noise(const vec3& p) const
+PerlinNoise::Noise(const Vec3& p) const
 {
     auto u = p.x() - float(floor(p.x()));
     auto v = p.y() - float(floor(p.y()));
@@ -59,7 +59,7 @@ PerlinNoise::Noise(const vec3& p) const
     auto i = int(floor(p.x()));
     auto j = int(floor(p.y()));
     auto k = int(floor(p.z()));
-    vec3 c[2][2][2];
+    Vec3 c[2][2][2];
     for (auto di: {0, 1})
         for (auto dj: {0, 1})
             for (auto dk: {0, 1})
@@ -70,7 +70,7 @@ PerlinNoise::Noise(const vec3& p) const
 }
 
 
-float PerlinNoise::Turbulence(const vec3 &p, int depth) const
+float PerlinNoise::Turbulence(const Vec3 &p, int depth) const
 {
     auto accum = 0.0f;
     auto temp_p = p;
