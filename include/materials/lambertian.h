@@ -12,8 +12,8 @@
 class lambertian : public material
 {
 public:
-    lambertian(Texture *a) : albedo(a) {}
-    virtual bool scatter(const ray& r_in, const hit_record& rec, vec3& attenuation, ray& scattered) const;
+    explicit lambertian(Texture *a) : albedo(a) {}
+    bool scatter(const ray& r_in, const hit_record& rec, vec3& attenuation, ray& scattered) const override;
 
     Texture *albedo;
 };

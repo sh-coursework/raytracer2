@@ -12,7 +12,7 @@
 class metal : public material {
 public:
     metal(Texture *a, float f);
-    virtual bool scatter(const ray& r_in, const hit_record& rec, vec3& attenuation, ray& scattered) const;
+    bool scatter(const ray& r_in, const hit_record& rec, vec3& attenuation, ray& scattered) const override;
 
     Texture *albedo;
     float fuzz;

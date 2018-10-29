@@ -16,7 +16,7 @@
 class ImageTexture : public Texture
 {
 public:
-    ImageTexture(std::string image_file);
+    explicit ImageTexture(std::string image_file);
     vec3 value(float u, float v, const vec3& p) const override;
 
     std::string image_file_;

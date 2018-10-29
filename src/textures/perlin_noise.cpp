@@ -2,7 +2,6 @@
 // Created by Steve Hwan on 10/23/18.
 //
 
-#include <math.h>
 #include <cmath>
 #include <boost/range/irange.hpp>
 

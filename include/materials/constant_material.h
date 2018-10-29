@@ -14,7 +14,7 @@
 class ConstantMaterial : public material
 {
 public:
-    ConstantMaterial(Texture *a) : albedo(a) {}
+    explicit ConstantMaterial(Texture *a) : albedo(a) {}
     bool scatter(const ray& r_in, const hit_record& rec, vec3& attenuation, ray& scattered) const override;
 
     Texture *albedo;

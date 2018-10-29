@@ -2,7 +2,7 @@
 // Created by Steve Hwan on 10/1/18.
 //
 
-#include <math.h>
+#include <cmath>
 
 #include "scene_geometry/sphere.h"
 

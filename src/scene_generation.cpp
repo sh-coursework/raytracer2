@@ -235,7 +235,11 @@ get_scene(const RenderSettings &render_settings)
 {
 //    auto w_tmp = two_marblelike_spheres();
 //    auto c_tmp = two_sphere_cam(render_settings);
-    auto w_tmp = image_sphere_tests();
-    auto c_tmp = image_sphere_test_cam(render_settings);
+
+//    auto w_tmp = image_sphere_tests();
+//    auto c_tmp = image_sphere_test_cam(render_settings);
+
+    auto w_tmp = random_scene(0.0, 1.0, true);
+    auto c_tmp = random_scene_cam(render_settings);
     return std::make_tuple(w_tmp, c_tmp);
 }

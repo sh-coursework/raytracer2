@@ -49,13 +49,20 @@ In raytracer2, I'm working through the second book,
     * Adjusted metal to point at texture instead of vector,
       like lambertian does.
 
+## Release 1.2.0
+### Clang-tidy cleanup
+* avoid the repeating return tipe from the declaration...
+* use '= default' to define a trivial default constructor
+* 'virtual' is redundant since the function is already declared 'verride'
+* Single-argument constructors must be marked explicit...
+* Update headers float -> cfloat, math->cmath, stdlib->cstdlib
+* Parameter .. is const-qualified in the function declaration; ...
 
 ## Stuff I plan to work on:
 * scanline and tile output/traversal, with work-in-progress outputs.
 * Use smart pointers for all ownership
 * shader binding - separate material definition from scene geom
 * Clean up variable and class names
-* Address more of CLion's Clang tidy warnings.
 * Comment/Document
 * External definition of scene - USD?
 * OSL shaders?

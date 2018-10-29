@@ -37,5 +37,5 @@ ray camera::get_ray(float s, float t) {
     auto rd = lens_radius * random_in_unit_disk();
     auto offset = u * rd.x() + v * rd.y();
     auto time = time0 + float(drand48() * (time1 - time0));
-    return ray(origin + offset, lower_left_corner + s * horizontal + t * vertical - origin - offset, time);
+    return {origin + offset, lower_left_corner + s * horizontal + t * vertical - origin - offset, time};
 }

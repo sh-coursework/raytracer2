@@ -2,7 +2,7 @@
 // Created by Steve Hwan on 10/9/18.
 //
 
-#include <math.h>
+#include <cmath>
 #include "ray_engine/bvh_node.h"
 
 

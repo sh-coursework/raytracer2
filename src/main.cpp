@@ -1,5 +1,5 @@
 #include <ctime>
-#include "float.h"
+#include <cfloat>
 #include <fstream>
 #include <iostream>
 #include <iomanip>

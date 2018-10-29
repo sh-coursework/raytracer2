@@ -11,10 +11,11 @@
 class ConstantTexture : public Texture
 {
 public:
-    ConstantTexture() {}
-    ConstantTexture(vec3 c) : color(c) {}
-    virtual vec3 value(float u, float v, const vec3& p) const
+    ConstantTexture() = default;
+    explicit ConstantTexture(vec3 c) : color(c) {}
+    vec3 value(float u, float v, const vec3& p) const override
     { return color; }
+
     vec3 color;
 };
 
