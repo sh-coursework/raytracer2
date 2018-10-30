@@ -2,7 +2,7 @@
 // Created by Steve Hwan on 10/30/18.
 //
 
-#include "scene_geometry/flip_normals.h"
+#include "ray_engine/flip_normals.h"
 
 bool FlipNormals::Hit(const Ray &r, float t_min, float t_max, HitRecord &rec) const {
     if (orig_hitable_ptr_->Hit(r, t_min, t_max, rec)) {

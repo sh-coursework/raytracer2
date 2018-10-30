@@ -14,7 +14,8 @@
 #include "scene_geometry/sphere.h"
 #include "scene_geometry/moving_sphere.h"
 #include "scene_geometry/rect.h"
-#include "scene_geometry/flip_normals.h"
+#include "scene_geometry/box.h"
+#include "ray_engine/flip_normals.h"
 #include "textures/texture.h"
 #include "textures/constant_texture.h"
 #include "textures/checker_texture.h"
@@ -198,14 +199,17 @@ Hitable *CornellBox() {
     Material *light = new DiffuseLight(
             new ConstantTexture(Vec3(15.0f, 15.0f, 15.0f)));
 
+    // light
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new XZRect(213, 343, 227, 332, 554, light)
+    ));
+
+    // main room walls
     scene_list.push_back( std::shared_ptr<Hitable>(
             new FlipNormals(new YZRect(0, 555, 0, 555, 555, green))
     ));
     scene_list.push_back( std::shared_ptr<Hitable>(
             new YZRect(0, 555, 0, 555, 0, red)
-    ));
-    scene_list.push_back( std::shared_ptr<Hitable>(
-            new XZRect(213, 343, 227, 332, 554, light)
     ));
     scene_list.push_back( std::shared_ptr<Hitable>(
             new FlipNormals(new XZRect(0, 555, 0, 555, 555, white))
@@ -215,6 +219,14 @@ Hitable *CornellBox() {
     ));
     scene_list.push_back( std::shared_ptr<Hitable>(
             new FlipNormals(new XYRect(0, 555, 0, 555, 555, white))
+    ));
+
+    // 2 boxes
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new Box(Vec3(130, 0, 65), Vec3(295, 165, 230), white)
+    ));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new Box(Vec3(265, 0, 295), Vec3(430, 330, 460), white)
     ));
 
     return new HitableList(scene_list);

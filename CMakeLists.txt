@@ -9,10 +9,16 @@ include_directories(include ${Boost_INCLUDE_DIRS})
 find_library(OIIO "OpenImageIO" "/usr/local/lib")
 
 set(SOURCE_CPPS
+        src/ray_engine/flip_normals.cpp
+        src/ray_engine/hitable_list.cpp
+        src/ray_engine/bvh_node.cpp
+        src/ray_engine/aabb.cpp
+        src/ray_engine/ray_engine.cpp
+
         src/scene_geometry/sphere.cpp
         src/scene_geometry/moving_sphere.cpp
         src/scene_geometry/rect.cpp
-        src/scene_geometry/flip_normals.cpp
+        src/scene_geometry/box.cpp
 
         src/materials/constant_material.cpp
         src/materials/lambertian.cpp
@@ -26,16 +32,11 @@ set(SOURCE_CPPS
         src/textures/noise_texture.cpp
         src/textures/image_texture.cpp
 
-        src/ray_engine/hitable_list.cpp
-        src/ray_engine/bvh_node.cpp
-        src/ray_engine/aabb.cpp
-        src/ray_engine/ray_engine.cpp
-
         src/camera.cpp
         src/render_settings.cpp
         src/scene_generation.cpp
-
         src/vec3.cpp
+
         src/main.cpp
         )
 

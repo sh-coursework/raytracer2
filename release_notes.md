@@ -76,9 +76,12 @@ totally breaks backward compatibility, renaming all the functions.
 10/29/2018 sh-coursework
 ### Work from book
 * Book 2, Chapter 6 - Rectangles and Lights, through Cornell Box walls
+* Book 3, Chapter 7 - Instances, box geometry pre-transform.
 ### Other cleanup
 * Cleaned up variable names for t_min and t_max for consistency.
   Though it's still ambiguous if t is time or the line parametization.
+* Moved flip_normals from scene_geometry to ray_engine because it's more
+  like a utility.
 
 
 ## Stuff I plan to work on:
