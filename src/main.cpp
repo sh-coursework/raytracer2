@@ -126,7 +126,7 @@ main(int argc, char** argv) {
                 auto v = float(row_num + drand48()) / float(resolution_y);
 
                 auto r = cam.GetRay(u, v);
-                auto p = r.point_at_parameter(2.0f);  // p not used
+                auto p = r.PointAtParameter(2.0f);  // p not used
                 pixel_color += ColorForRay(r, world, 0);
             }
             pixel_color /= float(number_samples_per_pixel);

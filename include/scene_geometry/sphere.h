@@ -15,9 +15,9 @@ public:
     Sphere() = default;
     Sphere(Vec3 cen, float r, Material *m) : center_(cen), radius_(r),
                                              material_ptr_(m) {};
-    bool Hit(const Ray &r, float tmin, float tmax,
+    bool Hit(const Ray &r, float t_min, float t_max,
              HitRecord &rec) const override;
-    bool BoundingBox(float t0, float t1, AABB &box) const override;
+    bool BoundingBox(float t_min, float t_max, AABB &box) const override;
 
     Vec3 center_;
     float radius_;

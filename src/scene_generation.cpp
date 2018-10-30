@@ -13,6 +13,8 @@
 #include "ray_engine/hitable_list.h"
 #include "scene_geometry/sphere.h"
 #include "scene_geometry/moving_sphere.h"
+#include "scene_geometry/rect.h"
+#include "scene_geometry/flip_normals.h"
 #include "textures/texture.h"
 #include "textures/constant_texture.h"
 #include "textures/checker_texture.h"
@@ -22,6 +24,7 @@
 #include "materials/metal.h"
 #include "materials/dielectric.h"
 #include "materials/constant_material.h"
+#include "materials/diffuse_light.h"
 
 
 Hitable *RandomScene(float t_min, float t_max, bool use_bvh) {
@@ -147,9 +150,71 @@ Hitable *ImageSphereTests() {
     scene_list.push_back( std::shared_ptr<Hitable>(
             new Sphere(Vec3(0, -1000, 0), 1000, new Lambertian(noise_textured))
     ));
-
     scene_list.push_back( std::shared_ptr<Hitable>(
             new Sphere(Vec3(0, 2, 0), 2, new ConstantMaterial(image_textured))
+    ));
+
+    return new HitableList(scene_list);
+}
+
+Hitable *SimpleLightTest() {
+    std::string test_filename = "test_data/land_ocean_ice_cloud_2048.jpg";
+    Texture *noise_textured = new MarblelikeTexture(4.0f);
+    Texture *image_textured = new ImageTexture(test_filename);
+
+    std::vector<std::shared_ptr<Hitable>> scene_list;
+    // For now, assume C++11, not 14 so no "make_unique"
+    // Big sphere - let's keep the marble
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new Sphere(Vec3(0, -1000, 0), 1000, new Lambertian(noise_textured))
+    ));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+//            new Sphere(Vec3(0, 2, 0), 2, new Lambertian(noise_textured))
+            new Sphere(Vec3(0, 2, 0), 2, new Lambertian(image_textured))
+    ));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new Sphere(Vec3(0, 7, 0), 2, new DiffuseLight(
+                    new ConstantTexture(Vec3(4.0f, 4.0f, 4.0f))))
+    ));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new XYRect(3.0f, 5.0f, 1.0f, 3.0f, -2.0f, new DiffuseLight(
+                    new ConstantTexture(Vec3(4.0f, 4.0f, 4.0f))))
+    ));
+
+    return new HitableList(scene_list);
+}
+
+
+Hitable *CornellBox() {
+    std::vector<std::shared_ptr<Hitable>> scene_list;
+
+    Material *red = new Lambertian(
+            new ConstantTexture(Vec3(0.65f, 0.05f, 0.05f)));
+    Material *white = new Lambertian(
+            new ConstantTexture(Vec3(0.73f, 0.73f, 0.73f)));
+    Material *green = new Lambertian(
+            new ConstantTexture(Vec3(0.12f, 0.45f, 0.15f)));
+
+    Material *light = new DiffuseLight(
+            new ConstantTexture(Vec3(15.0f, 15.0f, 15.0f)));
+
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new FlipNormals(new YZRect(0, 555, 0, 555, 555, green))
+    ));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new YZRect(0, 555, 0, 555, 0, red)
+    ));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new XZRect(213, 343, 227, 332, 554, light)
+    ));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new FlipNormals(new XZRect(0, 555, 0, 555, 555, white))
+    ));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new XZRect(0, 555, 0, 555, 0, white)
+    ));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new FlipNormals(new XYRect(0, 555, 0, 555, 555, white))
     ));
 
     return new HitableList(scene_list);
@@ -212,6 +277,40 @@ Camera &&ImageSphereTestCam(const RenderSettings &render_settings)
 }
 
 
+Camera &&SimpleLightTestCam(const RenderSettings &render_settings)
+{
+    auto two_sphere_lookfrom = Vec3(22.0f, 2.0f, 3.0f);
+    auto two_sphere_lookat = Vec3(0.0f, 2.0f, 0.0f);
+    auto two_sphere_dist_to_focus = 10.0f;
+    auto two_sphere_aperture = 0.0f;
+    auto cam = Camera(two_sphere_lookfrom, two_sphere_lookat,
+            Vec3(0.0, 1.0, 0.0),
+            20.0f,
+            float(render_settings.resolution_x_)
+                    / float(render_settings.resolution_y_),
+            two_sphere_aperture, two_sphere_dist_to_focus,
+            render_settings.shutter_open_, render_settings.shutter_close_);
+    return std::move(cam); // seems to complain if I do std::move and if I don't
+}
+
+
+Camera &&CornellBoxCam(const RenderSettings &render_settings)
+{
+    auto cornell_box_lookfrom = Vec3(278.0f, 278.0f, -800.0f);
+    auto cornell_box_lookat = Vec3(278.0f, 278.0f, 0.0f);
+    auto cornell_box_dist_to_focus = 10.0f;
+    auto cornell_box_aperture = 0.0f;
+    auto cam = Camera(cornell_box_lookfrom, cornell_box_lookat,
+            Vec3(0.0, 1.0, 0.0),
+            40.0f,
+            float(render_settings.resolution_x_)
+                    / float(render_settings.resolution_y_),
+            cornell_box_aperture, cornell_box_dist_to_focus,
+            render_settings.shutter_open_, render_settings.shutter_close_);
+    return std::move(cam); // seems to complain if I do std::move and if I don't
+}
+
+
 //////////////////////////////////////////////////////////////////////////
 /// Scene generation
 //////////////////////////////////////////////////////////////////////////
@@ -229,8 +328,14 @@ std::tuple<Hitable *, Camera> GetScene(const RenderSettings &render_settings) {
 //    auto w_tmp = ImageSphereTests();
 //    auto c_tmp = ImageSphereTestCam(render_settings);
 
-    auto w_tmp = RandomScene(0.0, 1.0, true);
-    auto c_tmp = RandomSceneCam(render_settings);
+//    auto w_tmp = SimpleLightTest();
+//    auto c_tmp = SimpleLightTestCam(render_settings);
+
+//    auto w_tmp = RandomScene(0.0, 1.0, true);
+//    auto c_tmp = RandomSceneCam(render_settings);
+
+    auto w_tmp = CornellBox();
+    auto c_tmp = CornellBoxCam(render_settings);
 
     return std::make_tuple(w_tmp, c_tmp);
 }

@@ -18,13 +18,16 @@ Vec3 ColorForRay(const Ray &r, Hitable *world, int depth) {
         Ray scattered;
         Vec3 attenuation;
 
-        if (depth < 50 && rec.mat_ptr->Scatter(r, rec, attenuation, scattered))
-            return attenuation * ColorForRay(scattered, world, depth + 1);
+        Vec3 emitted = rec.material_ptr->Emitted(rec.u, rec.v, rec.p);
+        if (depth < 50 && rec.material_ptr->Scatter(r, rec, attenuation, scattered))
+            return emitted
+                    + attenuation * ColorForRay(scattered, world, depth + 1);
         else
-            return {0.0f, 0.0f, 0.0f};
+            return emitted;
     } else {
-        auto unit_direction = unit_vector(r.direction());
-        auto t = 0.5f * (unit_direction.y() + 1.0f);
-        return (1.0f - t) * Vec3(1.0f, 1.0f, 1.0f) + t * Vec3(0.5f, 0.7f, 1.0f);
+//        auto unit_direction = unit_vector(r.direction());
+//        auto t = 0.5f * (unit_direction.y() + 1.0f);
+//        return (1.0f - t) * Vec3(1.0f, 1.0f, 1.0f) + t * Vec3(0.5f, 0.7f, 1.0f);
+        return Vec3(0.0f, 0.0f, 0.0f);
     }
 }

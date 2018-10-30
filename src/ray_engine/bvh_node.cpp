@@ -74,7 +74,7 @@ BVHNode::BVHNode(std::vector<std::shared_ptr<Hitable>>::iterator hitable_begin,
     box_ = surrounding_box(box_left, box_right);
 }
 
-bool BVHNode::BoundingBox(float t0, float t1, AABB &b) const {
+bool BVHNode::BoundingBox(float t_min, float t_max, AABB &b) const {
     b = box_;
     return true;
 }

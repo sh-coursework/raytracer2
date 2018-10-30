@@ -16,8 +16,8 @@ public:
             std::vector<std::shared_ptr<Hitable>>::iterator hitable_end,
             float time0, float time1);
     bool Hit(const Ray &r, float t_min, float t_max,
-            HitRecord &rec) const override;
-    bool BoundingBox(float t0, float t1, AABB &box) const override;
+             HitRecord &rec) const override;
+    bool BoundingBox(float t_min, float t_max, AABB &box) const override;
 
     std::shared_ptr<Hitable> left_;
     std::shared_ptr<Hitable> right_;

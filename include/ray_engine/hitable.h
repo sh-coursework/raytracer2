@@ -16,15 +16,15 @@ struct HitRecord {
     Vec3 p;
     Vec3 normal;
     float u, v;
-    Material *mat_ptr;
+    Material *material_ptr;
 };
+
 
 class Hitable {
 public:
     virtual bool Hit(const Ray &r, float t_min, float t_max,
-            HitRecord &rec) const = 0;
-    virtual bool BoundingBox(float t0, float t1, AABB &box) const = 0;
-
+                     HitRecord &rec) const = 0;
+    virtual bool BoundingBox(float t_min, float t_max, AABB &box) const = 0;
 };
 
 

@@ -22,7 +22,7 @@ bool HitableList::Hit(const Ray &r, float t_min, float t_max,
     return hit_anything;
 }
 
-bool HitableList::BoundingBox(float t0, float t1, AABB &box) const {
+bool HitableList::BoundingBox(float t_min, float t_max, AABB &box) const {
     if (vector_list_.empty())
         return false;
 
@@ -30,14 +30,14 @@ bool HitableList::BoundingBox(float t0, float t1, AABB &box) const {
 
     // Special treatment for first element
     auto hitables_it = vector_list_.begin();
-    if ((*hitables_it)->BoundingBox(t0, t1, temp_box)) {
+    if ((*hitables_it)->BoundingBox(t_min, t_max, temp_box)) {
         box = temp_box;
     } else
         return false;
 
     std::advance(hitables_it, 1);
     for (; hitables_it != vector_list_.end(); ++hitables_it) {
-        if ((*hitables_it)->BoundingBox(t0, t1, temp_box)) {
+        if ((*hitables_it)->BoundingBox(t_min, t_max, temp_box)) {
             box = surrounding_box(box, temp_box);
         } else
             return false;

@@ -11,11 +11,15 @@ find_library(OIIO "OpenImageIO" "/usr/local/lib")
 set(SOURCE_CPPS
         src/scene_geometry/sphere.cpp
         src/scene_geometry/moving_sphere.cpp
+        src/scene_geometry/rect.cpp
+        src/scene_geometry/flip_normals.cpp
 
+        src/materials/constant_material.cpp
         src/materials/lambertian.cpp
         src/materials/metal.cpp
         src/materials/dielectric.cpp
-        src/materials/constant_material.cpp
+
+        src/materials/diffuse_light.cpp
 
         src/textures/checker_texture.cpp
         src/textures/perlin_noise.cpp

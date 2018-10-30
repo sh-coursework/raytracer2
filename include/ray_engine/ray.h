@@ -16,7 +16,7 @@ class Ray {
         Vec3 origin() const { return origin_; }
         Vec3 direction() const { return direction_; }
         float time() const { return time_; }
-        Vec3 point_at_parameter(float t) const
+        Vec3 PointAtParameter(float t) const
                 { return  origin_ + t * direction_; }
 
         Vec3 origin_;

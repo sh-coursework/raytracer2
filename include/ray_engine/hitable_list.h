@@ -20,7 +20,7 @@ public:
             {vector_list_ = std::move(l); }
     bool Hit(const Ray &r, float t_min, float t_max,
              HitRecord &rec) const override;
-    bool BoundingBox(float t0, float t1, AABB &box) const override;
+    bool BoundingBox(float t_min, float t_max, AABB &box) const override;
 };
 
 

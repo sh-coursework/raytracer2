@@ -51,6 +51,8 @@ In raytracer2, I'm working through the second book,
 
 ## Release 1.2.0
 10/29/2018 sh-coursework
+Technically, I guess this should have been a major version release since it
+totally breaks backward compatibility, renaming all the functions.
 ### Clang-tidy cleanup
 * avoid the repeating return tipe from the declaration...
 * use '= default' to define a trivial default constructor
@@ -69,6 +71,15 @@ In raytracer2, I'm working through the second book,
 ### Other cleanup
 * Moved reflection and unit sphere utility functions into vec3.
 * use standard algorithm min/max instead of my own inline.
+
+## Release 1.3.0
+10/29/2018 sh-coursework
+### Work from book
+* Book 2, Chapter 6 - Rectangles and Lights, through Cornell Box walls
+### Other cleanup
+* Cleaned up variable names for t_min and t_max for consistency.
+  Though it's still ambiguous if t is time or the line parametization.
+
 
 ## Stuff I plan to work on:
 * Clean up variable names to more descriptive.

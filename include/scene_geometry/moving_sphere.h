@@ -5,8 +5,11 @@
 #ifndef RAYTRACER2_MOVING_SPHERE_H
 #define RAYTRACER2_MOVING_SPHERE_H
 
+#include "vec3.h"
 #include "ray_engine/hitable.h"
+#include "ray_engine/aabb.h"
 #include "materials/material.h"
+
 
 class MovingSphere : public Hitable {
 public:
@@ -14,9 +17,9 @@ public:
     MovingSphere(Vec3 cen0, Vec3 cen1, float t0, float t1, float r, Material *m)
             : center_0_(cen0), center_1_(cen1), time_0_(t0), time_1_(t1),
               radius_(r), material_ptr_(m) {};
-    bool Hit(const Ray &r, float tmin, float tmax,
+    bool Hit(const Ray &r, float t_min, float t_max,
              HitRecord &rec) const override;
-    bool BoundingBox(float t0, float t1, AABB &box) const override;
+    bool BoundingBox(float t_min, float t_max, AABB &box) const override;
     Vec3 center(float time) const;
 
     Vec3 center_0_, center_1_;
