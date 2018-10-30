@@ -8,9 +8,7 @@
 #include <boost/range/irange.hpp>
 
 
-static Vec3*
-PerlinGenerate()
-{
+static Vec3* PerlinGenerate() {
     Vec3 * p = new Vec3[256];
     for (auto i: boost::irange(0, 256))
         p[i] = unit_vector(Vec3(-1.0 + 2.0 * drand48(),
@@ -20,9 +18,7 @@ PerlinGenerate()
     return p;
 }
 
-void
-Permute(int *p, int n)
-{
+void Permute(int *p, int n) {
     for (int i = n-1; i > 0; i--)
     {
         auto target = int(drand48() * (i + 1));
@@ -32,8 +28,7 @@ Permute(int *p, int n)
     }
 }
 
-static int*
-PerlinGeneratePerm()
+static int* PerlinGeneratePerm()
 {
     int * p = new int[256];
     for (auto i: boost::irange(0, 256))
@@ -42,15 +37,13 @@ PerlinGeneratePerm()
     return p;
 }
 
-Vec3 *PerlinNoise::random_vec3 = PerlinGenerate();
-int *PerlinNoise::perm_x = PerlinGeneratePerm();
-int *PerlinNoise::perm_y = PerlinGeneratePerm();
-int *PerlinNoise::perm_z = PerlinGeneratePerm();
+Vec3 *PerlinNoise::random_vec3_ = PerlinGenerate();
+int *PerlinNoise::perm_x_ = PerlinGeneratePerm();
+int *PerlinNoise::perm_y_ = PerlinGeneratePerm();
+int *PerlinNoise::perm_z_ = PerlinGeneratePerm();
 
 
-float
-PerlinNoise::Noise(const Vec3& p) const
-{
+float PerlinNoise::Noise(const Vec3& p) const {
     auto u = p.x() - float(floor(p.x()));
     auto v = p.y() - float(floor(p.y()));
     auto w = p.z() - float(floor(p.z()));
@@ -63,15 +56,14 @@ PerlinNoise::Noise(const Vec3& p) const
     for (auto di: {0, 1})
         for (auto dj: {0, 1})
             for (auto dk: {0, 1})
-                c[di][dj][dk] = random_vec3[perm_x[(i + di) & 255]
-                                            ^ perm_y[(j + dj) & 255]
-                                            ^ perm_z[(k + dk) & 255]];
-    return perlin_interp(c, u, v, w);
+                c[di][dj][dk] = random_vec3_[perm_x_[(i + di) & 255]
+                                            ^ perm_y_[(j + dj) & 255]
+                                            ^ perm_z_[(k + dk) & 255]];
+    return PerlinInterp(c, u, v, w);
 }
 
 
-float PerlinNoise::Turbulence(const Vec3 &p, int depth) const
-{
+float PerlinNoise::Turbulence(const Vec3 &p, int depth) const {
     auto accum = 0.0f;
     auto temp_p = p;
     auto weight = 1.0f;

@@ -10,13 +10,13 @@
 
 class CheckerTexture : public Texture {
 public:
-    CheckerTexture() { odd = nullptr; even = nullptr; };
-    CheckerTexture(Texture *texture0, Texture *texture1) : even(texture0),
-                                                           odd(texture1) {}
-    Vec3 value(float u, float v, const Vec3& p) const override;
+    CheckerTexture() { odd_ = nullptr; even_ = nullptr; };
+    CheckerTexture(Texture *texture0, Texture *texture1) : even_(texture0),
+                                                           odd_(texture1) {}
+    Vec3 Value(float u, float v, const Vec3 &p) const override;
 
-    Texture *odd;
-    Texture *even;
+    Texture *odd_;
+    Texture *even_;
 };
 
 

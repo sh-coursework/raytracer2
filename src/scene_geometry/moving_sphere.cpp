@@ -7,15 +7,16 @@
 #include "scene_geometry/sphere.h"  // For the UV math
 
 Vec3 MovingSphere::center(float time) const {
-    return center0 + ((time - time0) / (time1 - time0)) * (center1 - center0);
+    return center_0_ + ((time - time_0_) / (time_1_ - time_0_))
+            * (center_1_ - center_0_);
 }
 
-bool MovingSphere::hit(const Ray& r, float tmin, float tmax,
-                       HitRecord& rec) const {
+bool MovingSphere::Hit(const Ray &r, float tmin, float tmax,
+                       HitRecord &rec) const {
     auto oc = r.origin() - center(r.time());
     auto a = dot(r.direction(), r.direction());
     auto b = dot(oc, r.direction());
-    auto c = dot(oc, oc) - radius * radius;
+    auto c = dot(oc, oc) - radius_ * radius_;
     auto discriminant = b * b - a * c;
     if (discriminant > 0) {
         // root 1
@@ -23,9 +24,9 @@ bool MovingSphere::hit(const Ray& r, float tmin, float tmax,
         if (temp < tmax && temp > tmin) {
             rec.t = temp;
             rec.p = r.point_at_parameter(rec.t);
-            GetSphereUV((rec.p - center(r.time())) / radius, rec.u, rec.v);
-            rec.normal = (rec.p - center(r.time())) / radius;
-            rec.mat_ptr = mat_ptr;
+            GetSphereUV((rec.p - center(r.time())) / radius_, rec.u, rec.v);
+            rec.normal = (rec.p - center(r.time())) / radius_;
+            rec.mat_ptr = material_ptr_;
             return true;
         }
         // root 2
@@ -33,20 +34,20 @@ bool MovingSphere::hit(const Ray& r, float tmin, float tmax,
         if (temp < tmax && temp > tmin) {
             rec.t = temp;
             rec.p = r.point_at_parameter(rec.t);
-            GetSphereUV((rec.p - center(r.time())) / radius, rec.u, rec.v);
-            rec.normal = (rec.p - center(r.time())) / radius;
-            rec.mat_ptr = mat_ptr;
+            GetSphereUV((rec.p - center(r.time())) / radius_, rec.u, rec.v);
+            rec.normal = (rec.p - center(r.time())) / radius_;
+            rec.mat_ptr = material_ptr_;
             return true;
         }
     }
     return false;
 }
 
-bool MovingSphere::bounding_box(float t0, float t1, AABB& box) const {
-    AABB temp_box0 = AABB(center0 - Vec3(radius, radius, radius),
-                          center0 + Vec3(radius, radius, radius));
-    AABB temp_box1 = AABB(center1 - Vec3(radius, radius, radius),
-                          center1 + Vec3(radius, radius, radius));
+bool MovingSphere::BoundingBox(float t0, float t1, AABB &box) const {
+    AABB temp_box0 = AABB(center_0_ - Vec3(radius_, radius_, radius_),
+                          center_0_ + Vec3(radius_, radius_, radius_));
+    AABB temp_box1 = AABB(center_1_ - Vec3(radius_, radius_, radius_),
+                          center_1_ + Vec3(radius_, radius_, radius_));
     box = surrounding_box(temp_box0, temp_box1);
     return true;
 }

@@ -4,4 +4,4 @@
 
 
 // Moved function out to vec3, so this cpp is irrelevant now.
-// Removining it from CMake.  Okay to add it back if there's function.
+// Removing it from CMake.  Okay to add it back if there's function.

@@ -50,6 +50,7 @@ In raytracer2, I'm working through the second book,
       like lambertian does.
 
 ## Release 1.2.0
+10/29/2018 sh-coursework
 ### Clang-tidy cleanup
 * avoid the repeating return tipe from the declaration...
 * use '= default' to define a trivial default constructor
@@ -57,20 +58,21 @@ In raytracer2, I'm working through the second book,
 * Single-argument constructors must be marked explicit...
 * Update headers float -> cfloat, math->cmath, stdlib->cstdlib
 * Parameter .. is const-qualified in the function declaration; ...
-### Code Standards
+### Code Style
 * Make class names CapitalizedCamelCase.
 * Put open curly brace on starting line, not by itself on next line.
 * Wrap long lines.
 * More consistency with include order, with self include file first.
 * Keep function name on same line as return value when possible.
-### Other cleanup
-* Moved reflection and unit sphere utility functions into vec3.
-
-## Stuff I plan to work on:
-* All the names of aabb are bad.
 * Clean up function/method names to CapitalizedCamelCase.
 * Clean up class member names to end with underscore.
+### Other cleanup
+* Moved reflection and unit sphere utility functions into vec3.
+* use standard algorithm min/max instead of my own inline.
+
+## Stuff I plan to work on:
 * Clean up variable names to more descriptive.
+  * All the names of aabb are bad.
 * Look for more std container usage.
 * Use smart pointers for all ownership
 * scanline and tile output/traversal, with work-in-progress outputs.

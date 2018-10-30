@@ -14,23 +14,23 @@
 class NoiseTexture : public Texture {
 public:
     NoiseTexture() = default;
-    explicit NoiseTexture(float sc) : noise_scale(sc) {};
-    Vec3 value(float u, float v, const Vec3& p) const override;
+    explicit NoiseTexture(float sc) : noise_scale_(sc) {};
+    Vec3 Value(float u, float v, const Vec3 &p) const override;
 
-    PerlinNoise noise;
-    float noise_scale;
+    PerlinNoise noise_;
+    float noise_scale_;
 };
 
 class TurbulenceTexture : public NoiseTexture {
 public:
     explicit TurbulenceTexture(float sc) : NoiseTexture(sc) {};
-    Vec3 value(float u, float v, const Vec3& p) const override;
+    Vec3 Value(float u, float v, const Vec3 &p) const override;
 };
 
 class MarblelikeTexture : public NoiseTexture {
 public:
     explicit MarblelikeTexture(float sc) : NoiseTexture(sc) {};
-    Vec3 value(float u, float v, const Vec3& p) const override;
+    Vec3 Value(float u, float v, const Vec3 &p) const override;
 };
 
 

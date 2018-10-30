@@ -12,17 +12,18 @@ class MovingSphere : public Hitable {
 public:
     MovingSphere() = default;
     MovingSphere(Vec3 cen0, Vec3 cen1, float t0, float t1, float r, Material *m)
-            : center0(cen0), center1(cen1), time0(t0), time1(t1), radius(r),
-              mat_ptr(m) {};
-    bool hit(const Ray& r, float tmin, float tmax,
-             HitRecord& rec) const override;
-    bool bounding_box(float t0, float t1, AABB& box) const override;
+            : center_0_(cen0), center_1_(cen1), time_0_(t0), time_1_(t1),
+              radius_(r), material_ptr_(m) {};
+    bool Hit(const Ray &r, float tmin, float tmax,
+             HitRecord &rec) const override;
+    bool BoundingBox(float t0, float t1, AABB &box) const override;
     Vec3 center(float time) const;
-    Vec3 center0, center1;
-    float time0, time1;
-    float radius;
-    Material *mat_ptr;  // I think I actually own the material ptr,
-                        // but I don't really want to.
+
+    Vec3 center_0_, center_1_;
+    float time_0_, time_1_;
+    float radius_;
+    Material *material_ptr_;  // I think I actually own the material ptr,
+                              // but I don't really want to.
 };
 
 

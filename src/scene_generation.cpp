@@ -24,8 +24,7 @@
 #include "materials/constant_material.h"
 
 
-Hitable *random_scene(float t_min, float t_max, bool use_bvh)
-{
+Hitable *RandomScene(float t_min, float t_max, bool use_bvh) {
     // Hitable is an abstract base, so I wouldn't know how/what to allocate
     // up front, and there's not really a default placeholder.
     // So I want the vector of pointers, not vector of hitables.
@@ -40,14 +39,11 @@ Hitable *random_scene(float t_min, float t_max, bool use_bvh)
                        new Lambertian(checker))
      ));
 
-    for (auto a: boost::irange(-10, 10))
-    {
-        for (auto b: boost::irange(-10, 10))
-        {
+    for (auto a: boost::irange(-10, 10)) {
+        for (auto b: boost::irange(-10, 10)) {
             auto choose_mat = float(drand48());
             auto center = Vec3(a + 0.9f * drand48(), 0.2f, b + 0.9f * drand48());
-            if (choose_mat < 0.8)  // diffuse
-            {
+            if (choose_mat < 0.8) {  // diffuse
                 scene_list.push_back( std::shared_ptr<Hitable>(
                         new MovingSphere(center,
                                 center + Vec3(0, 0.5 * drand48(), 0),
@@ -58,8 +54,7 @@ Hitable *random_scene(float t_min, float t_max, bool use_bvh)
                                                 drand48() * drand48(),
                                                 drand48() * drand48()))))
                 ));
-            } else if (choose_mat < 0.95)  // metal
-            {
+            } else if (choose_mat < 0.95) {  // metal
                 scene_list.push_back( std::shared_ptr<Hitable>(
                         new Sphere(center, 0.2,
                                 new Metal(new ConstantTexture(
@@ -68,8 +63,7 @@ Hitable *random_scene(float t_min, float t_max, bool use_bvh)
                                                 0.5 * (1.0f + drand48()))),
                                         0.5 * drand48()))
                 ));
-            } else  // glass
-            {
+            } else {  // glass
                 scene_list.push_back( std::shared_ptr<Hitable>(
                         new Sphere(center, 0.2f, new Dielectric(1.5f))
                 ));
@@ -95,9 +89,7 @@ Hitable *random_scene(float t_min, float t_max, bool use_bvh)
         return new HitableList(scene_list);
 }
 
-Hitable *
-two_spheres()
-{
+Hitable * TwoSpheres() {
     Texture *checker = new CheckerTexture(
             new ConstantTexture(Vec3(0.2, 0.3, 0.1)),
             new ConstantTexture(Vec3(0.9, 0.9, 0.9))
@@ -116,9 +108,7 @@ two_spheres()
 // Maybe change this to smart pointers so the assignement
 // to lambertian can be reference counted, and the ownership
 // better managed.
-Hitable *
-two_noise_spheres(Texture *noise_textured)
-{
+Hitable *TwoNoiseSpheres(Texture *noise_textured) {
     std::vector<std::shared_ptr<Hitable>> scene_list;
     // For now, assume C++11, not 14 so no "make_unique"
     scene_list.push_back( std::shared_ptr<Hitable>(
@@ -131,29 +121,22 @@ two_noise_spheres(Texture *noise_textured)
     return new HitableList(scene_list);
 }
 
-Hitable *
-two_perlin_spheres() {
+Hitable *TwoPerlinSpheres() {
     Texture *noise_textured = new NoiseTexture(4.0f);
-    return two_noise_spheres(noise_textured);
+    return TwoNoiseSpheres(noise_textured);
 }
 
-Hitable *
-two_turbulence_spheres()
-{
+Hitable *TwoTurbulenceSpheres() {
     Texture *noise_textured = new TurbulenceTexture(4.0f);
-    return two_noise_spheres(noise_textured);
+    return TwoNoiseSpheres(noise_textured);
 }
 
-Hitable *
-two_marblelike_spheres()
-{
+Hitable *TwoMarblelikeSpheres() {
     Texture *noise_textured = new MarblelikeTexture(4.0f);
-    return two_noise_spheres(noise_textured);
+    return TwoNoiseSpheres(noise_textured);
 }
 
-Hitable *
-image_sphere_tests()
-{
+Hitable *ImageSphereTests() {
     std::string test_filename = "test_data/land_ocean_ice_cloud_2048.jpg";
     Texture *noise_textured = new MarblelikeTexture(4.0f);
     Texture *image_textured = new ImageTexture(test_filename);
@@ -178,7 +161,7 @@ image_sphere_tests()
 //////////////////////////////////////////////////////////////////////////
 
 
-Camera && random_scene_cam(const RenderSettings &render_settings)
+Camera &&RandomSceneCam(const RenderSettings &render_settings)
 {
     auto lookfrom = Vec3(13.0f, 2.0f, 3.0f);
     auto lookat = Vec3(0.0f, 0.0f, 0.0f);
@@ -187,15 +170,15 @@ Camera && random_scene_cam(const RenderSettings &render_settings)
     auto cam = Camera(lookfrom, lookat,
             Vec3(0.0f, 1.0f, 0.0f),
             20.0f,
-            float(render_settings.resolution_x)
-                    / float(render_settings.resolution_y),
+            float(render_settings.resolution_x_)
+                    / float(render_settings.resolution_y_),
             aperture, dist_to_focus,
-            render_settings.shutter_open, render_settings.shutter_close);
+            render_settings.shutter_open_, render_settings.shutter_close_);
     return std::move(cam); // seems to complain if I do std::move and if I don't
 }
 
 
-Camera && two_sphere_cam(const RenderSettings &render_settings)
+Camera &&TwoSphereCam(const RenderSettings &render_settings)
 {
     auto two_sphere_lookfrom = Vec3(13.0f, 2.0f, 3.0f);
     auto two_sphere_lookat = Vec3(0.0f, 0.0f, 0.0f);
@@ -204,15 +187,15 @@ Camera && two_sphere_cam(const RenderSettings &render_settings)
     auto cam = Camera(two_sphere_lookfrom, two_sphere_lookat,
             Vec3(0.0, 1.0, 0.0),
             20.0f,
-            float(render_settings.resolution_x)
-                    / float(render_settings.resolution_y),
+            float(render_settings.resolution_x_)
+                    / float(render_settings.resolution_y_),
             two_sphere_aperture, two_sphere_dist_to_focus,
-            render_settings.shutter_open, render_settings.shutter_close);
+            render_settings.shutter_open_, render_settings.shutter_close_);
     return std::move(cam); // seems to complain if I do std::move and if I don't
 }
 
 
-Camera && image_sphere_test_cam(const RenderSettings &render_settings)
+Camera &&ImageSphereTestCam(const RenderSettings &render_settings)
 {
     auto two_sphere_lookfrom = Vec3(15.0f, 2.0f, 3.0f);
     auto two_sphere_lookat = Vec3(0.0f, 2.0f, 0.0f);
@@ -221,10 +204,10 @@ Camera && image_sphere_test_cam(const RenderSettings &render_settings)
     auto cam = Camera(two_sphere_lookfrom, two_sphere_lookat,
             Vec3(0.0, 1.0, 0.0),
             20.0f,
-            float(render_settings.resolution_x)
-                    / float(render_settings.resolution_y),
+            float(render_settings.resolution_x_)
+                    / float(render_settings.resolution_y_),
             two_sphere_aperture, two_sphere_dist_to_focus,
-            render_settings.shutter_open, render_settings.shutter_close);
+            render_settings.shutter_open_, render_settings.shutter_close_);
     return std::move(cam); // seems to complain if I do std::move and if I don't
 }
 
@@ -239,16 +222,15 @@ Camera && image_sphere_test_cam(const RenderSettings &render_settings)
 // outside main.
 
 
-std::tuple<Hitable *, Camera>
-get_scene(const RenderSettings &render_settings)
-{
-//    auto w_tmp = two_marblelike_spheres();
-//    auto c_tmp = two_sphere_cam(render_settings);
+std::tuple<Hitable *, Camera> GetScene(const RenderSettings &render_settings) {
+//    auto w_tmp = TwoMarblelikeSpheres();
+//    auto c_tmp = TwoSphereCam(render_settings);
 
-//    auto w_tmp = image_sphere_tests();
-//    auto c_tmp = image_sphere_test_cam(render_settings);
+//    auto w_tmp = ImageSphereTests();
+//    auto c_tmp = ImageSphereTestCam(render_settings);
 
-    auto w_tmp = random_scene(0.0, 1.0, true);
-    auto c_tmp = random_scene_cam(render_settings);
+    auto w_tmp = RandomScene(0.0, 1.0, true);
+    auto c_tmp = RandomSceneCam(render_settings);
+
     return std::make_tuple(w_tmp, c_tmp);
 }

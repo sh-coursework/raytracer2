@@ -154,6 +154,8 @@ bool refract(const Vec3& v, const Vec3& n, float ni_over_nt, Vec3& refracted);
 
 float schlick(float cosine, float ref_idx);
 
+Vec3 random_in_unit_disk();
+
 Vec3 random_in_unit_sphere();
 
 #endif //RAYTRACER1_VEC3_H

@@ -13,28 +13,20 @@ public:
     float Noise(const Vec3& p) const;
     float Turbulence(const Vec3& p, int depth=7) const;
 
-    static Vec3 *random_vec3;
-    static int *perm_x;
-    static int *perm_y;
-    static int *perm_z;
+    static Vec3 *random_vec3_;
+    static int *perm_x_;
+    static int *perm_y_;
+    static int *perm_z_;
 };
 
 
-static Vec3*
-PerlinGenerate();
+static Vec3* PerlinGenerate();
 
+void Permute(int *p, int n);
 
-void
-Permute(int *p, int n);
+static int* PerlinGeneratePerm();
 
-
-static int*
-PerlinGeneratePerm();
-
-
-inline float
-perlin_interp(Vec3 c[2][2][2], float u, float v, float w)
-{
+inline float PerlinInterp(Vec3 c[2][2][2], float u, float v, float w) {
     // Chapter 4 - move Hermite cubic smoothing here
     auto uu = u * u * (3.0 - 2.0 * u);
     auto vv = v * v * (3.0 - 2.0 * v);

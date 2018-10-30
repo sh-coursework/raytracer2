@@ -17,11 +17,11 @@ class ImageTexture : public Texture
 {
 public:
     explicit ImageTexture(std::string image_file);
-    Vec3 value(float u, float v, const Vec3& p) const override;
+    Vec3 Value(float u, float v, const Vec3 &p) const override;
 
     std::string image_file_;
-    int image_resx, image_resy;
-    std::vector<unsigned char> pixels;
+    int image_res_x_, image_res_y_;
+    std::vector<unsigned char> pixels_;
 };
 
 

@@ -14,11 +14,11 @@ Vec3 ColorForRay(const Ray &r, Hitable *world, int depth) {
         return {1.0f, 1.0f, 1.0f};
 
     HitRecord rec;
-    if (world->hit(r, 0.001f, MAXFLOAT, rec)) {
+    if (world->Hit(r, 0.001f, MAXFLOAT, rec)) {
         Ray scattered;
         Vec3 attenuation;
 
-        if (depth < 50 && rec.mat_ptr->scatter(r, rec, attenuation, scattered))
+        if (depth < 50 && rec.mat_ptr->Scatter(r, rec, attenuation, scattered))
             return attenuation * ColorForRay(scattered, world, depth + 1);
         else
             return {0.0f, 0.0f, 0.0f};

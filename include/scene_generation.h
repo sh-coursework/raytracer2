@@ -13,6 +13,6 @@
 #include "render_settings.h"
 
 
-std::tuple<Hitable *, Camera> get_scene(const RenderSettings &render_settings);
+std::tuple<Hitable *, Camera> GetScene(const RenderSettings &render_settings);
 
 #endif //RAYTRACER2_SCENE_GENERATION_H

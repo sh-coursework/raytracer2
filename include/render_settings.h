@@ -15,20 +15,20 @@
 // public read/write to everything.
 // It will also make it easier to have an arg parser populate it.
 struct RenderSettings {
-    RenderSettings() : resolution_x(200), resolution_y(100),
-                    num_channels(3),
-                    number_samples_per_pixel(100),
-                    use_bvh(true),
-                    image_filename("temp.jpg"),
-                    shutter_open(0.0f), shutter_close(1.0f)
+    RenderSettings() : resolution_x_(200), resolution_y_(100),
+                    num_channels_(3),
+                    number_samples_per_pixel_(100),
+                    use_bvh_(true),
+                    image_filename_("temp.jpg"),
+                    shutter_open_(0.0f), shutter_close_(1.0f)
                     {};
 
-    int resolution_x, resolution_y;
-    int num_channels;  // Maybe channels should be less direct.
-    int number_samples_per_pixel;
-    bool use_bvh;
-    std::string image_filename;
-    float shutter_open, shutter_close;
+    int resolution_x_, resolution_y_;
+    int num_channels_;  // Maybe channels should be less direct.
+    int number_samples_per_pixel_;
+    bool use_bvh_;
+    std::string image_filename_;
+    float shutter_open_, shutter_close_;
 
 };
 

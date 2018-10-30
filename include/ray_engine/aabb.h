@@ -10,16 +10,14 @@
 #include "vec3.h"
 #include "ray_engine/ray.h"
 
-inline float ffmin(float a, float b) { return a < b ? a : b; }
-inline float ffmax(float a, float b) { return a > b ? a : b; }
 
 class AABB {
 public:
     AABB() = default;
-    AABB(const Vec3& a, const Vec3&b) { _min = a; _max = b; }
+    AABB(const Vec3& a, const Vec3&b) { min_ = a; max_ = b; }
 
-    Vec3 min() const {return _min; }
-    Vec3 max() const {return _max; }
+    Vec3 min() const {return min_; }
+    Vec3 max() const {return max_; }
 
     inline bool hit(const Ray& r, float tmin, float tmax) const {
         for (auto a: boost::irange(0, 3)) {
@@ -36,8 +34,8 @@ public:
         return true;
     }
 
-    Vec3 _min;
-    Vec3 _max;
+    Vec3 min_;
+    Vec3 max_;
 };
 
 AABB surrounding_box(AABB box0, AABB box1);

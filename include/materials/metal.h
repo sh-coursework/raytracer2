@@ -14,11 +14,11 @@
 class Metal : public Material {
 public:
     Metal(Texture *a, float f);
-    bool scatter(const Ray& r_in, const HitRecord& rec, Vec3& attenuation,
-                 Ray& scattered) const override;
+    bool Scatter(const Ray &r_in, const HitRecord &rec, Vec3 &attenuation,
+                 Ray &scattered) const override;
 
-    Texture *albedo;
-    float fuzz;
+    Texture *albedo_;
+    float fuzz_;
 };
 
 

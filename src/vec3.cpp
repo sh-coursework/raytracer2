@@ -27,6 +27,14 @@ float schlick(float cosine, float ref_idx) {
     return r0 + (1.0f - r0) * powf((1.0f - cosine), 5.0f);
 }
 
+Vec3 random_in_unit_disk() {
+    Vec3 p;
+    do {
+        p = 2.0 * Vec3(drand48(), drand48(), 0.0f) - Vec3(1.0f, 1.0f, 0.0f);
+    } while (dot(p, p) >= 1.0);
+    return p;
+}
+
 Vec3 random_in_unit_sphere() {
     Vec3 p;
     do {

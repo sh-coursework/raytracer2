@@ -12,8 +12,8 @@
 // Pure abstract base class
 class Material {
 public:
-    virtual bool scatter(const Ray& r_in, const HitRecord& rec,
-                         Vec3& attenuation, Ray& scattered) const = 0;
+    virtual bool Scatter(const Ray &r_in, const HitRecord &rec,
+                         Vec3 &attenuation, Ray &scattered) const = 0;
 };
 
 

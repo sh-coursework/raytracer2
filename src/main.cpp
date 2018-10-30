@@ -87,7 +87,7 @@ main(int argc, char** argv) {
 
     Hitable *world;
     Camera cam;
-    std::tie(world, cam) = get_scene(render_settings);
+    std::tie(world, cam) = GetScene(render_settings);
 
     auto world_built_time = std::clock();
     std::cout << "Time to create scene: "
@@ -98,20 +98,20 @@ main(int argc, char** argv) {
     // Get to the rendering and writing images
 
 
-    float pixels[render_settings.resolution_x * render_settings.resolution_y
-            * render_settings.num_channels];
+    float pixels[render_settings.resolution_x_ * render_settings.resolution_y_
+            * render_settings.num_channels_];
 
     OIIO::ImageOutput *oiio_out = OIIO::ImageOutput::create(
-            render_settings.image_filename);
+            render_settings.image_filename_);
     if (! oiio_out)
         return WEXITED;
 
     // Yes, I could do this directly, I guess, but I'm planning ahead
     // to pull this chunk out to its own function and maybe do better
     // tiling or scanline.
-    auto resolution_x = render_settings.resolution_x;
-    auto resolution_y = render_settings.resolution_y;
-    auto number_samples_per_pixel = render_settings.number_samples_per_pixel;
+    auto resolution_x = render_settings.resolution_x_;
+    auto resolution_y = render_settings.resolution_y_;
+    auto number_samples_per_pixel = render_settings.number_samples_per_pixel_;
     // Run though pixels in the image, and write to stdout
     for (auto row_count: boost::irange(0, resolution_y))
     {
@@ -125,7 +125,7 @@ main(int argc, char** argv) {
                 auto u = float(column_num + drand48()) / float(resolution_x);
                 auto v = float(row_num + drand48()) / float(resolution_y);
 
-                auto r = cam.get_ray(u, v);
+                auto r = cam.GetRay(u, v);
                 auto p = r.point_at_parameter(2.0f);  // p not used
                 pixel_color += ColorForRay(r, world, 0);
             }
@@ -136,7 +136,7 @@ main(int argc, char** argv) {
             pixel_color = Vec3(sqrtf(pixel_color[0]), sqrtf(pixel_color[1]),
                     sqrtf(pixel_color[2]));
             auto pixel_base_index = ((resolution_y - 1 - row_num) * resolution_x
-                    + column_num) * render_settings.num_channels;
+                    + column_num) * render_settings.num_channels_;
             pixels[pixel_base_index    ] = pixel_color[0];
             pixels[pixel_base_index + 1] = pixel_color[1];
             pixels[pixel_base_index + 2] = pixel_color[2];
@@ -161,9 +161,9 @@ main(int argc, char** argv) {
     // Note: ppm is m_pnm_type 3 - probably 6-3.
     // in a spec, how do I set spec.get_int_attribute ?
     OIIO::ImageSpec spec(resolution_x, resolution_y,
-            render_settings.num_channels, OIIO::TypeDesc::FLOAT);
+            render_settings.num_channels_, OIIO::TypeDesc::FLOAT);
     spec.attribute("pnm:binary", 0);  // int - just for ppm to turn off binary
-    oiio_out->open(render_settings.image_filename, spec);
+    oiio_out->open(render_settings.image_filename_, spec);
     oiio_out->write_image(OIIO::TypeDesc::FLOAT, pixels);
     oiio_out->close();
     OIIO::ImageOutput::destroy(oiio_out);

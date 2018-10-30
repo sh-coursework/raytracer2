@@ -11,15 +11,17 @@
 class Ray {
     public:
         Ray() = default;
-        Ray(const Vec3 &a, const Vec3 &b, float ti) { A = a; B = b; _time = ti;}
-        Vec3 origin() const { return A; }
-        Vec3 direction() const { return B; }
-        float time() const { return _time; }
-        Vec3 point_at_parameter(float t) const { return  A + t * B; }
+        Ray(const Vec3 &origin, const Vec3 &direction, float time)
+                { origin_ = origin; direction_ = direction; time_ = time;}
+        Vec3 origin() const { return origin_; }
+        Vec3 direction() const { return direction_; }
+        float time() const { return time_; }
+        Vec3 point_at_parameter(float t) const
+                { return  origin_ + t * direction_; }
 
-        Vec3 A;
-        Vec3 B;
-        float _time;
+        Vec3 origin_;
+        Vec3 direction_;
+        float time_;
 };
 
 #endif //RAYTRACER1_RAY_H

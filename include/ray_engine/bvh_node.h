@@ -11,17 +11,17 @@
 
 class BVHNode : public Hitable {
 public:
-    std::shared_ptr<Hitable> left;
-    std::shared_ptr<Hitable> right;
-    AABB box;
-
     BVHNode() = default;
-    BVHNode(
-            std::vector<std::shared_ptr<Hitable>>::iterator hitable_begin,
+    BVHNode(std::vector<std::shared_ptr<Hitable>>::iterator hitable_begin,
             std::vector<std::shared_ptr<Hitable>>::iterator hitable_end,
             float time0, float time1);
-    bool hit(const Ray& r, float t_min, float t_max, HitRecord& rec) const override;
-    bool bounding_box(float t0, float t1, AABB& box) const override;
+    bool Hit(const Ray &r, float t_min, float t_max,
+            HitRecord &rec) const override;
+    bool BoundingBox(float t0, float t1, AABB &box) const override;
+
+    std::shared_ptr<Hitable> left_;
+    std::shared_ptr<Hitable> right_;
+    AABB box_;
 };
 
 bool box_x_compare(const std::shared_ptr<Hitable> &hitable_a,
