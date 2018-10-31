@@ -7,6 +7,7 @@
 
 #include "vec3.h"
 #include "ray_engine/hitable.h"
+#include "ray_engine/ray.h"
 #include "ray_engine/aabb.h"
 #include "materials/material.h"
 

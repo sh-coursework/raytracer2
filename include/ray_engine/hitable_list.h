@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "ray_engine/hitable.h"
+#include "ray_engine/ray.h"
 #include "ray_engine/aabb.h"
 
 class HitableList : public Hitable {

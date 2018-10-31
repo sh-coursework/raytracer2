@@ -15,7 +15,9 @@
 #include "scene_geometry/moving_sphere.h"
 #include "scene_geometry/rect.h"
 #include "scene_geometry/box.h"
-#include "ray_engine/flip_normals.h"
+#include "scene_geometry/transforms/flip_normals.h"
+#include "scene_geometry/transforms/translate.h"
+#include "scene_geometry/transforms/rotate_y.h"
 #include "textures/texture.h"
 #include "textures/constant_texture.h"
 #include "textures/checker_texture.h"
@@ -223,10 +225,14 @@ Hitable *CornellBox() {
 
     // 2 boxes
     scene_list.push_back( std::shared_ptr<Hitable>(
-            new Box(Vec3(130, 0, 65), Vec3(295, 165, 230), white)
+            new Translate(new RotateY(
+                new Box(Vec3(0, 0, 0), Vec3(165, 165, 165), white),
+                -18), Vec3(130, 0, 65))
     ));
     scene_list.push_back( std::shared_ptr<Hitable>(
-            new Box(Vec3(265, 0, 295), Vec3(430, 330, 460), white)
+            new Translate(new RotateY(
+                new Box(Vec3(0, 0, 0), Vec3(165, 330, 165), white),
+                15), Vec3(265, 0, 295))
     ));
 
     return new HitableList(scene_list);

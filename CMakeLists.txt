@@ -9,12 +9,14 @@ include_directories(include ${Boost_INCLUDE_DIRS})
 find_library(OIIO "OpenImageIO" "/usr/local/lib")
 
 set(SOURCE_CPPS
-        src/ray_engine/flip_normals.cpp
         src/ray_engine/hitable_list.cpp
         src/ray_engine/bvh_node.cpp
         src/ray_engine/aabb.cpp
         src/ray_engine/ray_engine.cpp
 
+        src/scene_geometry/transforms/flip_normals.cpp
+        src/scene_geometry/transforms/translate.cpp
+        src/scene_geometry/transforms/rotate_y.cpp
         src/scene_geometry/sphere.cpp
         src/scene_geometry/moving_sphere.cpp
         src/scene_geometry/rect.cpp

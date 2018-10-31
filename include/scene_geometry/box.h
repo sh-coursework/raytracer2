@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "vec3.h"
+#include "ray_engine/ray.h"
 #include "ray_engine/hitable.h"
 #include "ray_engine/hitable_list.h"
 #include "ray_engine/aabb.h"

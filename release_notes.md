@@ -54,7 +54,7 @@ In raytracer2, I'm working through the second book,
 Technically, I guess this should have been a major version release since it
 totally breaks backward compatibility, renaming all the functions.
 ### Clang-tidy cleanup
-* avoid the repeating return tipe from the declaration...
+* avoid the repeating return type from the declaration...
 * use '= default' to define a trivial default constructor
 * 'virtual' is redundant since the function is already declared 'verride'
 * Single-argument constructors must be marked explicit...
@@ -76,19 +76,18 @@ totally breaks backward compatibility, renaming all the functions.
 10/29/2018 sh-coursework
 ### Work from book
 * Book 2, Chapter 6 - Rectangles and Lights, through Cornell Box walls
-* Book 2, Chapter 7 - Instances, box geometry pre-transform.
+* Book 2, Chapter 7 - Instances, box, translate, rotate-Y, Cornell Box
 ### Other cleanup
 * Cleaned up variable names for t_min and t_max for consistency.
   Though it's still ambiguous if t is time or the line parametization.
-* Moved flip_normals from scene_geometry to ray_engine because it's more
-  like a utility.
+* Moved flip_normals from scene_geometry to transforms subdir.
 
 
 ## Stuff I plan to work on:
 * Clean up variable names to more descriptive.
   * All the names of aabb are bad.
 * Look for more std container usage.
-* Use smart pointers for all ownership
+* Use smart pointers for all ownership / audit pointers.
 * scanline and tile output/traversal, with work-in-progress outputs.
 * shader binding - separate material definition from scene geom
 * Comment/Document

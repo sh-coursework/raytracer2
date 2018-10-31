@@ -51,14 +51,12 @@ main(int argc, char** argv) {
             parse_results
             );
     // --help option
-    if (parse_results.count("help"))
-    {
+    if (parse_results.count("help")) {
         std::cout << "Command Line Options" << std::endl
             << cmdline_options << std::endl;
         return SUCCESS;
     }
-    if (parse_results.count("rendersettingsfile"))
-    {
+    if (parse_results.count("rendersettingsfile")) {
         std::string render_settings_filename
                 = parse_results["rendersettingsfile"].as<std::string>();
         std::ifstream render_settings_file_stream(
@@ -113,15 +111,12 @@ main(int argc, char** argv) {
     auto resolution_y = render_settings.resolution_y_;
     auto number_samples_per_pixel = render_settings.number_samples_per_pixel_;
     // Run though pixels in the image, and write to stdout
-    for (auto row_count: boost::irange(0, resolution_y))
-    {
+    for (auto row_count: boost::irange(0, resolution_y)) {
         auto row_num = resolution_y - 1 - row_count;
-        for (auto column_num: boost::irange(0, resolution_x))
-        {
+        for (auto column_num: boost::irange(0, resolution_x)) {
             auto pixel_color = Vec3(0.0f, 0.0f, 0.0f);
 
-            for (auto sample_num: boost::irange(0, number_samples_per_pixel))
-            {
+            for (auto sample_num: boost::irange(0, number_samples_per_pixel)) {
                 auto u = float(column_num + drand48()) / float(resolution_x);
                 auto v = float(row_num + drand48()) / float(resolution_y);
 

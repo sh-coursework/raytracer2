@@ -4,7 +4,7 @@
 
 #include "scene_geometry/box.h"
 
-#include "ray_engine/flip_normals.h"
+#include "scene_geometry/transforms/flip_normals.h"
 #include "scene_geometry/rect.h"
 
 

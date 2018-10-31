@@ -11,14 +11,14 @@
 
 class FlipNormals : public Hitable {
 public:
-    FlipNormals(Hitable *orig_hitable_ptr)
-            : orig_hitable_ptr_(orig_hitable_ptr) {}
+    FlipNormals(Hitable *child_hitable_)
+            : child_hitable_(child_hitable_) {}
 
     bool Hit(const Ray &r, float t_min, float t_max,
              HitRecord &rec) const override;
     bool BoundingBox(float t_min, float t_max, AABB &box) const override;
 
-    Hitable *orig_hitable_ptr_;
+    Hitable *child_hitable_;
 };
 
 

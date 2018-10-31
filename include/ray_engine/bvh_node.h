@@ -6,7 +6,9 @@
 #define RAYTRACER2_BVH_NODE_H
 
 #include <vector>
+
 #include "ray_engine/aabb.h"
+#include "ray_engine/ray.h"
 #include "ray_engine/hitable.h"
 
 class BVHNode : public Hitable {
