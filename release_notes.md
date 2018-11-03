@@ -91,6 +91,7 @@ totally breaks backward compatibility, renaming all the functions.
 * scanline and tile output/traversal, with work-in-progress outputs.
 * shader binding - separate material definition from scene geom
 * Comment/Document
+* Rotate-X, rotate-Z, scale
 * External definition of scene - USD?
 * OSL shaders?
 * One day... multithreading.

@@ -6,8 +6,8 @@
 #define RAYTRACER2_IMAGE_TEXTURE_H
 
 
-#include <string>
 #include <vector>
+#include <string>
 
 #include "vec3.h"
 #include "textures/texture.h"

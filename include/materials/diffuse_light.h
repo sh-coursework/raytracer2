@@ -11,7 +11,7 @@
 
 class DiffuseLight : public Material {
 public:
-    DiffuseLight(Texture *emission) : emission_(emission) {};
+    explicit DiffuseLight(Texture *emission) : emission_(emission) {};
     bool Scatter(const Ray &r_in, const HitRecord &rec, Vec3 &attenuation,
                  Ray &scattered) const override
             { return false; }

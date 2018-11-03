@@ -11,7 +11,7 @@
 
 class FlipNormals : public Hitable {
 public:
-    FlipNormals(Hitable *child_hitable_)
+    explicit FlipNormals(Hitable *child_hitable_)
             : child_hitable_(child_hitable_) {}
 
     bool Hit(const Ray &r, float t_min, float t_max,
