@@ -78,6 +78,7 @@ totally breaks backward compatibility, renaming all the functions.
 * Book 2, Chapter 6 - Rectangles and Lights, through Cornell Box walls
 * Book 2, Chapter 7 - Instances, box, translate, rotate-Y, Cornell Box
 * Book 2, Chapter 8 - Volumes
+* Book 2, Chapter 9 - Putting it all together
 ### Other cleanup
 * Cleaned up variable names for t_min and t_max for consistency.
   Though it's still ambiguous if t is time or the line parametization.
@@ -85,14 +86,16 @@ totally breaks backward compatibility, renaming all the functions.
 
 
 ## Stuff I plan to work on:
+* Book 3!
 * Clean up variable names to more descriptive.
-  * All the names of aabb are bad.
+  * All the names of aabb, including aabb itself, are not very descriptive.
 * Look for more std container usage.
+* Are there better ways to find min,max of a vector/bounding box?
+* Rotate-X, rotate-Z, scale
 * Use smart pointers for all ownership / audit pointers.
 * scanline and tile output/traversal, with work-in-progress outputs.
 * shader binding - separate material definition from scene geom
 * Comment/Document
-* Rotate-X, rotate-Z, scale
 * External definition of scene - USD?
 * OSL shaders?
 * One day... multithreading.

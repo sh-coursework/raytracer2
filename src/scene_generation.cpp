@@ -295,6 +295,112 @@ Hitable *CornellSmoke() {
 }
 
 
+Hitable *TestAllBook2() {
+    std::vector<std::shared_ptr<Hitable>> scene_list;
+
+    std::vector<std::shared_ptr<Hitable>> box_list_1;
+    std::vector<std::shared_ptr<Hitable>> box_list_2;
+
+    Material *white = new Lambertian(
+            new ConstantTexture(Vec3(0.73f, 0.73f, 0.73f)));
+    Material *ground = new Lambertian(
+            new ConstantTexture(Vec3(0.48f, 0.83f, 0.53f)));
+
+    auto num_boxes = 20;
+    for (auto i: boost::irange(0, num_boxes)) {
+        for (auto j: boost::irange(0, num_boxes)) {
+            auto w = 100.0f;
+            auto x0 = -1000.0f + i * w;
+            auto z0 = -1000.0f + j * w;
+            auto y0 = 0.0f;
+            auto x1 = x0 + w;
+            auto y1 = 100.0 * float(drand48() + 0.01);
+            auto z1  = z0 + w;
+            box_list_1.push_back( std::shared_ptr<Hitable>(
+                    new Box(Vec3(x0, y0, z0), Vec3(x1, y1, z1), ground)
+                    ));
+        }
+    }
+
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new BVHNode(box_list_1.begin(), box_list_1.end(), 0, 1)
+    ));
+
+    // light
+    Material *light = new DiffuseLight(
+            new ConstantTexture(Vec3(7.0f, 7.0f, 7.0f)));
+
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new XZRect(123, 423, 147, 412, 554, light)
+    ));
+
+    Vec3 center(400.0f, 400.0f, 200.0f);
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new MovingSphere(center, center + Vec3(30.0f, 0.0f, 0.0f),
+                    0, 1, 50.0,
+                    new Lambertian(new ConstantTexture(Vec3(0.7f, 0.3f, 0.1f)))
+                    )
+    ));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new Sphere(Vec3(260.0f, 150.0f, 45.0f), 50.0f,
+                    new Dielectric(1.5f))
+    ));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new Sphere(Vec3(0.0f, 150.0f, 145.0f), 50.0f,
+                    new Metal(new ConstantTexture(Vec3(0.2f, 0.4f, 0.9f)), 10.0f))
+    ));
+
+    Hitable *boundary = new Sphere(Vec3(360.0f, 150.0f, 145.0f), 70.0f,
+            new Dielectric(1.5f));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            boundary
+    ));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new ConstantMedium(boundary, 0.2,
+                    new ConstantTexture(Vec3(0.2f, 0.4f, 0.9f)))
+    ));
+
+    // This kind of scares me. I guess I've implicitly transfered ownership
+    // of the old version to scene_list.  But still... reusing...
+    boundary = new Sphere(Vec3(0.0f, 0.0f, 5.0f), 5000.0f,
+                                   new Dielectric(1.5f));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new ConstantMedium(boundary, 0.0001,
+                               new ConstantTexture(Vec3(1.0f, 1.0f, 1.0f)))
+    ));
+
+    int nx, ny, nz;
+    std::string test_filename = "test_data/land_ocean_ice_cloud_2048.jpg";
+    Texture *image_textured = new ImageTexture(test_filename);
+    Material *earth_material = new Lambertian(image_textured);
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new Sphere(Vec3(400.0f, 200.0f, 300.0f), 80.0f,
+                       earth_material)
+    ));
+
+    Texture *perlin_texture = new NoiseTexture(0.1);
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new Sphere(Vec3(220.0f, 280.0f, 300.0f), 80.0f,
+                       new Lambertian(perlin_texture))
+    ));
+
+    auto ns = 1000;
+    for (auto j: boost::irange(0, ns)) {
+        box_list_2.push_back( std::shared_ptr<Hitable>(
+                new Sphere(Vec3(165.0 * drand48(), 165.0 * drand48(), 165.0 * drand48()),
+                        10.0f, white)
+        ));
+    }
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new Translate( new RotateY(
+                    new BVHNode(box_list_2.begin(), box_list_2.end(), 0.0, 1.0),
+                    15.0f), Vec3(-100, 270, 395))
+    ));
+
+    return new HitableList(scene_list);
+}
+
+
 //////////////////////////////////////////////////////////////////////////
 /// Cameras
 //////////////////////////////////////////////////////////////////////////
@@ -408,7 +514,10 @@ std::tuple<Hitable *, Camera> GetScene(const RenderSettings &render_settings) {
 //    auto w_tmp = RandomScene(0.0, 1.0, true);
 //    auto c_tmp = RandomSceneCam(render_settings);
 
-    auto w_tmp = CornellSmoke();
+//    auto w_tmp = CornellSmoke();
+//    auto c_tmp = CornellBoxCam(render_settings);
+
+    auto w_tmp = TestAllBook2();
     auto c_tmp = CornellBoxCam(render_settings);
 
     return std::make_tuple(w_tmp, c_tmp);
