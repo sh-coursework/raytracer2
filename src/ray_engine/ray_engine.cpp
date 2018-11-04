@@ -10,6 +10,7 @@
 Vec3 ColorForRay(const Ray &r, Hitable *world, int depth) {
     // Added Special 0,0 Ray - stop hit test and return full.
     // (But how expensive is this test on every ColorForRay call?)
+    // TODO: get rid of this - it's already covered by emission.
     if (r.origin().length() == 0.0f and r.direction().length() == 0.0f)
         return {1.0f, 1.0f, 1.0f};
 
@@ -25,9 +26,6 @@ Vec3 ColorForRay(const Ray &r, Hitable *world, int depth) {
         else
             return emitted;
     } else {
-//        auto unit_direction = unit_vector(r.direction());
-//        auto t = 0.5f * (unit_direction.y() + 1.0f);
-//        return (1.0f - t) * Vec3(1.0f, 1.0f, 1.0f) + t * Vec3(0.5f, 0.7f, 1.0f);
         return {0.0f, 0.0f, 0.0f};
     }
 }

@@ -18,6 +18,7 @@
 #include "scene_geometry/transforms/flip_normals.h"
 #include "scene_geometry/transforms/translate.h"
 #include "scene_geometry/transforms/rotate_y.h"
+#include "scene_geometry/volumes/constant_medium.h"
 #include "textures/texture.h"
 #include "textures/constant_texture.h"
 #include "textures/checker_texture.h"
@@ -239,6 +240,61 @@ Hitable *CornellBox() {
 }
 
 
+Hitable *CornellSmoke() {
+    std::vector<std::shared_ptr<Hitable>> scene_list;
+
+    Material *red = new Lambertian(
+            new ConstantTexture(Vec3(0.65f, 0.05f, 0.05f)));
+    Material *white = new Lambertian(
+            new ConstantTexture(Vec3(0.73f, 0.73f, 0.73f)));
+    Material *green = new Lambertian(
+            new ConstantTexture(Vec3(0.12f, 0.45f, 0.15f)));
+
+    Material *light = new DiffuseLight(
+            new ConstantTexture(Vec3(7.0f, 7.0f, 7.0f)));
+
+    // light
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new XZRect(113, 443, 127, 432, 554, light)
+    ));
+
+    // main room walls
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new FlipNormals(new YZRect(0, 555, 0, 555, 555, green))
+    ));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new YZRect(0, 555, 0, 555, 0, red)
+    ));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new FlipNormals(new XZRect(0, 555, 0, 555, 555, white))
+    ));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new XZRect(0, 555, 0, 555, 0, white)
+    ));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new FlipNormals(new XYRect(0, 555, 0, 555, 555, white))
+    ));
+
+    // 2 boxes
+    Hitable *box_1 = new Translate(new RotateY(
+            new Box(Vec3(0, 0, 0), Vec3(165, 165, 165), white),
+            -18), Vec3(130, 0, 65));
+    Hitable *box_2 = new Translate(new RotateY(
+            new Box(Vec3(0, 0, 0), Vec3(165, 330, 165), white),
+            15), Vec3(265, 0, 295));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new ConstantMedium(box_1, 0.01,
+                    new ConstantTexture(Vec3(1.0, 1.0, 1.0)))
+    ));
+    scene_list.push_back( std::shared_ptr<Hitable>(
+            new ConstantMedium(box_2, 0.01,
+                    new ConstantTexture(Vec3(0.0, 0.0, 0.0)))
+    ));
+
+    return new HitableList(scene_list);
+}
+
+
 //////////////////////////////////////////////////////////////////////////
 /// Cameras
 //////////////////////////////////////////////////////////////////////////
@@ -352,7 +408,7 @@ std::tuple<Hitable *, Camera> GetScene(const RenderSettings &render_settings) {
 //    auto w_tmp = RandomScene(0.0, 1.0, true);
 //    auto c_tmp = RandomSceneCam(render_settings);
 
-    auto w_tmp = CornellBox();
+    auto w_tmp = CornellSmoke();
     auto c_tmp = CornellBoxCam(render_settings);
 
     return std::make_tuple(w_tmp, c_tmp);

@@ -21,12 +21,17 @@ set(SOURCE_CPPS
         src/scene_geometry/moving_sphere.cpp
         src/scene_geometry/rect.cpp
         src/scene_geometry/box.cpp
+        src/scene_geometry/volumes/constant_medium.cpp
 
         src/materials/constant_material.cpp
         src/materials/lambertian.cpp
         src/materials/metal.cpp
         src/materials/dielectric.cpp
 
+        # Volumes
+        src/materials/isotropic.cpp
+
+        # Lights
         src/materials/diffuse_light.cpp
 
         src/textures/checker_texture.cpp

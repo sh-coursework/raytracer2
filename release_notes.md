@@ -77,6 +77,7 @@ totally breaks backward compatibility, renaming all the functions.
 ### Work from book
 * Book 2, Chapter 6 - Rectangles and Lights, through Cornell Box walls
 * Book 2, Chapter 7 - Instances, box, translate, rotate-Y, Cornell Box
+* Book 2, Chapter 8 - Volumes
 ### Other cleanup
 * Cleaned up variable names for t_min and t_max for consistency.
   Though it's still ambiguous if t is time or the line parametization.
