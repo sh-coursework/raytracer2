@@ -27,7 +27,6 @@ bool Dielectric::Scatter(const Ray &r_in, const HitRecord &rec,
     if (refract(r_in.direction(), outward_normal, ni_over_nt, refracted)) {
         reflect_prob = schlick(cosine, ref_idx_);
     } else {
-        scattered = Ray(rec.p, reflected, r_in.time());
         reflect_prob = 1.0;
     }
     if (drand48() < reflect_prob) {

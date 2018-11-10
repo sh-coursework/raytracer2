@@ -84,6 +84,10 @@ totally breaks backward compatibility, renaming all the functions.
   Though it's still ambiguous if t is time or the line parametization.
 * Moved flip_normals from scene_geometry to transforms subdir.
 
+## Release 1.4.0
+11/4/2018 sh-coursework
+### Code cleanup
+* Book 1 online comments point out Dielectric repeats scatter in reflect.
 
 ## Stuff I plan to work on:
 * Book 3!
