@@ -14,7 +14,7 @@
 class MovingSphere : public Hitable {
 public:
     MovingSphere() = default;
-    MovingSphere(Vec3 cen0, Vec3 cen1, float t0, float t1, float r, Material *m)
+    MovingSphere(const Vec3 &cen0, const Vec3 &cen1, float t0, float t1, float r, Material *m)
             : center_0_(cen0), center_1_(cen1), time_0_(t0), time_1_(t1),
               radius_(r), material_ptr_(m) {};
     bool Hit(const Ray &r, float t_min, float t_max,

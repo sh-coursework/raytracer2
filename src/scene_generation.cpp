@@ -369,7 +369,6 @@ Hitable *TestAllBook2() {
                                new ConstantTexture(Vec3(1.0f, 1.0f, 1.0f)))
     ));
 
-    int nx, ny, nz;
     std::string test_filename = "test_data/land_ocean_ice_cloud_2048.jpg";
     Texture *image_textured = new ImageTexture(test_filename);
     Material *earth_material = new Lambertian(image_textured);

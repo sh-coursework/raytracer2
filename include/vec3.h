@@ -144,7 +144,7 @@ inline Vec3& Vec3::operator/=(float t) {
     return *this;
 }
 
-inline Vec3 unit_vector(Vec3 v) {
+inline Vec3 unit_vector(const Vec3 &v) {
     return v / v.length();
 }
 

@@ -88,6 +88,7 @@ totally breaks backward compatibility, renaming all the functions.
 11/4/2018 sh-coursework
 ### Code cleanup
 * Book 1 online comments point out Dielectric repeats scatter in reflect.
+* Get rid of some unused variables.
 
 ## Stuff I plan to work on:
 * Book 3!
