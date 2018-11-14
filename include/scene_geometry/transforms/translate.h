@@ -13,7 +13,7 @@
 
 class Translate : public Hitable {
 public:
-    Translate(Hitable *child_hitable, const Vec3 &translate)
+    Translate(const Vec3 &translate, Hitable *child_hitable)
             :  child_hitable_(child_hitable), translate_(translate) {}
 
     bool Hit(const Ray &r, float t_min, float t_max,

@@ -84,11 +84,13 @@ totally breaks backward compatibility, renaming all the functions.
   Though it's still ambiguous if t is time or the line parametization.
 * Moved flip_normals from scene_geometry to transforms subdir.
 
-## Release 1.4.0
+## Release 2.0.0
 11/4/2018 sh-coursework
 ### Code cleanup
 * Book 1 online comments point out Dielectric repeats scatter in reflect.
 * Get rid of some unused variables.
+* Changed signatures of Translate and RotateY constructors to put child last.
+  This should be easier to read when transforms are chained together.
 
 ## Stuff I plan to work on:
 * Book 3!

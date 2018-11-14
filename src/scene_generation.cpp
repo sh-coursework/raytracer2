@@ -226,14 +226,12 @@ Hitable *CornellBox() {
 
     // 2 boxes
     scene_list.push_back( std::shared_ptr<Hitable>(
-            new Translate(new RotateY(
-                new Box(Vec3(0, 0, 0), Vec3(165, 165, 165), white),
-                -18), Vec3(130, 0, 65))
+        new Translate(Vec3(130, 0, 65), new RotateY(-18,
+                new Box(Vec3(0, 0, 0), Vec3(165, 165, 165), white)))
     ));
     scene_list.push_back( std::shared_ptr<Hitable>(
-            new Translate(new RotateY(
-                new Box(Vec3(0, 0, 0), Vec3(165, 330, 165), white),
-                15), Vec3(265, 0, 295))
+        new Translate(Vec3(265, 0, 295), new RotateY(15,
+                new Box(Vec3(0, 0, 0), Vec3(165, 330, 165), white)))
     ));
 
     return new HitableList(scene_list);
@@ -276,12 +274,10 @@ Hitable *CornellSmoke() {
     ));
 
     // 2 boxes
-    Hitable *box_1 = new Translate(new RotateY(
-            new Box(Vec3(0, 0, 0), Vec3(165, 165, 165), white),
-            -18), Vec3(130, 0, 65));
-    Hitable *box_2 = new Translate(new RotateY(
-            new Box(Vec3(0, 0, 0), Vec3(165, 330, 165), white),
-            15), Vec3(265, 0, 295));
+    Hitable *box_1 = new Translate(Vec3(130, 0, 65), new RotateY(-18,
+            new Box(Vec3(0, 0, 0), Vec3(165, 165, 165), white)));
+    Hitable *box_2 = new Translate(Vec3(265, 0, 295), new RotateY(15,
+            new Box(Vec3(0, 0, 0), Vec3(165, 330, 165), white)));
     scene_list.push_back( std::shared_ptr<Hitable>(
             new ConstantMedium(box_1, 0.01,
                     new ConstantTexture(Vec3(1.0, 1.0, 1.0)))
@@ -391,9 +387,8 @@ Hitable *TestAllBook2() {
         ));
     }
     scene_list.push_back( std::shared_ptr<Hitable>(
-            new Translate( new RotateY(
-                    new BVHNode(box_list_2.begin(), box_list_2.end(), 0.0, 1.0),
-                    15.0f), Vec3(-100, 270, 395))
+        new Translate(Vec3(-100, 270, 395), new RotateY(15.0f,
+                new BVHNode(box_list_2.begin(), box_list_2.end(), 0.0, 1.0)))
     ));
 
     return new HitableList(scene_list);

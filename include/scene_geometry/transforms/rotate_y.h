@@ -12,7 +12,7 @@
 
 class RotateY : public Hitable {
 public:
-    RotateY(Hitable *child_hitable, float angle);
+    RotateY(float angle, Hitable *child_hitable);
     bool Hit(const Ray &r, float t_min, float t_max,
             HitRecord &rec) const override;
 
