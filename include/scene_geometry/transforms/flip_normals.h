@@ -5,20 +5,21 @@
 #ifndef RAYTRACER2_FLIP_NORMALS_H
 #define RAYTRACER2_FLIP_NORMALS_H
 
+#include <memory>
 
 #include "ray_engine/hitable.h"
 
 
 class FlipNormals : public Hitable {
 public:
-    explicit FlipNormals(Hitable *child_hitable_)
-            : child_hitable_(child_hitable_) {}
+    explicit FlipNormals(std::shared_ptr<Hitable> child_hitable_)
+            : child_hitable_(std::move(child_hitable_)) {}
 
     bool Hit(const Ray &r, float t_min, float t_max,
              HitRecord &rec) const override;
     bool BoundingBox(float t_min, float t_max, AABB &box) const override;
 
-    Hitable *child_hitable_;
+    std::shared_ptr<Hitable> child_hitable_;
 };
 
 

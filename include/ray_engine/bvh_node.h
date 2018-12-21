@@ -5,6 +5,7 @@
 #ifndef RAYTRACER2_BVH_NODE_H
 #define RAYTRACER2_BVH_NODE_H
 
+#include <memory>
 #include <vector>
 
 #include "ray_engine/aabb.h"

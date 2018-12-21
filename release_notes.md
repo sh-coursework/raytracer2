@@ -92,6 +92,10 @@ totally breaks backward compatibility, renaming all the functions.
 * Changed signatures of Translate and RotateY constructors to put child last.
   This should be easier to read when transforms are chained together.
 
+## Next
+* Converted all geometry and transforms to smart pointers.
+  Still need to do materials and textures - maybe later for shader binding.
+
 ## Stuff I plan to work on:
 * Book 3!
 * Clean up variable names to more descriptive.

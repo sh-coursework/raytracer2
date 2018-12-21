@@ -5,6 +5,7 @@
 #ifndef RAYTRACER2_BOX_H
 #define RAYTRACER2_BOX_H
 
+#include <memory>
 #include <vector>
 
 #include "vec3.h"
@@ -24,7 +25,7 @@ public:
     bool BoundingBox(float t_min, float t_max, AABB &box) const override;
 
     Vec3 p_min_, p_max_;
-    HitableList *hitables_;
+    std::shared_ptr<HitableList> hitables_;
 };
 
 

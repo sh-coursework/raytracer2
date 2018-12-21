@@ -5,6 +5,8 @@
 #ifndef RAYTRACER2_CONSTANT_MEDIUM_H
 #define RAYTRACER2_CONSTANT_MEDIUM_H
 
+#include <memory>
+
 #include "ray_engine/aabb.h"
 #include "ray_engine/ray.h"
 #include "ray_engine/hitable.h"
@@ -15,15 +17,15 @@
 
 class ConstantMedium : public Hitable {
 public:
-    ConstantMedium(Hitable *boundary, float density, Texture *medium)
-            : boundary_(boundary), density_(density)
+    ConstantMedium(std::shared_ptr<Hitable> boundary, float density, Texture *medium)
+            : boundary_(std::move(boundary)), density_(density)
         { phase_function_ = new Isotropic(medium); };
 
     bool Hit(const Ray &r, float t_min, float t_max,
             HitRecord &rec) const override;
     bool BoundingBox(float t_min, float t_max, AABB &box) const override;
 
-    Hitable *boundary_;
+    std::shared_ptr<Hitable> boundary_;
     float density_;
     Material *phase_function_;
 };

@@ -83,9 +83,13 @@ main(int argc, char** argv) {
 
     auto start_time = std::clock();
 
-    Hitable *world;
-    Camera cam;
-    std::tie(world, cam) = GetScene(render_settings);
+    std::unique_ptr<Hitable> world_ptr;
+    std::unique_ptr<Camera> cam_ptr;
+    std::tie(world_ptr, cam_ptr) = GetScene(render_settings);
+    auto cam = *cam_ptr;  // Copying a Camera, I guess.  But I'm about to
+                          // dereference it like literally a million times.
+    auto world_raw_ptr = world_ptr.get();  // If I'm not changing ownership,
+                          // I think Herb Sutter says raw pointer are beautiful.
 
     auto world_built_time = std::clock();
     std::cout << "Time to create scene: "
@@ -122,7 +126,7 @@ main(int argc, char** argv) {
 
                 auto r = cam.GetRay(u, v);
                 auto p = r.PointAtParameter(2.0f);  // p not used
-                pixel_color += ColorForRay(r, world, 0);
+                pixel_color += ColorForRay(r, world_raw_ptr, 0);
             }
             pixel_color /= float(number_samples_per_pixel);
 

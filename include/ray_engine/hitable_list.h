@@ -5,6 +5,7 @@
 #ifndef RAYTRACER1_HITABLE_LIST_H
 #define RAYTRACER1_HITABLE_LIST_H
 
+#include <memory>
 #include <utility>
 #include <vector>
 
@@ -15,8 +16,8 @@
 class HitableList : public Hitable {
 public:
     HitableList() = default;
-    explicit HitableList(std::vector<std::shared_ptr<Hitable>> &l)
-            {vector_list_ = std::move(l); }
+    explicit HitableList(std::vector<std::shared_ptr<Hitable>> &hitables)
+            {vector_list_ = std::move(hitables); }
     bool Hit(const Ray &r, float t_min, float t_max,
              HitRecord &rec) const override;
     bool BoundingBox(float t_min, float t_max, AABB &box) const override;

@@ -7,7 +7,7 @@
 #include "materials/material.h"
 
 
-Vec3 ColorForRay(const Ray &r, Hitable *world, int depth) {
+Vec3 ColorForRay(const Ray &r, const Hitable *const world, int depth) {
     // Added Special 0,0 Ray - stop hit test and return full.
     // (But how expensive is this test on every ColorForRay call?)
     // TODO: get rid of this - it's already covered by emission.

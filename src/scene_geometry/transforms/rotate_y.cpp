@@ -11,8 +11,8 @@
 #include <boost/range/irange.hpp>
 
 
-RotateY::RotateY(float angle, Hitable *child_hitable)
-        : child_hitable_(child_hitable) {
+RotateY::RotateY(float angle, std::shared_ptr<Hitable> child_hitable)
+        : child_hitable_(std::move(child_hitable)) {
     float radians = (M_PI / 180.) * angle;
     sin_theta_ = sin(radians);
     cos_theta_ = cos(radians);
