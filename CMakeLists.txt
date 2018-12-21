@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.10)
 project(raytracer2)
 
 set(CMAKE_CXX_STANDARD 11)
 
-find_package( Boost 1.67.0 COMPONENTS program_options REQUIRED )
+find_package( Boost 1.65.1 COMPONENTS program_options REQUIRED )
 include_directories(include ${Boost_INCLUDE_DIRS})
 
 find_library(OIIO "OpenImageIO" "/usr/local/lib")
