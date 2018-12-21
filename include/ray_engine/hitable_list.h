@@ -5,6 +5,7 @@
 #ifndef RAYTRACER1_HITABLE_LIST_H
 #define RAYTRACER1_HITABLE_LIST_H
 
+#include <memory>
 #include <utility>
 #include <vector>
 
