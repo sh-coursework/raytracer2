@@ -84,6 +84,17 @@ totally breaks backward compatibility, renaming all the functions.
   Though it's still ambiguous if t is time or the line parametization.
 * Moved flip_normals from scene_geometry to transforms subdir.
 
+## Release 1.3.1
+12/21/2018 sh-coursework
+### Cleanup
+* Port to Ubuntu on Windows Subsystem for Linux.
+  Originally, I just chose the version I first downloaded on the Mac.
+  But it seems to work with the earlier versions on Windows
+  so let's go with that.
+  * Lower CMake minimum from 3.12 to 3.10
+  * Lower CMake minimum from 1.67.0 to 1.65.1.
+* Ubuntu compiler caught a couple missing includes for memory in bvh_node.h and hitable_list.h.
+
 ## Release 2.0.0
 11/4/2018 sh-coursework
 ### Code cleanup
@@ -91,8 +102,6 @@ totally breaks backward compatibility, renaming all the functions.
 * Get rid of some unused variables.
 * Changed signatures of Translate and RotateY constructors to put child last.
   This should be easier to read when transforms are chained together.
-
-## Next
 * Converted all geometry and transforms to smart pointers.
   Still need to do materials and textures - maybe later for shader binding.
 
