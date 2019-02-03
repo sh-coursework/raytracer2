@@ -3,24 +3,19 @@
 //
 
 #include "vec3.h"
+#include "ortho_normal_basis.h"
+
 #include "materials/lambertian.h"
 
 bool Lambertian::Scatter(const Ray &r_in, const HitRecord &rec,
                          Vec3 &attenuation, Ray &scattered,
                          float &pdf) const {
-//    auto target = rec.p + rec.normal + random_in_unit_sphere();
-////    scattered = Ray(rec.p, target - rec.p, r_in.time());
-//    scattered = Ray(rec.p, unit_vector(target - rec.p), r_in.time());
-//    attenuation = albedo_->Value(rec.u, rec.v, rec.p);
-//    pdf = dot(rec.normal, scattered.direction()) / float(M_PI);
-
-    Vec3 direction;
-    do {
-        direction = random_in_unit_sphere();
-    } while (dot(direction, rec.normal) < 0 );
+    OrthoNormalBasis uvw;
+    uvw.BuildFromW(rec.normal);
+    Vec3 direction = uvw.Local(random_cosine_direction());
     scattered = Ray(rec.p, unit_vector(direction), r_in.time());
     attenuation = albedo_->Value(rec.u, rec.v, rec.p);
-    pdf = 0.5f / float(M_PI);
+    pdf = dot(uvw.w(), scattered.direction()) / float(M_PI);
     return true;
 }
 

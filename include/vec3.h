@@ -158,4 +158,6 @@ Vec3 random_in_unit_disk();
 
 Vec3 random_in_unit_sphere();
 
+Vec3 random_cosine_direction();
+
 #endif //RAYTRACER1_VEC3_H

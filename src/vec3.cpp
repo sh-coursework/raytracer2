@@ -44,3 +44,12 @@ Vec3 random_in_unit_sphere() {
     return p;
 }
 
+Vec3 random_cosine_direction() {
+  float r1 = drand48();
+  float r2 = drand48();
+  float z = sqrt(1-r2);
+  float phi = 2 * M_PI * r1;
+  float x = cos(phi) * 2.0f * sqrt(r2);
+  float y = sin(phi) * 2.0f * sqrt(r2);
+  return Vec3(x, y, z);
+}

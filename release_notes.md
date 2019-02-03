@@ -111,6 +111,8 @@ totally breaks backward compatibility, renaming all the functions.
 * Upgrade OIIO to 2.x.x (uses unique_ptr for create)
 ### Work from book 3
 * Chap 4 - probability distribution functions
+* Chap 5 - random cosine direction
+* Chap 6 - orthonormal basis
 
 ## Stuff I plan to work on:
 * Book 3!
