@@ -19,7 +19,7 @@ public:
     }
     virtual float ScatteringPdf(const Ray &r_in, const HitRecord &rec,
         const Ray &scattered) const {
-      return false;
+      return 1.0f;
     }
     virtual Vec3 Emitted(float u, float v, const Vec3& p) const
             { return {0.0f, 0.0f, 0.0f}; }
