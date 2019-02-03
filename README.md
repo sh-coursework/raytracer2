@@ -10,5 +10,5 @@ in the series, *"Raytracing, The Next Week"*.
 
 Dependencies:
 * boost 1.67.0
-* opeinimageio
+* opeinimageio 2.0.0+
 

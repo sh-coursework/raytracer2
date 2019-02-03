@@ -43,3 +43,4 @@ Vec3 random_in_unit_sphere() {
     } while (p.squared_length() >= 1.0);
     return p;
 }
+

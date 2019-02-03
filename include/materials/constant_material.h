@@ -15,7 +15,7 @@ class ConstantMaterial : public Material {
 public:
     explicit ConstantMaterial(Texture *a) : albedo_(a) {}
     bool Scatter(const Ray &r_in, const HitRecord &rec, Vec3 &attenuation,
-                 Ray &scattered) const override;
+                 Ray &scattered, float &pdf) const override;
 
     Texture *albedo_;
 };

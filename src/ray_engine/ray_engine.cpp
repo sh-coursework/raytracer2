@@ -20,9 +20,14 @@ Vec3 ColorForRay(const Ray &r, const Hitable *const world, int depth) {
         Vec3 attenuation;
 
         Vec3 emitted = rec.material_ptr->Emitted(rec.u, rec.v, rec.p);
-        if (depth < 50 && rec.material_ptr->Scatter(r, rec, attenuation, scattered))
+        float pdf;
+        if (depth < 50 && rec.material_ptr->Scatter(r, rec, attenuation, scattered, pdf))
+//            return emitted
+//                + attenuation * ColorForRay(scattered, world, depth + 1);
             return emitted
-                    + attenuation * ColorForRay(scattered, world, depth + 1);
+                    + attenuation
+                      * rec.material_ptr->ScatteringPdf(r, rec, scattered)
+                      * ColorForRay(scattered, world, depth + 1) / pdf;
         else
             return emitted;
     } else {

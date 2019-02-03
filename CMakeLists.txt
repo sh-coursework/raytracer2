@@ -1,12 +1,16 @@
 cmake_minimum_required(VERSION 3.10)
 project(raytracer2)
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 11)
 
-find_package( Boost 1.65.1 COMPONENTS program_options REQUIRED )
-include_directories(include ${Boost_INCLUDE_DIRS})
+list(APPEND CMAKE_MODULE_PATH "/usr/vfx/share/cmake/Modules")
+find_package(Boost 1.65.1 COMPONENTS program_options REQUIRED)
 
-find_library(OIIO "OpenImageIO" "/usr/local/lib")
+find_package(OpenImageIO REQUIRED)
+
+include_directories(include ${Boost_INCLUDE_DIRS}
+    ${OPENIMAGEIO_INCLUDE_DIR})
 
 set(SOURCE_CPPS
         src/ray_engine/hitable_list.cpp
@@ -45,11 +49,11 @@ set(SOURCE_CPPS
         src/vec3.cpp
 
         src/main.cpp
-        )
+    src/ortho_normal_basis.cpp include/ortho_normal_basis.h)
 
 add_executable(raytracer2 ${SOURCE_CPPS})
 
 target_link_libraries(${PROJECT_NAME}
-        ${OIIO}
+        ${OPENIMAGEIO_LIBRARIES}
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
         )

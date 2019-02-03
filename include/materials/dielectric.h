@@ -13,7 +13,7 @@ class Dielectric : public Material {
 public:
     explicit Dielectric(float ri) : ref_idx_(ri) {}
     bool Scatter(const Ray &r_in, const HitRecord &rec, Vec3 &attenuation,
-                 Ray &scattered) const override;
+                 Ray &scattered, float &pdf) const override;
 
     float ref_idx_;
 };

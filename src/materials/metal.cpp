@@ -13,7 +13,7 @@ Metal::Metal(Texture *a, float f) : albedo_(a) {
 }
 
 bool Metal::Scatter(const Ray &r_in, const HitRecord &rec, Vec3 &attenuation,
-                    Ray &scattered) const {
+                    Ray &scattered, float &pdf) const {
     Vec3 reflected = reflect(unit_vector(r_in.direction()), rec.normal);
     scattered = Ray(rec.p, reflected + fuzz_ * random_in_unit_sphere(),
                     r_in.time());

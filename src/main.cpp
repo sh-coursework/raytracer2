@@ -103,7 +103,8 @@ main(int argc, char** argv) {
     float pixels[render_settings.resolution_x_ * render_settings.resolution_y_
             * render_settings.num_channels_];
 
-    OIIO::ImageOutput *oiio_out = OIIO::ImageOutput::create(
+    // OIIO::ImageOutput *oiio_out = OIIO::ImageOutput::create(
+    auto oiio_out = OIIO::ImageOutput::create(
             render_settings.image_filename_);
     if (! oiio_out)
         return WEXITED;
@@ -165,5 +166,5 @@ main(int argc, char** argv) {
     oiio_out->open(render_settings.image_filename_, spec);
     oiio_out->write_image(OIIO::TypeDesc::FLOAT, pixels);
     oiio_out->close();
-    OIIO::ImageOutput::destroy(oiio_out);
+//    OIIO::ImageOutput::destroy(oiio_out);
 }

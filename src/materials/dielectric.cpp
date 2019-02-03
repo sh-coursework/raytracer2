@@ -6,7 +6,7 @@
 
 
 bool Dielectric::Scatter(const Ray &r_in, const HitRecord &rec,
-                         Vec3 &attenuation, Ray &scattered) const {
+                         Vec3 &attenuation, Ray &scattered, float &pdf) const {
     Vec3 outward_normal;
     auto reflected = reflect(r_in.direction(), rec.normal);
     float ni_over_nt;

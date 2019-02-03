@@ -527,23 +527,26 @@ std::unique_ptr<Camera> CornellBoxCam(const RenderSettings &render_settings)
 
 std::tuple<std::unique_ptr<Hitable>, std::unique_ptr<Camera>>
 GetScene(const RenderSettings &render_settings) {
-//    auto w_tmp = TwoMarblelikeSpheres();
-//    auto c_tmp = TwoSphereCam(render_settings);
+//    auto w_ptr_tmp = TwoMarblelikeSpheres();
+//    auto c_ptr_tmp = TwoSphereCam(render_settings);
 
-//    auto w_tmp = ImageSphereTests();
-//    auto c_tmp = ImageSphereTestCam(render_settings);
+//    auto w_ptr_tmp = ImageSphereTests();
+//    auto c_ptr_tmp = ImageSphereTestCam(render_settings);
 
-//    auto w_tmp = SimpleLightTest();
-//    auto c_tmp = SimpleLightTestCam(render_settings);
+//    auto w_ptr_tmp = SimpleLightTest();
+//    auto c_ptr_tmp = SimpleLightTestCam(render_settings);
 
-//    auto w_tmp = RandomScene(0.0, 1.0, true);
-//    auto c_tmp = RandomSceneCam(render_settings);
+//    auto w_ptr_tmp = RandomScene(0.0, 1.0, true);
+//    auto c_ptr_tmp = RandomSceneCam(render_settings);
 
-//    auto w_tmp = CornellSmoke();
-//    auto c_tmp = CornellBoxCam(render_settings);
+   auto w_ptr_tmp = CornellBox();
+   auto c_ptr_tmp = CornellBoxCam(render_settings);
 
-    auto w_tmp = TestAllBook2();
-    auto c_ptr_tmp = CornellBoxCam(render_settings);
+//    auto w_ptr_tmp = CornellSmoke();
+//    auto c_ptr_tmp = CornellBoxCam(render_settings);
 
-    return std::make_tuple(std::move(w_tmp), std::move(c_ptr_tmp));
+//    auto w_ptr_tmp = TestAllBook2();
+//    auto c_ptr_tmp = CornellBoxCam(render_settings);
+
+    return std::make_tuple(std::move(w_ptr_tmp), std::move(c_ptr_tmp));
 }

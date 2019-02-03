@@ -6,7 +6,7 @@
 
 
 bool Isotropic::Scatter(const Ray &r_in, const HitRecord &rec,
-        Vec3 &attenuation, Ray &scattered) const {
+        Vec3 &attenuation, Ray &scattered, float &pdf) const {
     scattered = Ray(rec.p, random_in_unit_sphere(), r_in.time());
     attenuation = albedo_->Value(rec.u, rec.v, rec.p);
     return true;

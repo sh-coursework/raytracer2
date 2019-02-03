@@ -15,7 +15,7 @@ class Metal : public Material {
 public:
     Metal(Texture *a, float f);
     bool Scatter(const Ray &r_in, const HitRecord &rec, Vec3 &attenuation,
-                 Ray &scattered) const override;
+                 Ray &scattered, float &pdf) const override;
 
     Texture *albedo_;
     float fuzz_;

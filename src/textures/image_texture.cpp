@@ -12,7 +12,8 @@
 ImageTexture::ImageTexture(std::string image_file) :
         image_file_(std::move(image_file))
 {
-    OIIO::ImageInput *in = OIIO::ImageInput::open(image_file_);
+//    OIIO::ImageInput *in = OIIO::ImageInput::open(image_file_);
+    auto in = OIIO::ImageInput::open(image_file_);
     if (! in)
         return;
     const OIIO::ImageSpec &spec = in->spec();
@@ -24,7 +25,7 @@ ImageTexture::ImageTexture(std::string image_file) :
     pixels_.reserve(size_t(buffer_size));
     in->read_image(OIIO::TypeDesc::UINT8, &pixels_[0]);
     in->close();
-    OIIO::ImageInput::destroy(in);
+//    OIIO::ImageInput::destroy(in);
 }
 
 Vec3 ImageTexture::Value(float u, float v, const Vec3 &p) const

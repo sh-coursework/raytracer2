@@ -14,7 +14,7 @@ class Isotropic : public Material {
 public:
     explicit Isotropic(Texture *albedo) : albedo_(albedo) {};
     bool Scatter(const Ray &r_in, const HitRecord &rec, Vec3 &attenuation,
-            Ray &scattered) const override;
+            Ray &scattered, float &pdf) const override;
 
 
 private:

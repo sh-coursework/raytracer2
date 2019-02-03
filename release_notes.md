@@ -104,6 +104,13 @@ totally breaks backward compatibility, renaming all the functions.
   This should be easier to read when transforms are chained together.
 * Converted all geometry and transforms to smart pointers.
   Still need to do materials and textures - maybe later for shader binding.
+  
+## Release 3.0.0
+1/29/2019 sh-coursework
+### Features
+* Upgrade OIIO to 2.x.x (uses unique_ptr for create)
+### Work from book 3
+* Chap 4 - probability distribution functions
 
 ## Stuff I plan to work on:
 * Book 3!
