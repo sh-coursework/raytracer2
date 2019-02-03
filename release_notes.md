@@ -108,20 +108,24 @@ totally breaks backward compatibility, renaming all the functions.
 ## Release 3.0.0
 1/29/2019 sh-coursework
 ### Features
-* Upgrade OIIO to 2.x.x (uses unique_ptr for create)
+* Upgrade OIIO to 2.x.x (uses unique_ptr for create),
+  update CMakeLists.txt file to use find_package, not find_library.
 ### Work from book 3
 * Chap 4 - probability distribution functions
 * Chap 5 - random cosine direction
 * Chap 6 - orthonormal basis
+* Chap 7 - sampling lights directly
 
 ## Stuff I plan to work on:
-* Book 3!
 * Clean up variable names to more descriptive.
   * All the names of aabb, including aabb itself, are not very descriptive.
 * Look for more std container usage.
 * Are there better ways to find min,max of a vector/bounding box?
+* Is there a better, more native c++ way to handle mathy vectors?
+* Is there a more native c++ way to handle random numbers with a
+  probability distribution?
 * Rotate-X, rotate-Z, scale
-* Use smart pointers for all ownership / audit pointers.
+* Use smart pointers for all ownership / audit pointers - materials.
 * scanline and tile output/traversal, with work-in-progress outputs.
 * shader binding - separate material definition from scene geom
 * Comment/Document

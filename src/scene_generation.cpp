@@ -205,7 +205,9 @@ std::unique_ptr<Hitable> CornellBox() {
 
     // light
     scene_list.push_back(
-        std::shared_ptr<XZRect>( new XZRect(213, 343, 227, 332, 554, light))
+        std::shared_ptr<FlipNormals>( new FlipNormals(
+            std::shared_ptr<XZRect>( new XZRect(213, 343, 227, 332, 554, light))
+        ))
     );
 
     // main room walls
