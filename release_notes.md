@@ -115,8 +115,13 @@ totally breaks backward compatibility, renaming all the functions.
 * Chap 5 - random cosine direction
 * Chap 6 - orthonormal basis
 * Chap 7 - sampling lights directly
+* Chap 8 - mixed density
 
 ## Stuff I plan to work on:
+* continue smart pointer refactor to use make_shared
+* should I really be float(M_PI)ing all over the place or is there
+  a more c++y way to use math constants in floats?
+* Add pdf stuff to other oriented rectangles and other geometry.
 * Clean up variable names to more descriptive.
   * All the names of aabb, including aabb itself, are not very descriptive.
 * Look for more std container usage.
@@ -124,12 +129,20 @@ totally breaks backward compatibility, renaming all the functions.
 * Is there a better, more native c++ way to handle mathy vectors?
 * Is there a more native c++ way to handle random numbers with a
   probability distribution?
+* Book 3 chap 7 looks like Peter moved Emitted from material
+  to hitable in order to get more components of the hit record.
+  I havent' made this move, but I think maybe I should refactor
+  my material to accept a hit record and maybe the incoming ray
+  instead of just (u, v, p) for future flexibility in generalizing
+  material definitions.
 * Rotate-X, rotate-Z, scale
 * Use smart pointers for all ownership / audit pointers - materials.
 * scanline and tile output/traversal, with work-in-progress outputs.
 * shader binding - separate material definition from scene geom
 * Comment/Document
 * External definition of scene - USD?
+* More general geometry - polygons, subdivs(opensubdiv?), (nurbs?)
+* embry? (Intel raytrace)
 * OSL shaders?
 * One day... multithreading.
 

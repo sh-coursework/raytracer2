@@ -38,8 +38,10 @@ public:
     bool Hit(const Ray &r, float t_min, float t_max,
              HitRecord &rec) const override;
     bool BoundingBox(float t_min, float t_max, AABB &box) const override;
+  float PDFValue(const Vec3 &origin, const Vec3 &direction) const override;
+  Vec3 Random(const Vec3 &origin) const override;
 
-    Material *material_ptr_;
+  Material *material_ptr_;
     float x_min_, x_max_, z_min_, z_max_;
     float fixed_val_;
 };

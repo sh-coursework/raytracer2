@@ -16,6 +16,7 @@ set(SOURCE_CPPS
         src/ray_engine/hitable_list.cpp
         src/ray_engine/bvh_node.cpp
         src/ray_engine/aabb.cpp
+        src/ortho_normal_basis.cpp
         src/ray_engine/ray_engine.cpp
 
         src/scene_geometry/transforms/flip_normals.cpp
@@ -26,6 +27,11 @@ set(SOURCE_CPPS
         src/scene_geometry/rect.cpp
         src/scene_geometry/box.cpp
         src/scene_geometry/volumes/constant_medium.cpp
+
+        src/materials/pdf_base.cpp
+        src/materials/cosine_pdf.cpp
+        src/materials/hitable_pdf.cpp
+        src/materials/mixture_pdf.cpp
 
         src/materials/constant_material.cpp
         src/materials/lambertian.cpp
@@ -49,7 +55,7 @@ set(SOURCE_CPPS
         src/vec3.cpp
 
         src/main.cpp
-    src/ortho_normal_basis.cpp include/ortho_normal_basis.h)
+)
 
 add_executable(raytracer2 ${SOURCE_CPPS})
 
