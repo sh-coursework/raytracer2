@@ -4,6 +4,8 @@
 
 #include "materials/mixture_pdf.h"
 
+#include <cmath>
+
 float MixturePDF::Value(const Vec3 &direction) const {
   return 0.5f * pdfs_[0]->Value(direction) + 0.5f * pdfs_[1]->Value(direction);
 }

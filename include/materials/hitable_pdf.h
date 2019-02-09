@@ -7,9 +7,9 @@
 
 #include <memory>
 
-#include "vec3.h"
 #include "pdf_base.h"
 #include "ray_engine/hitable.h"
+#include "vec3.h"
 
 class HitablePDF : public PDFBase {
  public:
@@ -17,7 +17,7 @@ class HitablePDF : public PDFBase {
       : hitable_ptr_(std::move(p_hitable)), origin_(origin) {}
   float Value(const Vec3 &direction) const override;
   Vec3 Generate() const override;
-
+ private:
   Vec3 origin_;
   std::shared_ptr<Hitable> hitable_ptr_;
 };

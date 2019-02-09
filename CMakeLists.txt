@@ -30,10 +30,12 @@ set(SOURCE_CPPS
 
         src/materials/pdf_base.cpp
         src/materials/cosine_pdf.cpp
+        src/materials/dielectric_pdf.cpp
+        src/materials/random_sphere_pdf.cpp
         src/materials/hitable_pdf.cpp
         src/materials/mixture_pdf.cpp
 
-        src/materials/constant_material.cpp
+#        src/materials/constant_material.cpp
         src/materials/lambertian.cpp
         src/materials/metal.cpp
         src/materials/dielectric.cpp
@@ -55,7 +57,7 @@ set(SOURCE_CPPS
         src/vec3.cpp
 
         src/main.cpp
-)
+    )
 
 add_executable(raytracer2 ${SOURCE_CPPS})
 

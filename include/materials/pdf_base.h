@@ -5,7 +5,7 @@
 #ifndef RAYTRACER2_PDFBASE_H
 #define RAYTRACER2_PDFBASE_H
 
-#include <vec3.h>
+#include "vec3.h"
 
 class PDFBase {
  public:

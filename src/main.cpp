@@ -11,9 +11,9 @@
 #include <boost/program_options.hpp>
 #include <OpenImageIO/imageio.h>
 
+#include "camera.h"
 #include "ray_engine/ray.h"
 #include "ray_engine/ray_engine.h"
-#include "camera.h"
 #include "render_settings.h"
 #include "scene_generation.h"
 
@@ -127,7 +127,7 @@ main(int argc, char** argv) {
 
                 auto r = cam.GetRay(u, v);
                 auto p = r.PointAtParameter(2.0f);  // p not used
-                pixel_color += ColorForRay(r, world_raw_ptr, 0);
+                pixel_color += ColorForRay(r, world_raw_ptr, nullptr, 0);
             }
             pixel_color /= float(number_samples_per_pixel);
 

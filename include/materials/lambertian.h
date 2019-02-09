@@ -5,18 +5,19 @@
 #ifndef RAYTRACER1_LAMBERTIAN_H
 #define RAYTRACER1_LAMBERTIAN_H
 
-#include "ray_engine/hitable.h"
 #include "materials/material.h"
+#include "ray_engine/hitable.h"
+#include "ray_engine/ray.h"
 #include "textures/texture.h"
 
 class Lambertian : public Material {
-public:
-    explicit Lambertian(Texture *a) : albedo_(a) {}
-    float ScatteringPdf(const Ray &r_in, const HitRecord &rec,
+ public:
+    explicit Lambertian(Texture *albedo) : albedo_(albedo) {}
+    float ScatteringPdf(const Ray &r_in, const HitRecord &hit_record,
                         const Ray &scattered) const override;
-    bool Scatter(const Ray &r_in, const HitRecord &rec, Vec3 &attenuation,
-                 Ray &scattered, float &pdf) const override;
-
+    bool Scatter(const Ray &r_in, const HitRecord &hit_record,
+                 ScatterRecord &scatter_record) const override;
+ private:
     Texture *albedo_;
 };
 

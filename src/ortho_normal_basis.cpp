@@ -2,9 +2,9 @@
 // Created by svhwan on 2/2/2019.
 //
 
-#include <cmath>
-
 #include "ortho_normal_basis.h"
+
+#include <cmath>
 
 void OrthoNormalBasis::BuildFromW(const Vec3 &n) {
   axis_[2] = unit_vector(n);

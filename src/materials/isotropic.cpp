@@ -4,11 +4,16 @@
 
 #include "materials/isotropic.h"
 
+#include "materials/random_sphere_pdf.h"
 
-bool Isotropic::Scatter(const Ray &r_in, const HitRecord &rec,
-        Vec3 &attenuation, Ray &scattered, float &pdf) const {
-    scattered = Ray(rec.p, random_in_unit_sphere(), r_in.time());
-    attenuation = albedo_->Value(rec.u, rec.v, rec.p);
+// TODO: pdf is just a placeholder in isotropic
+bool Isotropic::Scatter(const Ray &r_in, const HitRecord &hit_record,
+                        ScatterRecord &scatter_record) const {
+    scatter_record.is_specular = false;
+    scatter_record.attenuation = albedo_->Value(hit_record.u, hit_record.v,
+        hit_record.p);
+    scatter_record.do_mixture_pdf = false;
+    scatter_record.pdf_ptr = new RandomSpherePDF();
     return true;
 }
 

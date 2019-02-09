@@ -28,7 +28,7 @@
 #include "materials/lambertian.h"
 #include "materials/metal.h"
 #include "materials/dielectric.h"
-#include "materials/constant_material.h"
+//#include "materials/constant_material.h"
 #include "materials/diffuse_light.h"
 
 
@@ -156,7 +156,10 @@ std::unique_ptr<Hitable> ImageSphereTests() {
             new Sphere(Vec3(0, -1000, 0), 1000, new Lambertian(noise_textured))
     ));
     scene_list.push_back( std::shared_ptr<Sphere>(
-            new Sphere(Vec3(0, 2, 0), 2, new ConstantMaterial(image_textured))
+        // constant_material was my first attempt to do
+        // what Peter does in diffuse_light.
+//            new Sphere(Vec3(0, 2, 0), 2, new ConstantMaterial(image_textured))
+            new Sphere(Vec3(0, 2, 0), 2, new DiffuseLight(image_textured))
     ));
 
     return std::unique_ptr<HitableList>(new HitableList(scene_list));
@@ -248,6 +251,73 @@ std::unique_ptr<Hitable> CornellBox() {
                 std::shared_ptr<Box>(
                     new Box(Vec3(0, 0, 0), Vec3(165, 330, 165), white))
             ))
+        ))
+    );
+
+    return std::unique_ptr<HitableList>( new HitableList(scene_list));
+}
+
+
+std::unique_ptr<Hitable> CornellBoxAluminum() {
+    std::vector<std::shared_ptr<Hitable>> scene_list;
+
+    Material *red = new Lambertian(
+        new ConstantTexture(Vec3(0.65f, 0.05f, 0.05f)));
+    Material *white = new Lambertian(
+        new ConstantTexture(Vec3(0.73f, 0.73f, 0.73f)));
+    Material *green = new Lambertian(
+        new ConstantTexture(Vec3(0.12f, 0.45f, 0.15f)));
+    Material *alumninum = new Metal(
+        new ConstantTexture(Vec3(0.8, 0.85, 0.88)), 0.0);
+
+    Material *light = new DiffuseLight(
+        new ConstantTexture(Vec3(15.0f, 15.0f, 15.0f)));
+
+    // light
+    scene_list.push_back(
+        std::shared_ptr<FlipNormals>( new FlipNormals(
+            std::shared_ptr<XZRect>( new XZRect(213, 343, 227, 332, 554, light))
+        ))
+    );
+
+    // main room walls
+    scene_list.push_back(
+        std::shared_ptr<FlipNormals>( new FlipNormals(
+            std::shared_ptr<YZRect>( new YZRect(0, 555, 0, 555, 555, green))
+        ))
+    );
+    scene_list.push_back(
+        std::shared_ptr<YZRect>( new YZRect(0, 555, 0, 555, 0, red))
+    );
+    scene_list.push_back(
+        std::shared_ptr<FlipNormals>( new FlipNormals(
+            std::shared_ptr<XZRect>( new XZRect(0, 555, 0, 555, 555, white))
+        ))
+    );
+    scene_list.push_back(std::shared_ptr<XZRect>(
+        new XZRect(0, 555, 0, 555, 0, white)
+    ));
+    scene_list.push_back(
+        std::shared_ptr<FlipNormals>( new FlipNormals(
+            std::shared_ptr<XYRect>( new XYRect(0, 555, 0, 555, 555, white))
+        ))
+    );
+
+    // 2 boxes
+    scene_list.push_back(
+        std::shared_ptr<Translate>( new Translate(Vec3(130, 0, 65),
+                                                  std::shared_ptr<RotateY>( new RotateY(-18,
+                                                                                        std::shared_ptr<Box>(
+                                                                                            new Box(Vec3(0, 0, 0), Vec3(165, 165, 165), white))
+                                                  ))
+        ))
+    );
+    scene_list.push_back(
+        std::shared_ptr<Translate>( new Translate(Vec3(265, 0, 295),
+                                                  std::shared_ptr<RotateY>( new RotateY(15,
+                                                                                        std::shared_ptr<Box>(
+                                                                                            new Box(Vec3(0, 0, 0), Vec3(165, 330, 165), alumninum))
+                                                  ))
         ))
     );
 
@@ -541,8 +611,11 @@ GetScene(const RenderSettings &render_settings) {
 //    auto w_ptr_tmp = RandomScene(0.0, 1.0, true);
 //    auto c_ptr_tmp = RandomSceneCam(render_settings);
 
-   auto w_ptr_tmp = CornellBox();
-   auto c_ptr_tmp = CornellBoxCam(render_settings);
+//   auto w_ptr_tmp = CornellBox();
+//   auto c_ptr_tmp = CornellBoxCam(render_settings);
+
+    auto w_ptr_tmp = CornellBoxAluminum();
+    auto c_ptr_tmp = CornellBoxCam(render_settings);
 
 //    auto w_ptr_tmp = CornellSmoke();
 //    auto c_ptr_tmp = CornellBoxCam(render_settings);

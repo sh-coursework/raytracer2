@@ -10,14 +10,14 @@
 #include "materials/material.h"
 
 class DiffuseLight : public Material {
-public:
+ public:
     explicit DiffuseLight(Texture *emission) : emission_(emission) {};
-    bool Scatter(const Ray &r_in, const HitRecord &rec, Vec3 &attenuation,
-                 Ray &scattered, float &pdf) const override
+    bool Scatter(const Ray &r_in, const HitRecord &hit_record,
+                 ScatterRecord &scatter_record) const override
             { return false; }
     Vec3 Emitted(float u, float v, const Vec3 &p) const override
             { return emission_->Value(u, v, p); }
-
+ private:
     Texture *emission_;
 };
 
