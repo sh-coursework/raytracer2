@@ -13,7 +13,7 @@ DielectricPDF::DielectricPDF(float ref_idx,
   ref_idx_(ref_idx) {}
 
 // TODO: Placeholder - haven't implemented a true pdf for dielectric.
-float DielectricPDF::Value(const Vec3 &direction) const {
+float DielectricPDF::Value(const Vec3 &direction, float time) const {
   return 1;
 }
 

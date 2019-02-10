@@ -17,7 +17,7 @@
 // And there's really no need to keep changing ownership of the
 // unique_ptr passing it up and down through the recursive calls.
 Vec3 ColorForRay(const Ray &r, const Hitable *const world,
-                 std::shared_ptr<Hitable> light_shape, int depth);
+                 const Hitable *const light_shape_raw_ptr, int depth);
 
 
 #endif //RAYTRACER2_RAY_ENGINE_H

@@ -7,19 +7,21 @@
 
 #include <memory>
 
+#include "materials/isotropic.h"
 #include "ray_engine/aabb.h"
 #include "ray_engine/ray.h"
 #include "ray_engine/hitable.h"
-
 #include "textures/texture.h"
-#include "materials/isotropic.h"
 
 
 class ConstantMedium : public Hitable {
 public:
     ConstantMedium(std::shared_ptr<Hitable> boundary, float density, Texture *medium)
             : boundary_(std::move(boundary)), density_(density)
-        { phase_function_ = new Isotropic(medium); };
+        {
+            phase_function_ = std::unique_ptr<Isotropic>(
+                new Isotropic(medium));
+        };
 
     bool Hit(const Ray &r, float t_min, float t_max,
             HitRecord &rec) const override;
@@ -27,7 +29,7 @@ public:
 
     std::shared_ptr<Hitable> boundary_;
     float density_;
-    Material *phase_function_;
+    std::unique_ptr<Material> phase_function_;
 };
 
 

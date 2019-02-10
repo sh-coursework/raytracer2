@@ -13,13 +13,13 @@
 
 class HitablePDF : public PDFBase {
  public:
-  HitablePDF(std::shared_ptr<Hitable> p_hitable, const Vec3 &origin)
-      : hitable_ptr_(std::move(p_hitable)), origin_(origin) {}
-  float Value(const Vec3 &direction) const override;
+  HitablePDF(const Hitable * const hitable_ptr, const Vec3 &origin)
+      : hitable_ptr_(hitable_ptr), origin_(origin) {}
+  float Value(const Vec3 &direction, float time) const override;
   Vec3 Generate() const override;
  private:
   Vec3 origin_;
-  std::shared_ptr<Hitable> hitable_ptr_;
+  const Hitable * const hitable_ptr_;
 };
 
 #endif //RAYTRACER2_HITABLEPDF_H

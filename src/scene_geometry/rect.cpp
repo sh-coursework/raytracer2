@@ -50,11 +50,10 @@ bool XZRect::Hit(const Ray &r, float t_min, float t_max,
     return true;
 }
 
-float XZRect::PDFValue(const Vec3 &origin, const Vec3 &direction) const {
+float XZRect::PDFValue(const Vec3 &origin, const Vec3 &direction, float time)
+        const {
     HitRecord rec;
-    // TODO: Ray needs a time parameter - where does it get it from?
-    float time_placeholder = 0.0;
-    if (this->Hit(Ray(origin, direction, time_placeholder), 0.001f, FLT_MAX, rec)) {
+    if (this->Hit(Ray(origin, direction, time), 0.001f, FLT_MAX, rec)) {
         float area = (x_max_ - x_min_) * (z_max_ - z_min_);
         float distance_squared = rec.t * rec.t * direction.squared_length();
         float cosine = fabs(dot(direction, rec.normal) / direction.length());

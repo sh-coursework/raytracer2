@@ -4,6 +4,8 @@
 
 #include "materials/lambertian.h"
 
+#include <memory>
+
 #include "ortho_normal_basis.h"
 #include "materials/cosine_pdf.h"
 #include "vec3.h"
@@ -14,7 +16,8 @@ bool Lambertian::Scatter(const Ray &r_in, const HitRecord &hit_record,
     scatter_record.attenuation = albedo_->Value(hit_record.u, hit_record.v,
         hit_record.p);
     scatter_record.do_mixture_pdf = true;
-    scatter_record.pdf_ptr = new CosinePDF(hit_record.normal);
+    scatter_record.pdf_ptr = std::unique_ptr<CosinePDF>(
+        new CosinePDF(hit_record.normal));
     return true;
 }
 

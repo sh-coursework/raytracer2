@@ -14,7 +14,7 @@ class MixturePDF : public PDFBase {
  public:
   MixturePDF(PDFBase *pdf_0, PDFBase *pdf_1)
     {pdfs_[0] = pdf_0; pdfs_[1] = pdf_1; }
-  float Value(const Vec3 &direction) const override;
+  float Value(const Vec3 &direction, float time) const override;
   Vec3 Generate() const override;
  private:
   PDFBase * pdfs_[2];

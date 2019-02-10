@@ -4,7 +4,7 @@
 
 #include "materials/cosine_pdf.h"
 
-float CosinePDF::Value(const Vec3 &direction) const {
+float CosinePDF::Value(const Vec3 &direction, float time) const {
   float cosine = dot(unit_vector(direction), uvw_.w());
   if (cosine > 0)
     return cosine / float(M_PI);

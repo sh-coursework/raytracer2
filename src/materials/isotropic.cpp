@@ -4,6 +4,8 @@
 
 #include "materials/isotropic.h"
 
+#include <memory>
+
 #include "materials/random_sphere_pdf.h"
 
 // TODO: pdf is just a placeholder in isotropic
@@ -13,7 +15,8 @@ bool Isotropic::Scatter(const Ray &r_in, const HitRecord &hit_record,
     scatter_record.attenuation = albedo_->Value(hit_record.u, hit_record.v,
         hit_record.p);
     scatter_record.do_mixture_pdf = false;
-    scatter_record.pdf_ptr = new RandomSpherePDF();
+    scatter_record.pdf_ptr = std::unique_ptr<RandomSpherePDF>(
+        new RandomSpherePDF());
     return true;
 }
 

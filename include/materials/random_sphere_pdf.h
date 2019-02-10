@@ -10,7 +10,7 @@
 
 class RandomSpherePDF : public PDFBase {
  public:
-  float Value(const Vec3 &direction) const override;
+  float Value(const Vec3 &direction, float time) const override;
   Vec3 Generate() const override;
 };
 

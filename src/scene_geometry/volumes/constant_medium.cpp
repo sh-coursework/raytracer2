@@ -40,7 +40,7 @@ bool ConstantMedium::Hit(const Ray &r, float t_min, float t_max, HitRecord &rec)
                 if (db)
                     std::cerr << "rec.p = " << rec.p << "\n";
                 rec.normal = Vec3(1.0f, 0.0f, 0.0f);  // arbitrary
-                rec.material_ptr = phase_function_;
+                rec.material_ptr = phase_function_.get();
                 return true;
             }
         }

@@ -160,4 +160,6 @@ Vec3 random_in_unit_sphere();
 
 Vec3 random_cosine_direction();
 
+Vec3 random_to_sphere(float radius, float distance_squared);
+
 #endif //RAYTRACER1_VEC3_H

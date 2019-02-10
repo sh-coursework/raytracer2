@@ -4,8 +4,8 @@
 
 #include "materials/hitable_pdf.h"
 
-float HitablePDF::Value(const Vec3 &direction) const {
-  return hitable_ptr_->PDFValue(origin_, direction);
+float HitablePDF::Value(const Vec3 &direction, float time) const {
+  return hitable_ptr_->PDFValue(origin_, direction, time);
 }
 
 Vec3 HitablePDF::Generate() const {

@@ -8,7 +8,7 @@
 #include "vec3.h"
 
 // TODO: Placeholder - haven't implemented isotropic pdf
-float RandomSpherePDF::Value(const Vec3 &direction) const {
+float RandomSpherePDF::Value(const Vec3 &direction, float time) const {
   return 1;
 }
 

@@ -16,13 +16,14 @@
 #include "ray_engine/ray_engine.h"
 #include "render_settings.h"
 #include "scene_generation.h"
-
+// TODO: Would rather have a part of world id the lights)
+#include "scene_geometry/rect.h"
+#include "scene_geometry/sphere.h"
 
 namespace
 {
     const size_t SUCCESS = 0;
 }
-
 
 int
 main(int argc, char** argv) {
@@ -91,6 +92,13 @@ main(int argc, char** argv) {
     auto world_raw_ptr = world_ptr.get();  // If I'm not changing ownership,
                           // I think Herb Sutter says raw pointer are beautiful.
 
+    std::shared_ptr<Hitable> light_shape =
+        std::shared_ptr<XZRect>(new XZRect(213, 343, 227, 332, 554, nullptr));
+    auto light_shape_raw_ptr = light_shape.get();
+    std::shared_ptr<Hitable> glass_sphere_shape =
+        std::shared_ptr<Sphere>(new Sphere(Vec3(190, 90, 190), 90, nullptr));
+    auto glass_sphere_shape_raw_ptr = glass_sphere_shape.get();
+
     auto world_built_time = std::clock();
     std::cout << "Time to create scene: "
               << (world_built_time - start_time) / double(CLOCKS_PER_SEC)
@@ -127,7 +135,8 @@ main(int argc, char** argv) {
 
                 auto r = cam.GetRay(u, v);
                 auto p = r.PointAtParameter(2.0f);  // p not used
-                pixel_color += ColorForRay(r, world_raw_ptr, nullptr, 0);
+                pixel_color += ColorForRay(r, world_raw_ptr,
+                                           glass_sphere_shape_raw_ptr, 0);
             }
             pixel_color /= float(number_samples_per_pixel);
 

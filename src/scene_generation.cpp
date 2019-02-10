@@ -325,6 +325,76 @@ std::unique_ptr<Hitable> CornellBoxAluminum() {
 }
 
 
+std::unique_ptr<Hitable> CornellBoxGlassSphere() {
+  std::vector<std::shared_ptr<Hitable>> scene_list;
+
+  Material *red = new Lambertian(
+      new ConstantTexture(Vec3(0.65f, 0.05f, 0.05f)));
+  Material *white = new Lambertian(
+      new ConstantTexture(Vec3(0.73f, 0.73f, 0.73f)));
+  Material *green = new Lambertian(
+      new ConstantTexture(Vec3(0.12f, 0.45f, 0.15f)));
+
+  Material *light = new DiffuseLight(
+      new ConstantTexture(Vec3(15.0f, 15.0f, 15.0f)));
+
+  // light
+  scene_list.push_back(
+      std::shared_ptr<FlipNormals>( new FlipNormals(
+          std::shared_ptr<XZRect>( new XZRect(213, 343, 227, 332, 554, light))
+      ))
+  );
+
+  // main room walls
+  scene_list.push_back(
+      std::shared_ptr<FlipNormals>( new FlipNormals(
+          std::shared_ptr<YZRect>( new YZRect(0, 555, 0, 555, 555, green))
+      ))
+  );
+  scene_list.push_back(
+      std::shared_ptr<YZRect>( new YZRect(0, 555, 0, 555, 0, red))
+  );
+  scene_list.push_back(
+      std::shared_ptr<FlipNormals>( new FlipNormals(
+          std::shared_ptr<XZRect>( new XZRect(0, 555, 0, 555, 555, white))
+      ))
+  );
+  scene_list.push_back(std::shared_ptr<XZRect>(
+      new XZRect(0, 555, 0, 555, 0, white)
+  ));
+  scene_list.push_back(
+      std::shared_ptr<FlipNormals>( new FlipNormals(
+          std::shared_ptr<XYRect>( new XYRect(0, 555, 0, 555, 555, white))
+      ))
+  );
+
+  // 2 boxes
+//  scene_list.push_back(
+//      std::shared_ptr<Translate>( new Translate(Vec3(130, 0, 65),
+//                                                std::shared_ptr<RotateY>( new RotateY(-18,
+//                                                                                      std::shared_ptr<Box>(
+//                                                                                          new Box(Vec3(0, 0, 0), Vec3(165, 165, 165), white))
+//                                                ))
+//      ))
+//  );
+  scene_list.push_back(
+      std::shared_ptr<Sphere>( new Sphere(Vec3(190, 90, 190), 90,
+          new Dielectric(1.5f)))
+  );
+  scene_list.push_back(
+      std::shared_ptr<Translate>( new Translate(Vec3(265, 0, 295),
+                                                std::shared_ptr<RotateY>( new RotateY(15,
+                                                                                      std::shared_ptr<Box>(
+                                                                                          new Box(Vec3(0, 0, 0), Vec3(165, 330, 165), white))
+                                                ))
+      ))
+  );
+
+  return std::unique_ptr<HitableList>( new HitableList(scene_list));
+}
+
+
+
 std::unique_ptr<Hitable> CornellSmoke() {
     std::vector<std::shared_ptr<Hitable>> scene_list;
 
@@ -614,7 +684,10 @@ GetScene(const RenderSettings &render_settings) {
 //   auto w_ptr_tmp = CornellBox();
 //   auto c_ptr_tmp = CornellBoxCam(render_settings);
 
-    auto w_ptr_tmp = CornellBoxAluminum();
+//    auto w_ptr_tmp = CornellBoxAluminum();
+//    auto c_ptr_tmp = CornellBoxCam(render_settings);
+
+    auto w_ptr_tmp = CornellBoxGlassSphere();
     auto c_ptr_tmp = CornellBoxCam(render_settings);
 
 //    auto w_ptr_tmp = CornellSmoke();

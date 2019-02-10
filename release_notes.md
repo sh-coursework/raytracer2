@@ -116,7 +116,7 @@ totally breaks backward compatibility, renaming all the functions.
 * Chap 6 - orthonormal basis
 * Chap 7 - sampling lights directly
 * Chap 8 - mixed density
-* Chap 10 - refactor pdf - first part through aluminum box
+* Chap 10 - refactor pdf - second part through first glass sphere
 
 ## Stuff I plan to work on:
 * continue smart pointer refactor to use make_shared

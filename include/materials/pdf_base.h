@@ -9,7 +9,7 @@
 
 class PDFBase {
  public:
-  virtual float Value(const Vec3 &direction) const = 0;
+  virtual float Value(const Vec3 &direction, float time) const = 0;
   virtual Vec3 Generate() const = 0;
 };
 

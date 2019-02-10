@@ -4,8 +4,10 @@
 
 #include "scene_geometry/sphere.h"
 
+#include <cfloat>
 #include <cmath>
 
+#include "ortho_normal_basis.h"
 
 // Arguably, this could go in a math library (as could Vec3)
 void GetSphereUV(const Vec3 &p, float& u, float &v) {
@@ -14,7 +16,6 @@ void GetSphereUV(const Vec3 &p, float& u, float &v) {
     u = 1.0 - (phi + M_PI) / (2 * M_PI);
     v = (theta + M_PI/2.0) / M_PI;
 }
-
 
 bool Sphere::Hit(const Ray &r, float t_min, float t_max, HitRecord &rec) const {
     auto oc = r.origin() - center_;
@@ -53,4 +54,23 @@ bool Sphere::BoundingBox(float t_min, float t_max, AABB &box) const {
     return true;
 }
 
+float Sphere::PDFValue(const Vec3 &origin, const Vec3 &direction, float time)
+        const {
+    HitRecord hit_record;
+    if (this->Hit(Ray(origin, direction, time), 0.001f, FLT_MAX, hit_record)) {
+        auto cos_theta_max = sqrt(1 -
+            radius_ * radius_/(center_ - origin).squared_length());
+        auto solid_angle = 2.0f * M_PI * (1.0f - cos_theta_max);
+        return 1.0f / solid_angle;
+    } else {
+        return 0.0f;
+    }
+}
 
+Vec3 Sphere::Random(const Vec3 &origin) const {
+    auto direction = center_ - origin;
+    float distance_squared = direction.squared_length();
+    OrthoNormalBasis uvw;
+    uvw.BuildFromW(direction);
+    return uvw.Local(random_to_sphere(radius_, distance_squared));
+}

@@ -13,7 +13,7 @@ class DielectricPDF : public PDFBase {
   DielectricPDF(float ref_idx,
                 Vec3 r_in_direction,
                 Vec3 hit_record_normal);
-  float Value(const Vec3 &direction) const override;
+  float Value(const Vec3 &direction, float time) const override;
   Vec3 Generate() const override;
  private:
   float ref_idx_;
