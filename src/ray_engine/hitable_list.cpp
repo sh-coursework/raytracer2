@@ -6,7 +6,6 @@
 
 #include <boost/range/irange.hpp>
 
-
 bool HitableList::Hit(const Ray &r, float t_min, float t_max,
                       HitRecord &rec) const {
     HitRecord temp_rec;
@@ -43,4 +42,20 @@ bool HitableList::BoundingBox(float t_min, float t_max, AABB &box) const {
             return false;
     }
     return true;
+}
+
+float HitableList::PDFValue(const Vec3 &origin,
+                            const Vec3 &direction,
+                            float time) const {
+    auto weight = 1.0f / float(vector_list_.size());
+    auto sum = 0.0f;
+    for (auto &curr_hitable: vector_list_)
+        sum += weight * curr_hitable->PDFValue(origin, direction, time);
+
+    return sum;
+}
+
+Vec3 HitableList::Random(const Vec3 &origin) const {
+    auto index =int(drand48() * vector_list_.size());
+    return vector_list_[index]->Random(origin);
 }

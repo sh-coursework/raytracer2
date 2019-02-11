@@ -116,7 +116,7 @@ totally breaks backward compatibility, renaming all the functions.
 * Chap 6 - orthonormal basis
 * Chap 7 - sampling lights directly
 * Chap 8 - mixed density
-* Chap 10 - refactor pdf - second part through first glass sphere
+* Chap 10 - refactor pdf - through the end with De-NaN
 
 ## Stuff I plan to work on:
 * continue smart pointer refactor to use make_shared
@@ -126,6 +126,7 @@ totally breaks backward compatibility, renaming all the functions.
 * Clean up variable names to more descriptive.
   * All the names of aabb, including aabb itself, are not very descriptive.
 * Look for more std container usage.
+* Better De-NaN - maybe partial averaging along the way?
 * Are there better ways to find min,max of a vector/bounding box?
 * Is there a better, more native c++ way to handle mathy vectors?
 * Is there a more native c++ way to handle random numbers with a

@@ -11,6 +11,14 @@
 #include "materials/material.h"
 #include <materials/mixture_pdf.h>
 
+Vec3 DeNaN(const Vec3 &new_color) {
+    Vec3 temp = new_color;
+    if (! (temp[0] == temp[0])) temp[0] = 0;
+    if (! (temp[1] == temp[1])) temp[1] = 0;
+    if (! (temp[2] == temp[2])) temp[2] = 0;
+    return temp;
+}
+
 Vec3 ColorForRay(const Ray &r, const Hitable *const world,
                  const Hitable *const light_shape_raw_ptr, int depth) {
     // Added Special 0,0 Ray - stop hit test and return full.

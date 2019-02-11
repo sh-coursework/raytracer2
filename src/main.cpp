@@ -10,6 +10,7 @@
 #include <boost/range/irange.hpp>
 #include <boost/program_options.hpp>
 #include <OpenImageIO/imageio.h>
+#include <ray_engine/hitable_list.h>
 
 #include "camera.h"
 #include "ray_engine/ray.h"
@@ -94,10 +95,16 @@ main(int argc, char** argv) {
 
     std::shared_ptr<Hitable> light_shape =
         std::shared_ptr<XZRect>(new XZRect(213, 343, 227, 332, 554, nullptr));
-    auto light_shape_raw_ptr = light_shape.get();
+//    auto light_shape_raw_ptr = light_shape.get();
     std::shared_ptr<Hitable> glass_sphere_shape =
         std::shared_ptr<Sphere>(new Sphere(Vec3(190, 90, 190), 90, nullptr));
-    auto glass_sphere_shape_raw_ptr = glass_sphere_shape.get();
+//    auto glass_sphere_shape_raw_ptr = glass_sphere_shape.get();
+    std::vector<std::shared_ptr<Hitable>> light_list;
+    light_list.push_back(light_shape);
+    light_list.push_back(glass_sphere_shape);
+    auto hitable_light_list = std::unique_ptr<HitableList>(
+        new HitableList(light_list));
+    auto light_list_raw_ptr = hitable_light_list.get();
 
     auto world_built_time = std::clock();
     std::cout << "Time to create scene: "
@@ -106,7 +113,6 @@ main(int argc, char** argv) {
 
     ///////////////////////////////////////////////////////////////////////
     // Get to the rendering and writing images
-
 
     float pixels[render_settings.resolution_x_ * render_settings.resolution_y_
             * render_settings.num_channels_];
@@ -135,8 +141,9 @@ main(int argc, char** argv) {
 
                 auto r = cam.GetRay(u, v);
                 auto p = r.PointAtParameter(2.0f);  // p not used
-                pixel_color += ColorForRay(r, world_raw_ptr,
-                                           glass_sphere_shape_raw_ptr, 0);
+                pixel_color += DeNaN(ColorForRay(r, world_raw_ptr,
+                                                 light_list_raw_ptr, 0)
+                                    );
             }
             pixel_color /= float(number_samples_per_pixel);
 

@@ -9,20 +9,25 @@
 #include <utility>
 #include <vector>
 
+#include "ray_engine/aabb.h"
 #include "ray_engine/hitable.h"
 #include "ray_engine/ray.h"
-#include "ray_engine/aabb.h"
+#include "vec3.h"
 
 class HitableList : public Hitable {
 public:
-    HitableList() = default;
-    explicit HitableList(std::vector<std::shared_ptr<Hitable>> &hitables)
-            {vector_list_ = std::move(hitables); }
-    bool Hit(const Ray &r, float t_min, float t_max,
-             HitRecord &rec) const override;
-    bool BoundingBox(float t_min, float t_max, AABB &box) const override;
+  HitableList() = default;
+  explicit HitableList(std::vector<std::shared_ptr<Hitable>> &hitables)
+          {vector_list_ = std::move(hitables); }
+  bool Hit(const Ray &r, float t_min, float t_max,
+           HitRecord &rec) const override;
+  bool BoundingBox(float t_min, float t_max, AABB &box) const override;
+  float PDFValue(const Vec3 &origin,
+                 const Vec3 &direction,
+                 float time) const override;
+  Vec3 Random(const Vec3 &origin) const override;
 
-    std::vector<std::shared_ptr<Hitable>> vector_list_;
+  std::vector<std::shared_ptr<Hitable>> vector_list_;
 };
 
 

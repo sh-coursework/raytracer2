@@ -19,5 +19,6 @@
 Vec3 ColorForRay(const Ray &r, const Hitable *const world,
                  const Hitable *const light_shape_raw_ptr, int depth);
 
+Vec3 DeNaN(const Vec3 &new_color);
 
 #endif //RAYTRACER2_RAY_ENGINE_H
