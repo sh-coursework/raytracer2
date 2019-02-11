@@ -42,9 +42,9 @@ std::unique_ptr<Hitable> RandomScene(float t_min, float t_max, bool use_bvh) {
             new ConstantTexture(Vec3(0.2, 0.3, 0.1)),
             new ConstantTexture(Vec3(0.9, 0.9, 0.9))
             );
-    scene_list.push_back( std::shared_ptr<Sphere>(
-            new Sphere(Vec3(0.0f, -1000.0f, 0.0f), 1000.0f,
-                       new Lambertian(checker))
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(0.0f, -1000.0f, 0.0f), 1000.0f,
+                       new Lambertian(checker)
      ));
 
     for (auto a: boost::irange(-10, 10)) {
@@ -52,43 +52,41 @@ std::unique_ptr<Hitable> RandomScene(float t_min, float t_max, bool use_bvh) {
             auto choose_mat = float(drand48());
             auto center = Vec3(a + 0.9f * drand48(), 0.2f, b + 0.9f * drand48());
             if (choose_mat < 0.8) {  // diffuse
-                scene_list.push_back( std::shared_ptr<MovingSphere>(
-                        new MovingSphere(center,
-                                center + Vec3(0, 0.5 * drand48(), 0),
-                                0.0, 1.0,
-                                0.2f,
-                                new Lambertian(new ConstantTexture(
-                                        Vec3(drand48() * drand48(),
-                                                drand48() * drand48(),
-                                                drand48() * drand48()))))
+                scene_list.push_back(std::make_shared<MovingSphere>(
+                        center, center + Vec3(0, 0.5 * drand48(), 0),
+                        0.0, 1.0, 0.2f,
+                        new Lambertian(new ConstantTexture(
+                                Vec3(drand48() * drand48(),
+                                     drand48() * drand48(),
+                                     drand48() * drand48())))
                 ));
             } else if (choose_mat < 0.95) {  // metal
-                scene_list.push_back( std::shared_ptr<Sphere>(
-                        new Sphere(center, 0.2,
-                                new Metal(new ConstantTexture(
-                                        Vec3(0.5 * (1.0f + drand48()),
-                                                0.5 * (1.0f + drand48()),
-                                                0.5 * (1.0f + drand48()))),
-                                        0.5 * drand48()))
+                scene_list.push_back(std::make_shared<Sphere>(
+                        center, 0.2,
+                        new Metal(new ConstantTexture(
+                                Vec3(0.5 * (1.0f + drand48()),
+                                     0.5 * (1.0f + drand48()),
+                                     0.5 * (1.0f + drand48()))),
+                                0.5 * drand48())
                 ));
             } else {  // glass
-                scene_list.push_back( std::shared_ptr<Sphere>(
-                        new Sphere(center, 0.2f, new Dielectric(1.5f))
+                scene_list.push_back(std::make_shared<Sphere>(
+                        center, 0.2f, new Dielectric(1.5f)
                 ));
             }
         }
     }
 
-    scene_list.push_back( std::shared_ptr<Sphere>(
-            new Sphere(Vec3(0.0f, 1.0f, 0.0f), 1.0, new Dielectric(1.5))
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(0.0f, 1.0f, 0.0f), 1.0, new Dielectric(1.5)
     ));
-    scene_list.push_back( std::shared_ptr<Sphere>(
-            new Sphere(Vec3(-4.0f, 1.0f, 0.0f), 1.0f, new Lambertian(
-                    new ConstantTexture(Vec3(0.4f, 0.2f, 0.2f))))
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(-4.0f, 1.0f, 0.0f), 1.0f, new Lambertian(
+                    new ConstantTexture(Vec3(0.4f, 0.2f, 0.2f)))
     ));
-    scene_list.push_back( std::shared_ptr<Sphere>(
-            new Sphere(Vec3(4.0f, 1.0f, 0.0f), 1.0f, new Metal(
-                    new ConstantTexture(Vec3(0.7f, 0.6f, 0.5f)), 0.0f))
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(4.0f, 1.0f, 0.0f), 1.0f, new Metal(
+                    new ConstantTexture(Vec3(0.7f, 0.6f, 0.5f)), 0.0f)
     ));
 
     if (use_bvh)
@@ -103,11 +101,11 @@ std::unique_ptr<Hitable> TwoSpheres() {
             new ConstantTexture(Vec3(0.9, 0.9, 0.9))
     );
     std::vector<std::shared_ptr<Hitable>> scene_list;
-    scene_list.push_back( std::shared_ptr<Sphere>(
-            new Sphere(Vec3(0, -10, 0), 10, new Lambertian(checker))
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(0, -10, 0), 10, new Lambertian(checker)
     ));
-    scene_list.push_back( std::shared_ptr<Sphere>(
-            new Sphere(Vec3(0, 10, 0), 10, new Lambertian(checker))
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(0, 10, 0), 10, new Lambertian(checker)
     ));
 
     return std::unique_ptr<HitableList>(new HitableList(scene_list));
@@ -119,11 +117,11 @@ std::unique_ptr<Hitable> TwoSpheres() {
 std::unique_ptr<Hitable> TwoNoiseSpheres(Texture *noise_textured) {
     std::vector<std::shared_ptr<Hitable>> scene_list;
     // For now, assume C++11, not 14 so no "make_unique"
-    scene_list.push_back( std::shared_ptr<Sphere>(
-            new Sphere(Vec3(0, -1000, 0), 1000, new Lambertian(noise_textured))
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(0, -1000, 0), 1000, new Lambertian(noise_textured)
     ));
-    scene_list.push_back( std::shared_ptr<Sphere>(
-            new Sphere(Vec3(0, 2, 0), 2, new Lambertian(noise_textured))
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(0, 2, 0), 2, new Lambertian(noise_textured)
     ));
 
     return std::unique_ptr<HitableList>(new HitableList(scene_list));
@@ -152,14 +150,11 @@ std::unique_ptr<Hitable> ImageSphereTests() {
     std::vector<std::shared_ptr<Hitable>> scene_list;
     // For now, assume C++11, not 14 so no "make_unique"
     // Big sphere - let's keep the marble
-    scene_list.push_back( std::shared_ptr<Sphere>(
-            new Sphere(Vec3(0, -1000, 0), 1000, new Lambertian(noise_textured))
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(0, -1000, 0), 1000, new Lambertian(noise_textured)
     ));
-    scene_list.push_back( std::shared_ptr<Sphere>(
-        // constant_material was my first attempt to do
-        // what Peter does in diffuse_light.
-//            new Sphere(Vec3(0, 2, 0), 2, new ConstantMaterial(image_textured))
-            new Sphere(Vec3(0, 2, 0), 2, new DiffuseLight(image_textured))
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(0, 2, 0), 2, new DiffuseLight(image_textured)
     ));
 
     return std::unique_ptr<HitableList>(new HitableList(scene_list));
@@ -173,20 +168,19 @@ std::unique_ptr<Hitable> SimpleLightTest() {
     std::vector<std::shared_ptr<Hitable>> scene_list;
     // For now, assume C++11, not 14 so no "make_unique"
     // Big sphere - let's keep the marble
-    scene_list.push_back( std::shared_ptr<Sphere>(
-            new Sphere(Vec3(0, -1000, 0), 1000, new Lambertian(noise_textured))
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(0, -1000, 0), 1000, new Lambertian(noise_textured)
     ));
-    scene_list.push_back( std::shared_ptr<Sphere>(
-//            new Sphere(Vec3(0, 2, 0), 2, new Lambertian(noise_textured))
-            new Sphere(Vec3(0, 2, 0), 2, new Lambertian(image_textured))
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(0, 2, 0), 2, new Lambertian(image_textured)
     ));
-    scene_list.push_back( std::shared_ptr<Sphere>(
-            new Sphere(Vec3(0, 7, 0), 2, new DiffuseLight(
-                    new ConstantTexture(Vec3(4.0f, 4.0f, 4.0f))))
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(0, 7, 0), 2, new DiffuseLight(
+                    new ConstantTexture(Vec3(4.0f, 4.0f, 4.0f)))
     ));
-    scene_list.push_back( std::shared_ptr<XYRect>(
-            new XYRect(3.0f, 5.0f, 1.0f, 3.0f, -2.0f, new DiffuseLight(
-                    new ConstantTexture(Vec3(4.0f, 4.0f, 4.0f))))
+    scene_list.push_back(std::make_shared<XYRect>(
+            3.0f, 5.0f, 1.0f, 3.0f, -2.0f, new DiffuseLight(
+                    new ConstantTexture(Vec3(4.0f, 4.0f, 4.0f)))
     ));
 
     return std::unique_ptr<HitableList>(new HitableList(scene_list));
@@ -208,53 +202,53 @@ std::unique_ptr<Hitable> CornellBox() {
 
     // light
     scene_list.push_back(
-        std::shared_ptr<FlipNormals>( new FlipNormals(
-            std::shared_ptr<XZRect>( new XZRect(213, 343, 227, 332, 554, light))
-        ))
+        std::make_shared<FlipNormals>(
+            std::make_shared<XZRect>(213, 343, 227, 332, 554, light)
+        )
     );
 
     // main room walls
     scene_list.push_back(
-        std::shared_ptr<FlipNormals>( new FlipNormals(
-            std::shared_ptr<YZRect>( new YZRect(0, 555, 0, 555, 555, green))
-        ))
+        std::make_shared<FlipNormals>(
+            std::make_shared<YZRect>(0, 555, 0, 555, 555, green)
+        )
     );
     scene_list.push_back(
-        std::shared_ptr<YZRect>( new YZRect(0, 555, 0, 555, 0, red))
+        std::make_shared<YZRect>(0, 555, 0, 555, 0, red)
     );
     scene_list.push_back(
-        std::shared_ptr<FlipNormals>( new FlipNormals(
-            std::shared_ptr<XZRect>( new XZRect(0, 555, 0, 555, 555, white))
-        ))
+        std::make_shared<FlipNormals>(
+            std::make_shared<XZRect>(0, 555, 0, 555, 555, white)
+        )
     );
-    scene_list.push_back(std::shared_ptr<XZRect>(
-            new XZRect(0, 555, 0, 555, 0, white)
+    scene_list.push_back(std::make_shared<XZRect>(
+            0, 555, 0, 555, 0, white
     ));
     scene_list.push_back(
-        std::shared_ptr<FlipNormals>( new FlipNormals(
-            std::shared_ptr<XYRect>( new XYRect(0, 555, 0, 555, 555, white))
-        ))
+        std::make_shared<FlipNormals>(
+            std::make_shared<XYRect>(0, 555, 0, 555, 555, white)
+        )
     );
 
     // 2 boxes
     scene_list.push_back(
-        std::shared_ptr<Translate>( new Translate(Vec3(130, 0, 65),
-            std::shared_ptr<RotateY>( new RotateY(-18,
-                std::shared_ptr<Box>(
-                    new Box(Vec3(0, 0, 0), Vec3(165, 165, 165), white))
-            ))
-        ))
+        std::make_shared<Translate>(Vec3(130, 0, 65),
+            std::make_shared<RotateY>(-18,
+                std::make_shared<Box>(
+                    Vec3(0, 0, 0), Vec3(165, 165, 165), white)
+            )
+        )
     );
     scene_list.push_back(
-        std::shared_ptr<Translate>( new Translate(Vec3(265, 0, 295),
-            std::shared_ptr<RotateY>( new RotateY(15,
-                std::shared_ptr<Box>(
-                    new Box(Vec3(0, 0, 0), Vec3(165, 330, 165), white))
-            ))
-        ))
+        std::make_shared<Translate>(Vec3(265, 0, 295),
+            std::make_shared<RotateY>(15,
+                std::make_shared<Box>(
+                    Vec3(0, 0, 0), Vec3(165, 330, 165), white)
+            )
+        )
     );
 
-    return std::unique_ptr<HitableList>( new HitableList(scene_list));
+    return std::unique_ptr<HitableList>(new HitableList(scene_list));
 }
 
 
@@ -275,50 +269,45 @@ std::unique_ptr<Hitable> CornellBoxAluminum() {
 
     // light
     scene_list.push_back(
-        std::shared_ptr<FlipNormals>( new FlipNormals(
-            std::shared_ptr<XZRect>( new XZRect(213, 343, 227, 332, 554, light))
-        ))
+        std::make_shared<FlipNormals>(
+            std::make_shared<XZRect>(213, 343, 227, 332, 554, light)
+        )
     );
 
     // main room walls
     scene_list.push_back(
-        std::shared_ptr<FlipNormals>( new FlipNormals(
-            std::shared_ptr<YZRect>( new YZRect(0, 555, 0, 555, 555, green))
-        ))
+        std::make_shared<FlipNormals>(
+            std::make_shared<YZRect>(0, 555, 0, 555, 555, green)
+        )
     );
+    scene_list.push_back(std::make_shared<YZRect>(0, 555, 0, 555, 0, red));
     scene_list.push_back(
-        std::shared_ptr<YZRect>( new YZRect(0, 555, 0, 555, 0, red))
+        std::make_shared<FlipNormals>(
+            std::make_shared<XZRect>(0, 555, 0, 555, 555, white)
+        )
     );
+    scene_list.push_back(std::make_shared<XZRect>(0, 555, 0, 555, 0, white));
     scene_list.push_back(
-        std::shared_ptr<FlipNormals>( new FlipNormals(
-            std::shared_ptr<XZRect>( new XZRect(0, 555, 0, 555, 555, white))
-        ))
-    );
-    scene_list.push_back(std::shared_ptr<XZRect>(
-        new XZRect(0, 555, 0, 555, 0, white)
-    ));
-    scene_list.push_back(
-        std::shared_ptr<FlipNormals>( new FlipNormals(
-            std::shared_ptr<XYRect>( new XYRect(0, 555, 0, 555, 555, white))
-        ))
+        std::make_shared<FlipNormals>(
+            std::make_shared<XYRect>(0, 555, 0, 555, 555, white)
+        )
     );
 
     // 2 boxes
     scene_list.push_back(
-        std::shared_ptr<Translate>( new Translate(Vec3(130, 0, 65),
-                                                  std::shared_ptr<RotateY>( new RotateY(-18,
-                                                                                        std::shared_ptr<Box>(
-                                                                                            new Box(Vec3(0, 0, 0), Vec3(165, 165, 165), white))
-                                                  ))
-        ))
+        std::make_shared<Translate>(Vec3(130, 0, 65),
+            std::make_shared<RotateY>(-18,
+                std::make_shared<Box>(Vec3(0, 0, 0), Vec3(165, 165, 165), white)
+            )
+        )
     );
     scene_list.push_back(
-        std::shared_ptr<Translate>( new Translate(Vec3(265, 0, 295),
-                                                  std::shared_ptr<RotateY>( new RotateY(15,
-                                                                                        std::shared_ptr<Box>(
-                                                                                            new Box(Vec3(0, 0, 0), Vec3(165, 330, 165), alumninum))
-                                                  ))
-        ))
+        std::make_shared<Translate>(Vec3(265, 0, 295),
+              std::make_shared<RotateY>(15,
+                    std::make_shared<Box>(
+                        Vec3(0, 0, 0), Vec3(165, 330, 165), alumninum)
+              )
+        )
     );
 
     return std::unique_ptr<HitableList>( new HitableList(scene_list));
@@ -340,54 +329,43 @@ std::unique_ptr<Hitable> CornellBoxGlassSphere() {
 
   // light
   scene_list.push_back(
-      std::shared_ptr<FlipNormals>( new FlipNormals(
-          std::shared_ptr<XZRect>( new XZRect(213, 343, 227, 332, 554, light))
-      ))
+      std::make_shared<FlipNormals>(
+          std::make_shared<XZRect>(213, 343, 227, 332, 554, light)
+      )
   );
 
   // main room walls
   scene_list.push_back(
-      std::shared_ptr<FlipNormals>( new FlipNormals(
-          std::shared_ptr<YZRect>( new YZRect(0, 555, 0, 555, 555, green))
-      ))
+      std::make_shared<FlipNormals>(
+          std::make_shared<YZRect>(0, 555, 0, 555, 555, green)
+      )
   );
   scene_list.push_back(
-      std::shared_ptr<YZRect>( new YZRect(0, 555, 0, 555, 0, red))
+      std::make_shared<YZRect>(0, 555, 0, 555, 0, red)
   );
   scene_list.push_back(
-      std::shared_ptr<FlipNormals>( new FlipNormals(
-          std::shared_ptr<XZRect>( new XZRect(0, 555, 0, 555, 555, white))
-      ))
+      std::make_shared<FlipNormals>(
+          std::make_shared<XZRect>(0, 555, 0, 555, 555, white)
+      )
   );
-  scene_list.push_back(std::shared_ptr<XZRect>(
-      new XZRect(0, 555, 0, 555, 0, white)
-  ));
+  scene_list.push_back(std::make_shared<XZRect>(0, 555, 0, 555, 0, white));
   scene_list.push_back(
-      std::shared_ptr<FlipNormals>( new FlipNormals(
-          std::shared_ptr<XYRect>( new XYRect(0, 555, 0, 555, 555, white))
-      ))
+      std::make_shared<FlipNormals>(
+          std::make_shared<XYRect>(0, 555, 0, 555, 555, white)
+      )
   );
 
-  // 2 boxes
-//  scene_list.push_back(
-//      std::shared_ptr<Translate>( new Translate(Vec3(130, 0, 65),
-//                                                std::shared_ptr<RotateY>( new RotateY(-18,
-//                                                                                      std::shared_ptr<Box>(
-//                                                                                          new Box(Vec3(0, 0, 0), Vec3(165, 165, 165), white))
-//                                                ))
-//      ))
-//  );
+  // tall box and a glass sphere
   scene_list.push_back(
-      std::shared_ptr<Sphere>( new Sphere(Vec3(190, 90, 190), 90,
-          new Dielectric(1.5f)))
+      std::make_shared<Sphere>(Vec3(190, 90, 190), 90, new Dielectric(1.5f))
   );
   scene_list.push_back(
-      std::shared_ptr<Translate>( new Translate(Vec3(265, 0, 295),
-                                                std::shared_ptr<RotateY>( new RotateY(15,
-                                                                                      std::shared_ptr<Box>(
-                                                                                          new Box(Vec3(0, 0, 0), Vec3(165, 330, 165), white))
-                                                ))
-      ))
+      std::make_shared<Translate>(Vec3(265, 0, 295),
+            std::make_shared<RotateY>(15,
+                  std::make_shared<Box>(
+                      Vec3(0, 0, 0), Vec3(165, 330, 165), white)
+            )
+      )
   );
 
   return std::unique_ptr<HitableList>( new HitableList(scene_list));
@@ -410,54 +388,49 @@ std::unique_ptr<Hitable> CornellSmoke() {
 
     // light
     scene_list.push_back(
-        std::shared_ptr<XZRect>( new XZRect(113, 443, 127, 432, 554, light)
-    ));
+        std::make_shared<XZRect>(113, 443, 127, 432, 554, light));
 
     // main room walls
     scene_list.push_back(
-        std::shared_ptr<FlipNormals>( new FlipNormals(
-            std::shared_ptr<YZRect>( new YZRect(0, 555, 0, 555, 555, green))
-        ))
+        std::make_shared<FlipNormals>(
+            std::make_shared<YZRect>(0, 555, 0, 555, 555, green)
+        )
     );
+    scene_list.push_back(std::make_shared<YZRect>(0, 555, 0, 555, 0, red));
     scene_list.push_back(
-        std::shared_ptr<YZRect>( new YZRect(0, 555, 0, 555, 0, red))
+        std::make_shared<FlipNormals>(
+            std::make_shared<XZRect>(0, 555, 0, 555, 555, white))
     );
+    scene_list.push_back(std::make_shared<XZRect>(0, 555, 0, 555, 0, white));
     scene_list.push_back(
-        std::shared_ptr<FlipNormals>( new FlipNormals(
-            std::shared_ptr<XZRect>(new XZRect(0, 555, 0, 555, 555, white)))
-    ));
-    scene_list.push_back( std::shared_ptr<XZRect>(
-            new XZRect(0, 555, 0, 555, 0, white)
-    ));
-    scene_list.push_back(
-        std::shared_ptr<FlipNormals>( new FlipNormals(
-            std::shared_ptr<XYRect>(new XYRect(0, 555, 0, 555, 555, white))
-        ))
+        std::make_shared<FlipNormals>(
+            std::make_shared<XYRect>(0, 555, 0, 555, 555, white)
+        )
     );
 
     // 2 boxes
-    std::shared_ptr<Translate> box_1 { new Translate(Vec3(130, 0, 65),
-        std::shared_ptr<RotateY>( new RotateY( -18,
-            std::shared_ptr<Box>(
-                new Box(Vec3(0, 0, 0), Vec3(165, 165, 165), white))
-        ))
+    std::shared_ptr<Translate> box_1 {new Translate(Vec3(130, 0, 65),
+        std::make_shared<RotateY>(-18,
+            std::make_shared<Box>(
+                Vec3(0, 0, 0), Vec3(165, 165, 165), white)
+        )
     ) };
-    std::shared_ptr<Translate> box_2 { new Translate(Vec3(265, 0, 295),
-        std::shared_ptr<RotateY>( new RotateY(15,
-            std::shared_ptr<Box>(
-                new Box(Vec3(0, 0, 0), Vec3(165, 330, 165), white))
-        ))
-    ) };
-    scene_list.push_back( std::shared_ptr<Hitable>(
+    std::shared_ptr<Translate> box_2 {new Translate(Vec3(265, 0, 295),
+        std::make_shared<RotateY>(15,
+            std::make_shared<Box>(
+                Vec3(0, 0, 0), Vec3(165, 330, 165), white)
+        )
+    )};
+    scene_list.push_back(std::shared_ptr<Hitable>(
             new ConstantMedium(box_1, 0.01,
                     new ConstantTexture(Vec3(1.0, 1.0, 1.0)))
     ));
-    scene_list.push_back( std::shared_ptr<Hitable>(
+    scene_list.push_back(std::shared_ptr<Hitable>(
             new ConstantMedium(box_2, 0.01,
                     new ConstantTexture(Vec3(0.0, 0.0, 0.0)))
     ));
 
-    return std::unique_ptr<HitableList>( new HitableList(scene_list));
+    return std::unique_ptr<HitableList>(new HitableList(scene_list));
 }
 
 
@@ -482,84 +455,76 @@ std::unique_ptr<Hitable> TestAllBook2() {
             auto x1 = x0 + w;
             auto y1 = 100.0f * float(drand48() + 0.01f);
             auto z1  = z0 + w;
-            box_list_1.push_back( std::shared_ptr<Box>(
-                    new Box(Vec3(x0, y0, z0), Vec3(x1, y1, z1), ground)
+            box_list_1.push_back( std::make_shared<Box>(
+                    Vec3(x0, y0, z0), Vec3(x1, y1, z1), ground
                     ));
         }
     }
 
-    scene_list.push_back( std::shared_ptr<BVHRoot>(
-            new BVHRoot(box_list_1, 0, 1)
-    ));
+    scene_list.push_back(std::make_shared<BVHRoot>(box_list_1, 0, 1));
 
     // light
     Material *light = new DiffuseLight(
             new ConstantTexture(Vec3(7.0f, 7.0f, 7.0f)));
 
-    scene_list.push_back( std::shared_ptr<XZRect>(
-            new XZRect(123, 423, 147, 412, 554, light)
+    scene_list.push_back(std::make_shared<XZRect>(
+            123, 423, 147, 412, 554, light
     ));
 
     Vec3 center(400.0f, 400.0f, 200.0f);
-    scene_list.push_back( std::shared_ptr<MovingSphere>(
-            new MovingSphere(center, center + Vec3(30.0f, 0.0f, 0.0f),
-                    0, 1, 50.0,
-                    new Lambertian(new ConstantTexture(Vec3(0.7f, 0.3f, 0.1f)))
-                    )
+    scene_list.push_back(std::make_shared<MovingSphere>(
+            center, center + Vec3(30.0f, 0.0f, 0.0f),
+            0, 1, 50.0,
+            new Lambertian(new ConstantTexture(Vec3(0.7f, 0.3f, 0.1f)))
     ));
-    scene_list.push_back( std::shared_ptr<Sphere>(
-            new Sphere(Vec3(260.0f, 150.0f, 45.0f), 50.0f,
-                    new Dielectric(1.5f))
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(260.0f, 150.0f, 45.0f), 50.0f, new Dielectric(1.5f)
     ));
-    scene_list.push_back( std::shared_ptr<Sphere>(
-            new Sphere(Vec3(0.0f, 150.0f, 145.0f), 50.0f,
-                    new Metal(new ConstantTexture(Vec3(0.2f, 0.4f, 0.9f)), 10.0f))
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(0.0f, 150.0f, 145.0f), 50.0f,
+            new Metal(new ConstantTexture(Vec3(0.2f, 0.4f, 0.9f)), 10.0f)
     ));
 
-    std::shared_ptr<Sphere> boundary = std::shared_ptr<Sphere>(
-        new Sphere(Vec3(360.0f, 150.0f, 145.0f), 70.0f, new Dielectric(1.5f)));
+    std::shared_ptr<Sphere> boundary = std::make_shared<Sphere>(
+        Vec3(360.0f, 150.0f, 145.0f), 70.0f, new Dielectric(1.5f));
     scene_list.push_back(boundary);
-    scene_list.push_back( std::shared_ptr<ConstantMedium>(
-            new ConstantMedium(boundary, 0.2,
-                    new ConstantTexture(Vec3(0.2f, 0.4f, 0.9f)))
+    scene_list.push_back(std::make_shared<ConstantMedium>(
+            boundary, 0.2, new ConstantTexture(Vec3(0.2f, 0.4f, 0.9f))
     ));
 
     // This kind of scares me. I guess I've implicitly transfered ownership
     // of the old version to scene_list.  But still... reusing...
-    boundary = std::shared_ptr<Sphere>(new Sphere(Vec3(0.0f, 0.0f, 5.0f), 5000.0f,
-                                   new Dielectric(1.5f)));
-    scene_list.push_back( std::shared_ptr<ConstantMedium>(
-            new ConstantMedium(boundary, 0.0001,
-                               new ConstantTexture(Vec3(1.0f, 1.0f, 1.0f)))
+    boundary = std::make_shared<Sphere>(Vec3(0.0f, 0.0f, 5.0f), 5000.0f,
+                                   new Dielectric(1.5f));
+    scene_list.push_back(std::make_shared<ConstantMedium>(
+            boundary, 0.0001, new ConstantTexture(Vec3(1.0f, 1.0f, 1.0f))
     ));
 
     std::string test_filename = "test_data/land_ocean_ice_cloud_2048.jpg";
     Texture *image_textured = new ImageTexture(test_filename);
     Material *earth_material = new Lambertian(image_textured);
-    scene_list.push_back( std::shared_ptr<Sphere>(
-            new Sphere(Vec3(400.0f, 200.0f, 300.0f), 80.0f,
-                       earth_material)
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(400.0f, 200.0f, 300.0f), 80.0f, earth_material
     ));
 
     Texture *perlin_texture = new NoiseTexture(0.1);
-    scene_list.push_back( std::shared_ptr<Sphere>(
-            new Sphere(Vec3(220.0f, 280.0f, 300.0f), 80.0f,
-                       new Lambertian(perlin_texture))
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(220.0f, 280.0f, 300.0f), 80.0f, new Lambertian(perlin_texture)
     ));
 
     auto ns = 1000;
     for (auto j: boost::irange(0, ns)) {
-        box_list_2.push_back( std::shared_ptr<Sphere>(
-                new Sphere(Vec3(165.0 * drand48(), 165.0 * drand48(), 165.0 * drand48()),
-                        10.0f, white)
+        box_list_2.push_back(std::make_shared<Sphere>(
+                Vec3(165.0 * drand48(), 165.0 * drand48(), 165.0 * drand48()),
+                10.0f, white
         ));
     }
     scene_list.push_back(
-        std::shared_ptr<Translate>( new Translate(Vec3(-100, 270, 395),
-            std::shared_ptr<RotateY>( new RotateY(15.0f,
-                std::shared_ptr<BVHRoot>( new BVHRoot(box_list_2, 0.0, 1.0)))
+        std::make_shared<Translate>(Vec3(-100, 270, 395),
+            std::make_shared<RotateY>(15.0f,
+                std::make_shared<BVHRoot>(box_list_2, 0.0, 1.0)
             )
-        ))
+        )
     );
 
     return std::unique_ptr<HitableList>(new HitableList(scene_list));

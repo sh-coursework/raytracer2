@@ -117,9 +117,10 @@ totally breaks backward compatibility, renaming all the functions.
 * Chap 7 - sampling lights directly
 * Chap 8 - mixed density
 * Chap 10 - refactor pdf - through the end with De-NaN
+### Cleanup
+* Continue smart pointer refactor to use make_shared
 
 ## Stuff I plan to work on:
-* continue smart pointer refactor to use make_shared
 * should I really be float(M_PI)ing all over the place or is there
   a more c++y way to use math constants in floats?
 * Add pdf stuff to other oriented rectangles and other geometry.

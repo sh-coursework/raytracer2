@@ -14,34 +14,37 @@ Box::Box(const Vec3 &p_min, const Vec3 &p_max, Material *material_ptr) {
 
     std::vector<std::shared_ptr<Hitable>> scene_list;
     scene_list.push_back(
-        std::shared_ptr<XYRect>( new XYRect(p_min.x(), p_max.x(),
-                    p_min.y(), p_max.y(), p_max.z(), material_ptr)
+        std::make_shared<XYRect>(p_min.x(), p_max.x(),
+                    p_min.y(), p_max.y(), p_max.z(), material_ptr
     ));
     scene_list.push_back(
-        std::shared_ptr<FlipNormals>( new FlipNormals(
-            std::shared_ptr<XYRect>( new XYRect(p_min.x(), p_max.x(),
-                    p_min.y(), p_max.y(), p_min.z(), material_ptr)))
+        std::make_shared<FlipNormals>(
+            std::make_shared<XYRect>(p_min.x(), p_max.x(),
+                    p_min.y(), p_max.y(), p_min.z(), material_ptr)
+        )
+    );
+    scene_list.push_back(
+        std::make_shared<XZRect>(p_min.x(), p_max.x(),
+                       p_min.z(), p_max.z(), p_max.y(), material_ptr
     ));
     scene_list.push_back(
-        std::shared_ptr<XZRect>( new XZRect(p_min.x(), p_max.x(),
-                       p_min.z(), p_max.z(), p_max.y(), material_ptr)
+        std::make_shared<FlipNormals>(
+            std::make_shared<XZRect>(p_min.x(), p_max.x(),
+                       p_min.z(), p_max.z(), p_min.y(), material_ptr)
+        )
+    );
+    scene_list.push_back(
+        std::make_shared<YZRect>(p_min.y(), p_max.y(),
+                       p_min.z(), p_max.z(), p_max.x(), material_ptr
     ));
     scene_list.push_back(
-        std::shared_ptr<FlipNormals>( new FlipNormals(
-            std::shared_ptr<XZRect>( new XZRect(p_min.x(), p_max.x(),
-                       p_min.z(), p_max.z(), p_min.y(), material_ptr)))
-    ));
-    scene_list.push_back(
-        std::shared_ptr<YZRect>( new YZRect(p_min.y(), p_max.y(),
-                       p_min.z(), p_max.z(), p_max.x(), material_ptr)
-    ));
-    scene_list.push_back(
-        std::shared_ptr<FlipNormals>( new FlipNormals(
-            std::shared_ptr<YZRect>( new YZRect(p_min.y(), p_max.y(),
-                       p_min.z(), p_max.z(), p_min.x(), material_ptr)))
-    ));
+        std::make_shared<FlipNormals>(
+            std::make_shared<YZRect>(p_min.y(), p_max.y(),
+                       p_min.z(), p_max.z(), p_min.x(), material_ptr)
+        )
+    );
 
-    hitables_ = std::shared_ptr<HitableList>(new HitableList(scene_list));
+    hitables_ = std::make_shared<HitableList>(scene_list);
 }
 
 bool Box::Hit(const Ray &r, float t_min, float t_max, HitRecord &rec) const {

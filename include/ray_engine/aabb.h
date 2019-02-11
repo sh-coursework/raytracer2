@@ -19,12 +19,12 @@
 // tickets CPP-8423 - std::swap is red for builtin type if <tuple> is included.
 // and CPP-9222 - False "No matching function" for std::swap.
 // The code compiles and executes fine, at code inspection time, CLion is
-// unable to see the utiltiy std::swap. If <tuple> is included, it finds the
+// unable to see the utility std::swap. If <tuple> is included, it finds the
 // swap in that module, also in the std:: namespace. Otherwise, it just can't
 // find swap.
 // One of the other users on that thread said:
 // This occurred when using libstdc++ as standard C++ library,
-// possibly the defintion of std::swap in libstdc++ trigger some bug of CLion.
+// possibly the definiton of std::swap in libstdc++ trigger some bug of CLion.
 // On Linux, currently I install clang and libc++ and make CLion use them as
 // compiler and standard library to get it work.
 

@@ -94,11 +94,9 @@ main(int argc, char** argv) {
                           // I think Herb Sutter says raw pointer are beautiful.
 
     std::shared_ptr<Hitable> light_shape =
-        std::shared_ptr<XZRect>(new XZRect(213, 343, 227, 332, 554, nullptr));
-//    auto light_shape_raw_ptr = light_shape.get();
+        std::make_shared<XZRect>(213, 343, 227, 332, 554, nullptr);
     std::shared_ptr<Hitable> glass_sphere_shape =
-        std::shared_ptr<Sphere>(new Sphere(Vec3(190, 90, 190), 90, nullptr));
-//    auto glass_sphere_shape_raw_ptr = glass_sphere_shape.get();
+        std::make_shared<Sphere>(Vec3(190, 90, 190), 90, nullptr);
     std::vector<std::shared_ptr<Hitable>> light_list;
     light_list.push_back(light_shape);
     light_list.push_back(glass_sphere_shape);
