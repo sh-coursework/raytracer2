@@ -92,7 +92,7 @@ totally breaks backward compatibility, renaming all the functions.
   But it seems to work with the earlier versions on Windows
   so let's go with that.
   * Lower CMake minimum from 3.12 to 3.10
-  * Lower CMake minimum from 1.67.0 to 1.65.1.
+  * Lower boost minimum from 1.67.0 to 1.65.1.
 * Ubuntu compiler caught a couple missing includes for memory in bvh_node.h and hitable_list.h.
 
 ## Release 2.0.0
@@ -119,6 +119,11 @@ totally breaks backward compatibility, renaming all the functions.
 * Chap 10 - refactor pdf - through the end with De-NaN
 ### Cleanup
 * Continue smart pointer refactor to use make_shared
+
+## Release 3.0.1
+2/12/2019 sh-coursework
+### Cleanup
+* Minor corrections in .md files.
 
 ## Stuff I plan to work on:
 * should I really be float(M_PI)ing all over the place or is there
