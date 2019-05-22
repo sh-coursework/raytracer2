@@ -14,27 +14,21 @@
 #include "ray_engine/ray.h"
 #include "ray_engine/aabb.h"
 
-// This is effectively a BVHNode, but I want to store the list, and I don't
-// want to pollute every BVH node with a pointer that is going to be null for
-// all but one.
-class BVHRoot : public HitableList {
+// Basically a BVHNode, except it owns the hitables list.
+// It's a little awkward because the constructor has a
+// completely different signature than the parent.
+// But I wanted to avoid the additional Hit call that was
+// just deferring to the first BVHNode.
+class BVHRoot : public BVHNode {
  public:
   BVHRoot() = default;
-  BVHRoot(std::vector<std::shared_ptr<Hitable>> &hitables,
-      float time0, float time1)
-    : HitableList(hitables) {
-    bvh_root_ptr_ = std::unique_ptr<BVHNode>(new BVHNode(vector_list_.begin(),
-        vector_list_.end(), time0, time1));
-  };
-  inline bool Hit(const Ray &r, float t_min, float t_max, HitRecord &rec)
-      const override {
-    return bvh_root_ptr_->Hit(r, t_min, t_max, rec);
-  }
-  inline bool BoundingBox(float t_min, float t_max, AABB &box) const override {
-    return bvh_root_ptr_->BoundingBox(t_min, t_max, box);
-  };
+  explicit BVHRoot(std::vector<std::shared_ptr<Hitable>> &hitables,
+                   float time0, float time1)
+    : BVHNode(hitables.begin(),
+              hitables.end(), time0, time1),
+      vector_list_(std::move(hitables)) {}
 
-  std::unique_ptr<BVHNode> bvh_root_ptr_;
+  std::vector<std::shared_ptr<Hitable>> vector_list_;
 };
 
 #endif //RAYTRACER2_BVH_ROOT_H
