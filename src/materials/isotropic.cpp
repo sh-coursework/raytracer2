@@ -8,15 +8,18 @@
 
 #include "materials/random_sphere_pdf.h"
 
-// TODO: pdf is just a placeholder in isotropic
-bool Isotropic::Scatter(const Ray &r_in, const HitRecord &hit_record,
-                        ScatterRecord &scatter_record) const {
-    scatter_record.is_specular = false;
-    scatter_record.attenuation = albedo_->Value(hit_record.u, hit_record.v,
-        hit_record.p);
-    scatter_record.do_mixture_pdf = false;
-    scatter_record.pdf_ptr = std::unique_ptr<RandomSpherePDF>(
-        new RandomSpherePDF());
-    return true;
+Vec3 Isotropic::Attenuation(const HitRecord &hit_record) const {
+    return albedo_->Value(hit_record.u, hit_record.v, hit_record.p);
+}
+
+std::tuple<Ray, float>
+Isotropic::ScatteringContribution(const RenderContext &render_context, const Ray &r_in, const HitRecord &hit_record) const {
+    // TODO: pdf is just a placeholder in isotropic
+    auto pdf = RandomSpherePDF();
+    auto scattered = Ray(hit_record.p, pdf.Generate(), r_in.time());
+    float coefficient = ScatteringPdf(r_in, hit_record, scattered)
+                        / pdf.Value(scattered.direction(), r_in.time());
+
+    return std::make_tuple(scattered, coefficient);
 }
 

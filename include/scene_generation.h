@@ -12,9 +12,11 @@
 #include "ray_engine/hitable.h"
 #include "camera.h"
 #include "render_settings.h"
+#include "render_context.h"
 
 
-std::tuple<std::unique_ptr<Hitable>, std::unique_ptr<Camera>>
-GetScene(const RenderSettings &render_settings);
+//std::tuple<std::unique_ptr<Hitable>, std::unique_ptr<Camera>>
+void
+GetScene(RenderContext &render_context);
 
 #endif //RAYTRACER2_SCENE_GENERATION_H

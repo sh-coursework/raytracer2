@@ -55,9 +55,10 @@ set(SOURCE_CPPS
         src/render_settings.cpp
         src/scene_generation.cpp
         src/vec3.cpp
+        src/render_context.cpp
 
         src/main.cpp
-    )
+        )
 
 add_executable(raytracer2 ${SOURCE_CPPS})
 

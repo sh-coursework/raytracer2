@@ -11,15 +11,17 @@ Metal::Metal(Texture *a, float f) : albedo_(a) {
         fuzz_ = 1;
 }
 
-bool Metal::Scatter(const Ray &r_in, const HitRecord &hit_record,
-                    ScatterRecord &scatter_record) const {
-    Vec3 reflected = reflect(unit_vector(r_in.direction()), hit_record.normal);
-    scatter_record.specular_ray = Ray(hit_record.p,
-                                      reflected + fuzz_ * random_in_unit_sphere(),
-                                      r_in.time());
-    scatter_record.attenuation = albedo_->Value(hit_record.u, hit_record.v,
-                                                hit_record.p);
-    scatter_record.is_specular = true;
-    scatter_record.pdf_ptr = nullptr;
-    return true;
+Vec3 Metal::Attenuation(const HitRecord &hit_record) const {
+    return albedo_->Value(hit_record.u, hit_record.v, hit_record.p);
 }
+
+std::tuple<Ray, float>
+Metal::ScatteringContribution(const RenderContext &render_context, const Ray &r_in, const HitRecord &hit_record) const {
+    // No pdf implemented yet
+    Vec3 reflected = reflect(unit_vector(r_in.direction()), hit_record.normal);
+    return std::make_tuple(Ray(hit_record.p,
+                               reflected + fuzz_ * random_in_unit_sphere(),
+                               r_in.time()),
+                           1.0f);
+}
+

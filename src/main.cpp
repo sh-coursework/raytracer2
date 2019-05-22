@@ -17,6 +17,7 @@
 #include "ray_engine/ray_engine.h"
 #include "render_settings.h"
 #include "scene_generation.h"
+#include "render_context.h"
 // TODO: Would rather have a part of world id the lights)
 #include "scene_geometry/rect.h"
 #include "scene_geometry/sphere.h"
@@ -28,6 +29,7 @@ namespace
 
 int
 main(int argc, char** argv) {
+    auto render_context = RenderContext();
     ///////////////////////////////////////////////////////////////////////
     // Options and Render Settings processing
 
@@ -39,9 +41,8 @@ main(int argc, char** argv) {
                     boost::program_options::value<std::string>(),
                     "render settings file")
             ;
-    auto render_settings = RenderSettings();
     // Returns a unique_ptr
-    auto render_settings_options = GetRenderSettingsParser(render_settings);
+    auto render_settings_options = GetRenderSettingsParser(render_context.render_settings);
 
     auto cmdline_options = boost::program_options::options_description();
     cmdline_options.add(generic_options).add(*render_settings_options);
@@ -85,24 +86,35 @@ main(int argc, char** argv) {
 
     auto start_time = std::clock();
 
-    std::unique_ptr<Hitable> world_ptr;
-    std::unique_ptr<Camera> cam_ptr;
-    std::tie(world_ptr, cam_ptr) = GetScene(render_settings);
-    auto cam = *cam_ptr;  // Copying a Camera, I guess.  But I'm about to
+    GetScene(render_context);
+    auto cam = *render_context.camera_ptr;  // Copying a Camera, I guess.  But I'm about to
                           // dereference it like literally a million times.
-    auto world_raw_ptr = world_ptr.get();  // If I'm not changing ownership,
-                          // I think Herb Sutter says raw pointer are beautiful.
-
+    // TODO: Ideally, the light shapes and dielectrics would be part of
+    // scene_generation rather than the specific hard code it here in main.
     std::shared_ptr<Hitable> light_shape =
-        std::make_shared<XZRect>(213, 343, 227, 332, 554, nullptr);
-    std::shared_ptr<Hitable> glass_sphere_shape =
-        std::make_shared<Sphere>(Vec3(190, 90, 190), 90, nullptr);
+        std::make_shared<XZRect>(123, 423, 147, 412, 554, nullptr);
+    std::shared_ptr<Hitable> dielectric_ball =
+        std::make_shared<Sphere>(Vec3(260.0f, 150.0f, 45.0f), 50.0f, nullptr);
+    std::shared_ptr<Hitable> metal_ball =
+        std::make_shared<Sphere>(Vec3(0.0f, 150.0f, 145.0f), 50.0f, nullptr);
+    std::shared_ptr<Hitable> boundary =
+        std::make_shared<Sphere>(Vec3(360.0f, 150.0f, 145.0f), 70.0f, nullptr);
+
     std::vector<std::shared_ptr<Hitable>> light_list;
     light_list.push_back(light_shape);
-    light_list.push_back(glass_sphere_shape);
-    auto hitable_light_list = std::unique_ptr<HitableList>(
-        new HitableList(light_list));
-    auto light_list_raw_ptr = hitable_light_list.get();
+    light_list.push_back(light_shape);
+    light_list.push_back(light_shape);
+    light_list.push_back(light_shape);
+    light_list.push_back(light_shape);
+    light_list.push_back(light_shape);
+    light_list.push_back(light_shape);
+    light_list.push_back(light_shape);
+    light_list.push_back(light_shape);
+    light_list.push_back(dielectric_ball);
+//    light_list.push_back(metal_ball);
+//    light_list.push_back(boundary);
+    render_context.hitable_light_list_ptr = std::unique_ptr<HitableList>(
+            new HitableList(light_list));
 
     auto world_built_time = std::clock();
     std::cout << "Time to create scene: "
@@ -112,21 +124,23 @@ main(int argc, char** argv) {
     ///////////////////////////////////////////////////////////////////////
     // Get to the rendering and writing images
 
-    float pixels[render_settings.resolution_x_ * render_settings.resolution_y_
-            * render_settings.num_channels_];
+    float pixels[render_context.render_settings.resolution_x_
+            * render_context.render_settings.resolution_y_
+            * render_context.render_settings.num_channels_];
 
     // OIIO::ImageOutput *oiio_out = OIIO::ImageOutput::create(
     auto oiio_out = OIIO::ImageOutput::create(
-            render_settings.image_filename_);
+            render_context.render_settings.image_filename_);
     if (! oiio_out)
         return WEXITED;
 
     // Yes, I could do this directly, I guess, but I'm planning ahead
     // to pull this chunk out to its own function and maybe do better
     // tiling or scanline.
-    auto resolution_x = render_settings.resolution_x_;
-    auto resolution_y = render_settings.resolution_y_;
-    auto number_samples_per_pixel = render_settings.number_samples_per_pixel_;
+    auto resolution_x = render_context.render_settings.resolution_x_;
+    auto resolution_y = render_context.render_settings.resolution_y_;
+    auto number_samples_per_pixel \
+        = render_context.render_settings.number_samples_per_pixel_;
     // Run though pixels in the image, and write to stdout
     for (auto row_count: boost::irange(0, resolution_y)) {
         auto row_num = resolution_y - 1 - row_count;
@@ -139,9 +153,7 @@ main(int argc, char** argv) {
 
                 auto r = cam.GetRay(u, v);
                 auto p = r.PointAtParameter(2.0f);  // p not used
-                pixel_color += DeNaN(ColorForRay(r, world_raw_ptr,
-                                                 light_list_raw_ptr, 0)
-                                    );
+                pixel_color += DeNaN(ColorForRay(r, render_context, 0));
             }
             pixel_color /= float(number_samples_per_pixel);
 
@@ -150,7 +162,7 @@ main(int argc, char** argv) {
             pixel_color = Vec3(sqrtf(pixel_color[0]), sqrtf(pixel_color[1]),
                     sqrtf(pixel_color[2]));
             auto pixel_base_index = ((resolution_y - 1 - row_num) * resolution_x
-                    + column_num) * render_settings.num_channels_;
+                    + column_num) * render_context.render_settings.num_channels_;
             pixels[pixel_base_index    ] = pixel_color[0];
             pixels[pixel_base_index + 1] = pixel_color[1];
             pixels[pixel_base_index + 2] = pixel_color[2];
@@ -175,9 +187,9 @@ main(int argc, char** argv) {
     // Note: ppm is m_pnm_type 3 - probably 6-3.
     // in a spec, how do I set spec.get_int_attribute ?
     OIIO::ImageSpec spec(resolution_x, resolution_y,
-            render_settings.num_channels_, OIIO::TypeDesc::FLOAT);
+            render_context.render_settings.num_channels_, OIIO::TypeDesc::FLOAT);
     spec.attribute("pnm:binary", 0);  // int - just for ppm to turn off binary
-    oiio_out->open(render_settings.image_filename_, spec);
+    oiio_out->open(render_context.render_settings.image_filename_, spec);
     oiio_out->write_image(OIIO::TypeDesc::FLOAT, pixels);
     oiio_out->close();
 //    OIIO::ImageOutput::destroy(oiio_out);

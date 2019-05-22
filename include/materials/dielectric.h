@@ -5,15 +5,19 @@
 #ifndef RAYTRACER1_DIELECTRIC_H
 #define RAYTRACER1_DIELECTRIC_H
 
+#include "vec3.h"
 #include "material.h"
 #include "ray_engine/hitable.h"
-#include "vec3.h"
+#include "render_context.h"
 
 class Dielectric : public Material {
  public:
     explicit Dielectric(float ri) : ref_idx_(ri) {}
-    bool Scatter(const Ray &r_in, const HitRecord &hit_record,
-                 ScatterRecord &scatter_record) const override;
+    // No longer doing scatter record thing
+//    bool DoScatter(const Ray &r_in, const HitRecord &hit_record) const override;
+    Vec3 Attenuation(const HitRecord &hit_record) const override;
+    std::tuple<Ray, float>
+    ScatteringContribution(const RenderContext &render_context, const Ray &r_in, const HitRecord &hit_record) const override;
  private:
     float ref_idx_;
 };

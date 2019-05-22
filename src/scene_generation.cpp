@@ -467,9 +467,11 @@ std::unique_ptr<Hitable> TestAllBook2() {
     Material *light = new DiffuseLight(
             new ConstantTexture(Vec3(7.0f, 7.0f, 7.0f)));
 
-    scene_list.push_back(std::make_shared<XZRect>(
-            123, 423, 147, 412, 554, light
-    ));
+    scene_list.push_back(
+        std::make_shared<FlipNormals>(
+            std::make_shared<XZRect>(123, 423, 147, 412, 554, light)
+        )
+    );
 
     Vec3 center(400.0f, 400.0f, 200.0f);
     scene_list.push_back(std::make_shared<MovingSphere>(
@@ -632,8 +634,10 @@ std::unique_ptr<Camera> CornellBoxCam(const RenderSettings &render_settings)
 // outside main.
 
 
-std::tuple<std::unique_ptr<Hitable>, std::unique_ptr<Camera>>
-GetScene(const RenderSettings &render_settings) {
+//std::tuple<std::unique_ptr<Hitable>, std::unique_ptr<Camera>>
+//GetScene(const RenderSettings &render_settings) {
+void
+GetScene(RenderContext &render_context) {
 //    auto w_ptr_tmp = TwoMarblelikeSpheres();
 //    auto c_ptr_tmp = TwoSphereCam(render_settings);
 
@@ -652,14 +656,15 @@ GetScene(const RenderSettings &render_settings) {
 //    auto w_ptr_tmp = CornellBoxAluminum();
 //    auto c_ptr_tmp = CornellBoxCam(render_settings);
 
-    auto w_ptr_tmp = CornellBoxGlassSphere();
-    auto c_ptr_tmp = CornellBoxCam(render_settings);
+//    auto w_ptr_tmp = CornellBoxGlassSphere();
+//    auto c_ptr_tmp = CornellBoxCam(render_settings);
 
 //    auto w_ptr_tmp = CornellSmoke();
 //    auto c_ptr_tmp = CornellBoxCam(render_settings);
 
-//    auto w_ptr_tmp = TestAllBook2();
-//    auto c_ptr_tmp = CornellBoxCam(render_settings);
+    auto w_ptr_tmp = TestAllBook2();
+    auto c_ptr_tmp = CornellBoxCam(render_context.render_settings);
 
-    return std::make_tuple(std::move(w_ptr_tmp), std::move(c_ptr_tmp));
+    render_context.world_ptr = std::move(w_ptr_tmp);
+    render_context.camera_ptr = std::move(c_ptr_tmp);
 }

@@ -125,6 +125,24 @@ totally breaks backward compatibility, renaming all the functions.
 ### Cleanup
 * Minor corrections in .md files.
 
+## Release 4.0.0
+5/21/2019 sh-coursework
+### Optimization
+* 2/26/2019 BVHRoot optimization from 1.3.1 -> 2.0.0 - remove extraneous layer.
+  Initially, when I converted to smart pointers, my render of the book 2 test
+  scene jumped from 20921 sec to 21211 sec - so approx a 1% hit. But I think it
+  was from imposing an extraneous redirection of the hit function in bvh_root.
+  Correcting that brougt the time back down to 20825 sec.
+* 5/21/2019 Got rid of scatter_record and defining pdfs inside the materials
+  themselves.  Still preparing for brdf, but in Peter's book 3, the later
+  architecture with the scatter record creating pdf objects on the heap
+  (using "new" to allocate) significantly slowed things down.  The book 2
+  test scene went from about 20825 sec (see above bvh optimization) to
+  about 24028 sec.  Refactoring to avoid most of the allocating/destroying
+  the pointers that were happening per-ray-bounce and removing the whole
+  scatter record brought the time down to 22389. Still not all the way back,
+  but at least clawed back some time.
+
 ## Stuff I plan to work on:
 * should I really be float(M_PI)ing all over the place or is there
   a more c++y way to use math constants in floats?
@@ -139,7 +157,7 @@ totally breaks backward compatibility, renaming all the functions.
   probability distribution?
 * Book 3 chap 7 looks like Peter moved Emitted from material
   to hitable in order to get more components of the hit record.
-  I havent' made this move, but I think maybe I should refactor
+  I have't' made this move, but I think maybe I should refactor
   my material to accept a hit record and maybe the incoming ray
   instead of just (u, v, p) for future flexibility in generalizing
   material definitions.

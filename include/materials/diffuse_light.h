@@ -8,12 +8,12 @@
 #include "vec3.h"
 #include "textures/texture.h"
 #include "materials/material.h"
+#include "render_context.h"
 
 class DiffuseLight : public Material {
  public:
     explicit DiffuseLight(Texture *emission) : emission_(emission) {};
-    bool Scatter(const Ray &r_in, const HitRecord &hit_record,
-                 ScatterRecord &scatter_record) const override
+    bool DoScatter(const Ray &r_in, const HitRecord &hit_record) const override
             { return false; }
     Vec3 Emitted(float u, float v, const Vec3 &p) const override
             { return emission_->Value(u, v, p); }

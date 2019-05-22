@@ -6,39 +6,39 @@
 #define RAYTRACER1_MATERIAL_H
 
 #include <memory>
+#include <tuple>
 
+#include "vec3.h"
+#include "ray_engine/ray.h"
 #include "materials/pdf_base.h"
 #include "ray_engine/hitable.h"
-#include "ray_engine/ray.h"
-#include "vec3.h"
+#include "render_context.h"
 
-// I don't know why the scatter record always needs to create a fresh
-// pdf. Why isn't it just a part of the material with the incoming
-// direction just another parameter?
-// It feels like the pdf/brdf is a property of the material, not the
-// individual scatter-on-hit. Maybe it would be more appropriate to
-// at least make it a lambda?  Though that would still mean making a
-// pointer-per-scatter, but to the closure, so I'd still need to
-// track ownership.
-struct ScatterRecord {
-  Ray specular_ray;
-  bool is_specular;
-  Vec3 attenuation;
-  bool do_mixture_pdf;  // It's really a hack in lambert.'
-  std::unique_ptr<PDFBase> pdf_ptr;
-};
+// 5/21/2019 sh-coursework - removed ScatterRecord,
+// making that part of the material so it won't need
+// to allocate/destroy a unique_ptr on every ray bounce.
 
 // Pure abstract base class
+// ScatteringPdf is like distributing incident light.
+// ScatteringRecord pdf_ptr above is to compensate
+// for the sampling distribution.
 class Material {
 public:
-    virtual bool Scatter(const Ray &r_in, const HitRecord &hit_record,
-                         ScatterRecord &scatter_record) const {
-      return false;
+    virtual bool DoScatter(const Ray &r_in, const HitRecord &hit_record) const {
+      return true;
     }
     virtual float ScatteringPdf(const Ray &r_in, const HitRecord &hit_record,
                                 const Ray &scattered) const {
       return 1.0f;
     }
+    virtual Vec3 Attenuation(const HitRecord &hit_record) const {
+      return {1.0f, 1.0f, 1.0f};
+    }
+    virtual std::tuple<Ray, float>
+    ScatteringContribution(const RenderContext &render_context, const Ray &r_in, const HitRecord &hit_record) const {
+        return std::make_tuple(Ray(), 1.0f);
+    }
+
     virtual Vec3 Emitted(float u, float v, const Vec3& p) const
             { return {0.0f, 0.0f, 0.0f}; }
 };
