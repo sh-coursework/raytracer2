@@ -142,34 +142,36 @@ totally breaks backward compatibility, renaming all the functions.
   the pointers that were happening per-ray-bounce and removing the whole
   scatter record brought the time down to 22389. Still not all the way back,
   but at least clawed back some time.
+* 6/1/2019 Added scene for rotate test - a bunch of rotated cubes.
 
 ## Stuff I plan to work on:
+* Rotate-X, rotate-Z
+* scale
+* Use smart pointers for all ownership / audit pointers - materials.
 * should I really be float(M_PI)ing all over the place or is there
   a more c++y way to use math constants in floats?
-* Add pdf stuff to other oriented rectangles and other geometry.
 * Clean up variable names to more descriptive.
   * All the names of aabb, including aabb itself, are not very descriptive.
 * Look for more std container usage.
-* Better De-NaN - maybe partial averaging along the way?
-* Are there better ways to find min,max of a vector/bounding box?
-* Is there a better, more native c++ way to handle mathy vectors?
 * Is there a more native c++ way to handle random numbers with a
   probability distribution?
+* External definition of scene - USD?
+* OSL shaders?
+* Better De-NaN - maybe partial averaging along the way?
+* Add pdf stuff to other oriented rectangles and other geometry.
+* Are there better ways to find min,max of a vector/bounding box?
+* Is there a better, more native c++ way to handle mathy vectors?
 * Book 3 chap 7 looks like Peter moved Emitted from material
   to hitable in order to get more components of the hit record.
-  I have't' made this move, but I think maybe I should refactor
+  I have't made this move, but I think maybe I should refactor
   my material to accept a hit record and maybe the incoming ray
   instead of just (u, v, p) for future flexibility in generalizing
   material definitions.
-* Rotate-X, rotate-Z, scale
-* Use smart pointers for all ownership / audit pointers - materials.
 * scanline and tile output/traversal, with work-in-progress outputs.
 * shader binding - separate material definition from scene geom
 * Comment/Document
-* External definition of scene - USD?
 * More general geometry - polygons, subdivs(opensubdiv?), (nurbs?)
 * embry? (Intel raytrace)
-* OSL shaders?
 * One day... multithreading.
 
 
