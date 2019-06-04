@@ -143,18 +143,21 @@ totally breaks backward compatibility, renaming all the functions.
   scatter record brought the time down to 22389. Still not all the way back,
   but at least clawed back some time.
 * 6/1/2019 Added scene for rotate test - a bunch of rotated cubes.
+    * Moved rotate to template.
+    * Rotate-X, rotate-Z
 
 ## Stuff I plan to work on:
-* Rotate-X, rotate-Z
-* scale
 * Use smart pointers for all ownership / audit pointers - materials.
-* should I really be float(M_PI)ing all over the place or is there
-  a more c++y way to use math constants in floats?
 * Clean up variable names to more descriptive.
   * All the names of aabb, including aabb itself, are not very descriptive.
 * Look for more std container usage.
 * Is there a more native c++ way to handle random numbers with a
   probability distribution?
+  
+# Phase 3 - depart from book
+* scale / generalize transform
+* should I really be float(M_PI)ing all over the place or is there
+  a more c++y way to use math constants in floats?
 * External definition of scene - USD?
 * OSL shaders?
 * Better De-NaN - maybe partial averaging along the way?

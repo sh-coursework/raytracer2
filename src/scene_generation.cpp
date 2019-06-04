@@ -18,7 +18,7 @@
 #include "scene_geometry/box.h"
 #include "scene_geometry/transforms/flip_normals.h"
 #include "scene_geometry/transforms/translate.h"
-#include "scene_geometry/transforms/rotate_y.h"
+#include "scene_geometry/transforms/rotate.h"
 #include "scene_geometry/volumes/constant_medium.h"
 #include "textures/texture.h"
 #include "textures/constant_texture.h"
@@ -554,10 +554,86 @@ std::unique_ptr<Hitable> TestRotYBoxes() {
             auto z1  = z0 + w/2;
             auto roty = float(drand48() * 90);
             box_list_1.push_back(
-                    std::make_shared<RotateY>(roty,
-                        std::make_shared<Box>(
-                            Vec3(x0, y0, z0), Vec3(x1, y1, z1), ground
-                    )));
+              std::make_shared<RotateY>(roty,
+                  std::make_shared<Box>(
+                       Vec3(x0, y0, z0), Vec3(x1, y1, z1), ground
+              )));
+        }
+    }
+
+    scene_list.push_back(std::make_shared<BVHRoot>(box_list_1, 0, 1));
+
+    // light
+    Material *light = new DiffuseLight(
+            new ConstantTexture(Vec3(7.0f, 7.0f, 7.0f)));
+
+    scene_list.push_back(
+            std::make_shared<FlipNormals>(
+                    std::make_shared<XZRect>(123, 423, 147, 412, 554, light)
+            )
+    );
+
+    std::string test_filename = "test_data/land_ocean_ice_cloud_2048.jpg";
+    Texture *image_textured = new ImageTexture(test_filename);
+    Material *earth_material = new Lambertian(image_textured);
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(400.0f, 200.0f, 300.0f), 80.0f, earth_material
+    ));
+
+    Texture *perlin_texture = new NoiseTexture(0.1);
+    scene_list.push_back(std::make_shared<Sphere>(
+            Vec3(220.0f, 280.0f, 300.0f), 80.0f, new Lambertian(perlin_texture)
+    ));
+
+    return std::unique_ptr<HitableList>(new HitableList(scene_list));
+}
+
+
+std::unique_ptr<Hitable> TestRotBoxes2() {
+    std::vector<std::shared_ptr<Hitable>> scene_list;
+
+    std::vector<std::shared_ptr<Hitable>> box_list_1;
+    std::vector<std::shared_ptr<Hitable>> box_list_2;
+
+    Material *ground = new Lambertian(
+            new ConstantTexture(Vec3(0.48f, 0.83f, 0.53f)));
+
+    auto num_boxes = 20;
+    for (auto i: boost::irange(0, num_boxes)) {
+        for (auto j: boost::irange(0, num_boxes)) {
+            auto w = 100.0f;
+            auto x0 = -1000.0f + i * w;
+            auto z0 = -1000.0f + j * w;
+            auto y0 = 400.0f * float(drand48() + 0.01f);
+            auto rot_angle = float(drand48() * 90);
+            auto axis = drand48();
+            if (axis < 0.333333) {
+                box_list_1.push_back(
+                        std::make_shared<Translate>(Vec3(x0, y0, z0),
+                                                    std::make_shared<RotateY>(rot_angle,
+                                                                              std::make_shared<Box>(
+                                                                                      Vec3(-w / 4, -w / 6, -w / 4),
+                                                                                      Vec3(w / 4, w / 6, w / 4), ground
+                                                                              ))));
+            } else if (axis < 0.6666666) {
+                box_list_1.push_back(
+                        std::make_shared<Translate>(Vec3(x0, y0, z0),
+                                                    std::make_shared<RotateX>(rot_angle,
+                                                                              std::make_shared<Box>(
+                                                                                      Vec3(-w / 4, -w / 6, -w / 4),
+                                                                                      Vec3(w / 4, w / 6, w / 4), ground
+                                                                              ))));
+
+            } else {
+                box_list_1.push_back(
+                        std::make_shared<Translate>(Vec3(x0, y0, z0),
+                                                    std::make_shared<RotateZ>(rot_angle,
+                                                                              std::make_shared<Box>(
+                                                                                      Vec3(-w / 4, -w / 6, -w / 4),
+                                                                                      Vec3(w / 4, w / 6, w / 4), ground
+                                                                              ))));
+
+            }
         }
     }
 
@@ -721,7 +797,10 @@ GetScene(RenderContext &render_context) {
 //    auto w_ptr_tmp = TestAllBook2();
 //    auto c_ptr_tmp = CornellBoxCam(render_context.render_settings);
 
-    auto w_ptr_tmp = TestRotYBoxes();
+//    auto w_ptr_tmp = TestRotYBoxes();
+//    auto c_ptr_tmp = CornellBoxCam(render_context.render_settings);
+
+    auto w_ptr_tmp = TestRotBoxes2();
     auto c_ptr_tmp = CornellBoxCam(render_context.render_settings);
 
     render_context.world_ptr = std::move(w_ptr_tmp);

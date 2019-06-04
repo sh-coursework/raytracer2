@@ -21,7 +21,6 @@ set(SOURCE_CPPS
 
         src/scene_geometry/transforms/flip_normals.cpp
         src/scene_geometry/transforms/translate.cpp
-        src/scene_geometry/transforms/rotate_y.cpp
         src/scene_geometry/sphere.cpp
         src/scene_geometry/moving_sphere.cpp
         src/scene_geometry/rect.cpp
