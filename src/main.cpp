@@ -79,43 +79,15 @@ main(int argc, char** argv) {
     // After this, maybe consider pulling in a yaml file to override
     // render settings?
     // It may be extraneous because the boost parser already gives me the
-    // ability to read a config file - for not, that's probably good enough...
+    // ability to read a config file - for now, that's probably good enough...
 
     ///////////////////////////////////////////////////////////////////////
     // Build scene
 
     auto start_time = std::clock();
-
     GetScene(render_context);
     auto cam = *render_context.camera_ptr;  // Copying a Camera, I guess.  But I'm about to
                           // dereference it like literally a million times.
-    // TODO: Ideally, the light shapes and dielectrics would be part of
-    // scene_generation rather than the specific hard code it here in main.
-    std::shared_ptr<Hitable> light_shape =
-        std::make_shared<XZRect>(123, 423, 147, 412, 554, nullptr);
-    std::shared_ptr<Hitable> dielectric_ball =
-        std::make_shared<Sphere>(Vec3(260.0f, 150.0f, 45.0f), 50.0f, nullptr);
-    std::shared_ptr<Hitable> metal_ball =
-        std::make_shared<Sphere>(Vec3(0.0f, 150.0f, 145.0f), 50.0f, nullptr);
-    std::shared_ptr<Hitable> boundary =
-        std::make_shared<Sphere>(Vec3(360.0f, 150.0f, 145.0f), 70.0f, nullptr);
-
-    std::vector<std::shared_ptr<Hitable>> light_list;
-    light_list.push_back(light_shape);
-    light_list.push_back(light_shape);
-    light_list.push_back(light_shape);
-    light_list.push_back(light_shape);
-    light_list.push_back(light_shape);
-    light_list.push_back(light_shape);
-    light_list.push_back(light_shape);
-    light_list.push_back(light_shape);
-    light_list.push_back(light_shape);
-    light_list.push_back(dielectric_ball);
-//    light_list.push_back(metal_ball);
-//    light_list.push_back(boundary);
-    render_context.hitable_light_list_ptr = std::unique_ptr<HitableList>(
-            new HitableList(light_list));
-
     auto world_built_time = std::clock();
     std::cout << "Time to create scene: "
               << (world_built_time - start_time) / double(CLOCKS_PER_SEC)
@@ -128,7 +100,6 @@ main(int argc, char** argv) {
             * render_context.render_settings.resolution_y_
             * render_context.render_settings.num_channels_];
 
-    // OIIO::ImageOutput *oiio_out = OIIO::ImageOutput::create(
     auto oiio_out = OIIO::ImageOutput::create(
             render_context.render_settings.image_filename_);
     if (! oiio_out)
@@ -192,5 +163,4 @@ main(int argc, char** argv) {
     oiio_out->open(render_context.render_settings.image_filename_, spec);
     oiio_out->write_image(OIIO::TypeDesc::FLOAT, pixels);
     oiio_out->close();
-//    OIIO::ImageOutput::destroy(oiio_out);
 }

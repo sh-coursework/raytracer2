@@ -32,7 +32,8 @@
 #include "materials/diffuse_light.h"
 
 
-std::unique_ptr<Hitable> RandomScene(float t_min, float t_max, bool use_bvh) {
+void RandomScene(RenderContext &render_context,
+                 float t_min, float t_max, bool use_bvh) {
     // Hitable is an abstract base, so I wouldn't know how/what to allocate
     // up front, and there's not really a default placeholder.
     // So I want the vector of pointers, not vector of hitables.
@@ -90,12 +91,12 @@ std::unique_ptr<Hitable> RandomScene(float t_min, float t_max, bool use_bvh) {
     ));
 
     if (use_bvh)
-        return std::unique_ptr<BVHRoot>(new BVHRoot(scene_list, t_min, t_max));
+        render_context.world_ptr = std::unique_ptr<BVHRoot>(new BVHRoot(scene_list, t_min, t_max));
     else
-        return std::unique_ptr<HitableList>(new HitableList(scene_list));
+        render_context.world_ptr = std::unique_ptr<HitableList>(new HitableList(scene_list));
 }
 
-std::unique_ptr<Hitable> TwoSpheres() {
+void TwoSpheres(RenderContext &render_context) {
     Texture *checker = new CheckerTexture(
             new ConstantTexture(Vec3(0.2, 0.3, 0.1)),
             new ConstantTexture(Vec3(0.9, 0.9, 0.9))
@@ -108,13 +109,14 @@ std::unique_ptr<Hitable> TwoSpheres() {
             Vec3(0, 10, 0), 10, new Lambertian(checker)
     ));
 
-    return std::unique_ptr<HitableList>(new HitableList(scene_list));
+    render_context.world_ptr = std::unique_ptr<HitableList>(new HitableList(scene_list));
 }
 
 // Maybe change this to smart pointers so the assignement
 // to lambertian can be reference counted, and the ownership
 // better managed.
-std::unique_ptr<Hitable> TwoNoiseSpheres(Texture *noise_textured) {
+void TwoNoiseSpheres(RenderContext &render_context,
+                     Texture *noise_textured) {
     std::vector<std::shared_ptr<Hitable>> scene_list;
     // For now, assume C++11, not 14 so no "make_unique"
     scene_list.push_back(std::make_shared<Sphere>(
@@ -124,25 +126,25 @@ std::unique_ptr<Hitable> TwoNoiseSpheres(Texture *noise_textured) {
             Vec3(0, 2, 0), 2, new Lambertian(noise_textured)
     ));
 
-    return std::unique_ptr<HitableList>(new HitableList(scene_list));
+    render_context.world_ptr = std::unique_ptr<HitableList>(new HitableList(scene_list));
 }
 
-std::unique_ptr<Hitable> TwoPerlinSpheres() {
+void TwoPerlinSpheres(RenderContext &render_context) {
     Texture *noise_textured = new NoiseTexture(4.0f);
-    return TwoNoiseSpheres(noise_textured);
+    TwoNoiseSpheres(render_context, noise_textured);
 }
 
-std::unique_ptr<Hitable> TwoTurbulenceSpheres() {
+void TwoTurbulenceSpheres(RenderContext &render_context) {
     Texture *noise_textured = new TurbulenceTexture(4.0f);
-    return TwoNoiseSpheres(noise_textured);
+    TwoNoiseSpheres(render_context, noise_textured);
 }
 
-std::unique_ptr<Hitable> TwoMarblelikeSpheres() {
+void TwoMarblelikeSpheres(RenderContext &render_context) {
     Texture *noise_textured = new MarblelikeTexture(4.0f);
-    return TwoNoiseSpheres(noise_textured);
+    TwoNoiseSpheres(render_context, noise_textured);
 }
 
-std::unique_ptr<Hitable> ImageSphereTests() {
+void ImageSphereTests(RenderContext &render_context) {
     std::string test_filename = "test_data/land_ocean_ice_cloud_2048.jpg";
     Texture *noise_textured = new MarblelikeTexture(4.0f);
     Texture *image_textured = new ImageTexture(test_filename);
@@ -153,14 +155,15 @@ std::unique_ptr<Hitable> ImageSphereTests() {
     scene_list.push_back(std::make_shared<Sphere>(
             Vec3(0, -1000, 0), 1000, new Lambertian(noise_textured)
     ));
-    scene_list.push_back(std::make_shared<Sphere>(
-            Vec3(0, 2, 0), 2, new DiffuseLight(image_textured)
-    ));
+    auto light_geometry_ptr = std::make_shared<Sphere>(
+      Vec3(0, 2, 0), 2, new DiffuseLight(image_textured));
+    scene_list.push_back(light_geometry_ptr);
+    render_context.hitable_light_list.push_back(light_geometry_ptr);
 
-    return std::unique_ptr<HitableList>(new HitableList(scene_list));
+    render_context.world_ptr = std::unique_ptr<HitableList>(new HitableList(scene_list));
 }
 
-std::unique_ptr<Hitable> SimpleLightTest() {
+void SimpleLightTest(RenderContext &render_context) {
     std::string test_filename = "test_data/land_ocean_ice_cloud_2048.jpg";
     Texture *noise_textured = new MarblelikeTexture(4.0f);
     Texture *image_textured = new ImageTexture(test_filename);
@@ -174,20 +177,25 @@ std::unique_ptr<Hitable> SimpleLightTest() {
     scene_list.push_back(std::make_shared<Sphere>(
             Vec3(0, 2, 0), 2, new Lambertian(image_textured)
     ));
-    scene_list.push_back(std::make_shared<Sphere>(
+    auto light_geometry_sphere_ptr = std::make_shared<Sphere>(
             Vec3(0, 7, 0), 2, new DiffuseLight(
                     new ConstantTexture(Vec3(4.0f, 4.0f, 4.0f)))
-    ));
-    scene_list.push_back(std::make_shared<XYRect>(
+    );
+    scene_list.push_back(light_geometry_sphere_ptr);
+    auto light_geometry_plane_ptr = std::make_shared<XYRect>(
             3.0f, 5.0f, 1.0f, 3.0f, -2.0f, new DiffuseLight(
                     new ConstantTexture(Vec3(4.0f, 4.0f, 4.0f)))
-    ));
+    );
+    scene_list.push_back(light_geometry_plane_ptr);
 
-    return std::unique_ptr<HitableList>(new HitableList(scene_list));
+    render_context.hitable_light_list.push_back(light_geometry_sphere_ptr);
+    render_context.hitable_light_list.push_back(light_geometry_plane_ptr);
+
+    render_context.world_ptr = std::unique_ptr<HitableList>(new HitableList(scene_list));
 }
 
 
-std::unique_ptr<Hitable> CornellBox() {
+void CornellBox(RenderContext &render_context) {
     std::vector<std::shared_ptr<Hitable>> scene_list;
 
     Material *red = new Lambertian(
@@ -201,11 +209,12 @@ std::unique_ptr<Hitable> CornellBox() {
             new ConstantTexture(Vec3(15.0f, 15.0f, 15.0f)));
 
     // light
+    auto light_geometry_ptr = std::make_shared<XZRect>(213, 343, 227, 332, 554,
+                                                       light);
     scene_list.push_back(
-        std::make_shared<FlipNormals>(
-            std::make_shared<XZRect>(213, 343, 227, 332, 554, light)
-        )
+        std::make_shared<FlipNormals>(light_geometry_ptr)
     );
+    render_context.hitable_light_list.push_back(light_geometry_ptr);
 
     // main room walls
     scene_list.push_back(
@@ -248,11 +257,11 @@ std::unique_ptr<Hitable> CornellBox() {
         )
     );
 
-    return std::unique_ptr<HitableList>(new HitableList(scene_list));
+    render_context.world_ptr = std::unique_ptr<HitableList>(new HitableList(scene_list));
 }
 
 
-std::unique_ptr<Hitable> CornellBoxAluminum() {
+void CornellBoxAluminum(RenderContext &render_context) {
     std::vector<std::shared_ptr<Hitable>> scene_list;
 
     Material *red = new Lambertian(
@@ -268,11 +277,12 @@ std::unique_ptr<Hitable> CornellBoxAluminum() {
         new ConstantTexture(Vec3(15.0f, 15.0f, 15.0f)));
 
     // light
-    scene_list.push_back(
+    auto light_geometry_ptr =
         std::make_shared<FlipNormals>(
             std::make_shared<XZRect>(213, 343, 227, 332, 554, light)
-        )
-    );
+        );
+    scene_list.push_back(light_geometry_ptr);
+    render_context.hitable_light_list.push_back(light_geometry_ptr);
 
     // main room walls
     scene_list.push_back(
@@ -310,11 +320,11 @@ std::unique_ptr<Hitable> CornellBoxAluminum() {
         )
     );
 
-    return std::unique_ptr<HitableList>( new HitableList(scene_list));
+    render_context.world_ptr = std::unique_ptr<HitableList>( new HitableList(scene_list));
 }
 
 
-std::unique_ptr<Hitable> CornellBoxGlassSphere() {
+void CornellBoxGlassSphere(RenderContext &render_context) {
   std::vector<std::shared_ptr<Hitable>> scene_list;
 
   Material *red = new Lambertian(
@@ -328,11 +338,16 @@ std::unique_ptr<Hitable> CornellBoxGlassSphere() {
       new ConstantTexture(Vec3(15.0f, 15.0f, 15.0f)));
 
   // light
-  scene_list.push_back(
-      std::make_shared<FlipNormals>(
-          std::make_shared<XZRect>(213, 343, 227, 332, 554, light)
-      )
-  );
+//  auto light_geometry_ptr =
+//      std::make_shared<FlipNormals>(
+//          std::make_shared<XZRect>(213, 343, 227, 332, 554, light)
+//      );
+  auto light_geometry_ptr =
+      std::make_shared<XZRect>(213, 343, 227, 332, 554, light);
+  auto flipped_light_geometry_ptr =
+      std::make_shared<FlipNormals>(light_geometry_ptr);
+  scene_list.push_back(flipped_light_geometry_ptr);
+  render_context.hitable_light_list.push_back(flipped_light_geometry_ptr);
 
   // main room walls
   scene_list.push_back(
@@ -356,9 +371,11 @@ std::unique_ptr<Hitable> CornellBoxGlassSphere() {
   );
 
   // tall box and a glass sphere
-  scene_list.push_back(
-      std::make_shared<Sphere>(Vec3(190, 90, 190), 90, new Dielectric(1.5f))
-  );
+  auto glass_geometry_ptr =
+      std::make_shared<Sphere>(Vec3(190, 90, 190), 90, new Dielectric(1.5f));
+  scene_list.push_back(glass_geometry_ptr);
+  // TODO: separate the dielectric from the lights.
+  render_context.hitable_light_list.push_back(glass_geometry_ptr);
   scene_list.push_back(
       std::make_shared<Translate>(Vec3(265, 0, 295),
             std::make_shared<RotateY>(15,
@@ -368,12 +385,12 @@ std::unique_ptr<Hitable> CornellBoxGlassSphere() {
       )
   );
 
-  return std::unique_ptr<HitableList>( new HitableList(scene_list));
+  render_context.world_ptr = std::unique_ptr<HitableList>(new HitableList(scene_list));
 }
 
 
 
-std::unique_ptr<Hitable> CornellSmoke() {
+void CornellSmoke(RenderContext &render_context) {
     std::vector<std::shared_ptr<Hitable>> scene_list;
 
     Material *red = new Lambertian(
@@ -387,8 +404,9 @@ std::unique_ptr<Hitable> CornellSmoke() {
             new ConstantTexture(Vec3(7.0f, 7.0f, 7.0f)));
 
     // light
-    scene_list.push_back(
-        std::make_shared<XZRect>(113, 443, 127, 432, 554, light));
+    auto light_geometry_ptr = std::make_shared<XZRect>(113, 443, 127, 432, 554, light);
+    scene_list.push_back(light_geometry_ptr);
+    render_context.hitable_light_list.push_back(light_geometry_ptr);
 
     // main room walls
     scene_list.push_back(
@@ -430,11 +448,11 @@ std::unique_ptr<Hitable> CornellSmoke() {
                     new ConstantTexture(Vec3(0.0, 0.0, 0.0)))
     ));
 
-    return std::unique_ptr<HitableList>(new HitableList(scene_list));
+    render_context.world_ptr = std::unique_ptr<HitableList>(new HitableList(scene_list));
 }
 
 
-std::unique_ptr<Hitable> TestAllBook2() {
+void TestAllBook2(RenderContext &render_context) {
     std::vector<std::shared_ptr<Hitable>> scene_list;
 
     std::vector<std::shared_ptr<Hitable>> box_list_1;
@@ -467,11 +485,12 @@ std::unique_ptr<Hitable> TestAllBook2() {
     Material *light = new DiffuseLight(
             new ConstantTexture(Vec3(7.0f, 7.0f, 7.0f)));
 
-    scene_list.push_back(
+    auto light_geometry_ptr =
         std::make_shared<FlipNormals>(
             std::make_shared<XZRect>(123, 423, 147, 412, 554, light)
-        )
-    );
+        );
+    scene_list.push_back(light_geometry_ptr);
+    render_context.hitable_light_list.push_back(light_geometry_ptr);
 
     Vec3 center(400.0f, 400.0f, 200.0f);
     scene_list.push_back(std::make_shared<MovingSphere>(
@@ -479,9 +498,13 @@ std::unique_ptr<Hitable> TestAllBook2() {
             0, 1, 50.0,
             new Lambertian(new ConstantTexture(Vec3(0.7f, 0.3f, 0.1f)))
     ));
-    scene_list.push_back(std::make_shared<Sphere>(
+    // TODO: separate the dielectric from the lights.
+    auto dielectric_geometry_ptr = std::make_shared<Sphere>(
             Vec3(260.0f, 150.0f, 45.0f), 50.0f, new Dielectric(1.5f)
-    ));
+    );
+    scene_list.push_back(dielectric_geometry_ptr);
+//    render_context.hitable_light_list.push_back(dielectric_geometry_ptr);
+
     scene_list.push_back(std::make_shared<Sphere>(
             Vec3(0.0f, 150.0f, 145.0f), 50.0f,
             new Metal(new ConstantTexture(Vec3(0.2f, 0.4f, 0.9f)), 10.0f)
@@ -494,7 +517,7 @@ std::unique_ptr<Hitable> TestAllBook2() {
             boundary, 0.2, new ConstantTexture(Vec3(0.2f, 0.4f, 0.9f))
     ));
 
-    // This kind of scares me. I guess I've implicitly transfered ownership
+    // This kind of scares me. I guess I've implicitly transferred ownership
     // of the old version to scene_list.  But still... reusing...
     boundary = std::make_shared<Sphere>(Vec3(0.0f, 0.0f, 5.0f), 5000.0f,
                                    new Dielectric(1.5f));
@@ -529,11 +552,11 @@ std::unique_ptr<Hitable> TestAllBook2() {
         )
     );
 
-    return std::unique_ptr<HitableList>(new HitableList(scene_list));
+    render_context.world_ptr = std::unique_ptr<HitableList>(new HitableList(scene_list));
 }
 
 
-std::unique_ptr<Hitable> TestRotYBoxes() {
+void TestRotYBoxes(RenderContext &render_context) {
     std::vector<std::shared_ptr<Hitable>> scene_list;
 
     std::vector<std::shared_ptr<Hitable>> box_list_1;
@@ -567,11 +590,12 @@ std::unique_ptr<Hitable> TestRotYBoxes() {
     Material *light = new DiffuseLight(
             new ConstantTexture(Vec3(7.0f, 7.0f, 7.0f)));
 
-    scene_list.push_back(
+    auto light_geometry_ptr =
             std::make_shared<FlipNormals>(
                     std::make_shared<XZRect>(123, 423, 147, 412, 554, light)
-            )
-    );
+            );
+    scene_list.push_back(light_geometry_ptr);
+    render_context.hitable_light_list.push_back(light_geometry_ptr);
 
     std::string test_filename = "test_data/land_ocean_ice_cloud_2048.jpg";
     Texture *image_textured = new ImageTexture(test_filename);
@@ -585,11 +609,11 @@ std::unique_ptr<Hitable> TestRotYBoxes() {
             Vec3(220.0f, 280.0f, 300.0f), 80.0f, new Lambertian(perlin_texture)
     ));
 
-    return std::unique_ptr<HitableList>(new HitableList(scene_list));
+    render_context.world_ptr = std::unique_ptr<HitableList>(new HitableList(scene_list));
 }
 
 
-std::unique_ptr<Hitable> TestRotBoxes2() {
+void TestRotBoxes2(RenderContext &render_context) {
     std::vector<std::shared_ptr<Hitable>> scene_list;
 
     std::vector<std::shared_ptr<Hitable>> box_list_1;
@@ -643,11 +667,12 @@ std::unique_ptr<Hitable> TestRotBoxes2() {
     Material *light = new DiffuseLight(
             new ConstantTexture(Vec3(7.0f, 7.0f, 7.0f)));
 
-    scene_list.push_back(
+    auto light_geometry_ptr =
             std::make_shared<FlipNormals>(
                     std::make_shared<XZRect>(123, 423, 147, 412, 554, light)
-            )
-    );
+            );
+    scene_list.push_back(light_geometry_ptr);
+    render_context.hitable_light_list.push_back(light_geometry_ptr);
 
     std::string test_filename = "test_data/land_ocean_ice_cloud_2048.jpg";
     Texture *image_textured = new ImageTexture(test_filename);
@@ -661,7 +686,7 @@ std::unique_ptr<Hitable> TestRotBoxes2() {
             Vec3(220.0f, 280.0f, 300.0f), 80.0f, new Lambertian(perlin_texture)
     ));
 
-    return std::unique_ptr<HitableList>(new HitableList(scene_list));
+    render_context.world_ptr = std::unique_ptr<HitableList>(new HitableList(scene_list));
 }
 
 
@@ -672,29 +697,33 @@ std::unique_ptr<Hitable> TestRotBoxes2() {
 // to (unique) pointer. It feels more factory-ish.
 
 
-std::unique_ptr<Camera> RandomSceneCam(const RenderSettings &render_settings)
+void RandomSceneCam(RenderContext &render_context)
 {
-    auto lookfrom = Vec3(13.0f, 2.0f, 3.0f);
-    auto lookat = Vec3(0.0f, 0.0f, 0.0f);
-    auto dist_to_focus = (lookfrom - lookat).length();
-    auto aperture = 0.0f;
-    return std::unique_ptr<Camera>(new Camera(lookfrom, lookat,
-            Vec3(0.0f, 1.0f, 0.0f),
-            20.0f,
-            float(render_settings.resolution_x_)
-                    / float(render_settings.resolution_y_),
-            aperture, dist_to_focus,
-            render_settings.shutter_open_, render_settings.shutter_close_));
+  auto render_settings = render_context.render_settings;
+  auto lookfrom = Vec3(13.0f, 2.0f, 3.0f);
+  auto lookat = Vec3(0.0f, 0.0f, 0.0f);
+  auto dist_to_focus = (lookfrom - lookat).length();
+  auto aperture = 0.0f;
+  render_context.camera_ptr = std::unique_ptr<Camera>(
+      new Camera(lookfrom, lookat,
+                 Vec3(0.0f, 1.0f, 0.0f),
+                 20.0f,
+                 float(render_settings.resolution_x_)
+                     / float(render_settings.resolution_y_),
+                 aperture, dist_to_focus,
+                 render_settings.shutter_open_, render_settings.shutter_close_));
 }
 
 
-std::unique_ptr<Camera> TwoSphereCam(const RenderSettings &render_settings)
+void TwoSphereCam(RenderContext &render_context)
 {
-    auto two_sphere_lookfrom = Vec3(13.0f, 2.0f, 3.0f);
-    auto two_sphere_lookat = Vec3(0.0f, 0.0f, 0.0f);
-    auto two_sphere_dist_to_focus = 10.0f;
-    auto two_sphere_aperture = 0.0f;
-    return std::unique_ptr<Camera>(new Camera(two_sphere_lookfrom, two_sphere_lookat,
+  auto render_settings = render_context.render_settings;
+  auto two_sphere_lookfrom = Vec3(13.0f, 2.0f, 3.0f);
+  auto two_sphere_lookat = Vec3(0.0f, 0.0f, 0.0f);
+  auto two_sphere_dist_to_focus = 10.0f;
+  auto two_sphere_aperture = 0.0f;
+  render_context.camera_ptr = std::unique_ptr<Camera>(
+      new Camera(two_sphere_lookfrom, two_sphere_lookat,
             Vec3(0.0, 1.0, 0.0),
             20.0f,
             float(render_settings.resolution_x_)
@@ -704,14 +733,15 @@ std::unique_ptr<Camera> TwoSphereCam(const RenderSettings &render_settings)
 }
 
 
-std::unique_ptr<Camera>
-ImageSphereTestCam(const RenderSettings &render_settings)
+void ImageSphereTestCam(RenderContext &render_context)
 {
-    auto two_sphere_lookfrom = Vec3(15.0f, 2.0f, 3.0f);
-    auto two_sphere_lookat = Vec3(0.0f, 2.0f, 0.0f);
-    auto two_sphere_dist_to_focus = 10.0f;
-    auto two_sphere_aperture = 0.0f;
-    return std::unique_ptr<Camera>(new Camera(two_sphere_lookfrom, two_sphere_lookat,
+  auto render_settings = render_context.render_settings;
+  auto two_sphere_lookfrom = Vec3(15.0f, 2.0f, 3.0f);
+  auto two_sphere_lookat = Vec3(0.0f, 2.0f, 0.0f);
+  auto two_sphere_dist_to_focus = 10.0f;
+  auto two_sphere_aperture = 0.0f;
+  render_context.camera_ptr = std::unique_ptr<Camera>(
+      new Camera(two_sphere_lookfrom, two_sphere_lookat,
             Vec3(0.0, 1.0, 0.0),
             20.0f,
             float(render_settings.resolution_x_)
@@ -721,15 +751,15 @@ ImageSphereTestCam(const RenderSettings &render_settings)
 }
 
 
-std::unique_ptr<Camera>
-SimpleLightTestCam(const RenderSettings &render_settings)
+void SimpleLightTestCam(RenderContext &render_context)
 {
-    auto two_sphere_lookfrom = Vec3(22.0f, 2.0f, 3.0f);
-    auto two_sphere_lookat = Vec3(0.0f, 2.0f, 0.0f);
-    auto two_sphere_dist_to_focus = 10.0f;
-    auto two_sphere_aperture = 0.0f;
-    return std::unique_ptr<Camera>(new Camera (
-            two_sphere_lookfrom, two_sphere_lookat,
+  auto render_settings = render_context.render_settings;
+  auto two_sphere_lookfrom = Vec3(22.0f, 2.0f, 3.0f);
+  auto two_sphere_lookat = Vec3(0.0f, 2.0f, 0.0f);
+  auto two_sphere_dist_to_focus = 10.0f;
+  auto two_sphere_aperture = 0.0f;
+  render_context.camera_ptr = std::unique_ptr<Camera>(
+      new Camera(two_sphere_lookfrom, two_sphere_lookat,
             Vec3(0.0, 1.0, 0.0),
             20.0f,
             float(render_settings.resolution_x_)
@@ -739,13 +769,15 @@ SimpleLightTestCam(const RenderSettings &render_settings)
 }
 
 
-std::unique_ptr<Camera> CornellBoxCam(const RenderSettings &render_settings)
+void CornellBoxCam(RenderContext &render_context)
 {
-    auto cornell_box_lookfrom = Vec3(278.0f, 278.0f, -800.0f);
-    auto cornell_box_lookat = Vec3(278.0f, 278.0f, 0.0f);
-    auto cornell_box_dist_to_focus = 10.0f;
-    auto cornell_box_aperture = 0.0f;
-    return std::unique_ptr<Camera>(new Camera(
+  auto render_settings = render_context.render_settings;
+  auto cornell_box_lookfrom = Vec3(278.0f, 278.0f, -800.0f);
+  auto cornell_box_lookat = Vec3(278.0f, 278.0f, 0.0f);
+  auto cornell_box_dist_to_focus = 10.0f;
+  auto cornell_box_aperture = 0.0f;
+  render_context.camera_ptr = std::unique_ptr<Camera>(
+      new Camera(
             cornell_box_lookfrom, cornell_box_lookat,
             Vec3(0.0, 1.0, 0.0),
             40.0f,
@@ -770,39 +802,36 @@ std::unique_ptr<Camera> CornellBoxCam(const RenderSettings &render_settings)
 //GetScene(const RenderSettings &render_settings) {
 void
 GetScene(RenderContext &render_context) {
-//    auto w_ptr_tmp = TwoMarblelikeSpheres();
-//    auto c_ptr_tmp = TwoSphereCam(render_settings);
+//    TwoMarblelikeSpheres(render_context);
+//    TwoSphereCam(render_context);
 
-//    auto w_ptr_tmp = ImageSphereTests();
-//    auto c_ptr_tmp = ImageSphereTestCam(render_settings);
+//    ImageSphereTests(render_context);
+//    ImageSphereTestCam(render_context);
 
-//    auto w_ptr_tmp = SimpleLightTest();
-//    auto c_ptr_tmp = SimpleLightTestCam(render_settings);
+//    SimpleLightTest(render_context);
+//    SimpleLightTestCam(render_context);
 
-//    auto w_ptr_tmp = RandomScene(0.0, 1.0, true);
-//    auto c_ptr_tmp = RandomSceneCam(render_settings);
+//    RandomScene(render_context, 0.0, 1.0, true);
+//    RandomSceneCam(render_context);
 
-//   auto w_ptr_tmp = CornellBox();
-//   auto c_ptr_tmp = CornellBoxCam(render_settings);
+//    CornellBox(render_context);
+//    CornellBoxCam(render_context);
 
-//    auto w_ptr_tmp = CornellBoxAluminum();
-//    auto c_ptr_tmp = CornellBoxCam(render_settings);
+//    CornellBoxAluminum(render_context);
+//    CornellBoxCam(render_context);
 
-//    auto w_ptr_tmp = CornellBoxGlassSphere();
-//    auto c_ptr_tmp = CornellBoxCam(render_settings);
+//    CornellBoxGlassSphere(render_context);
+//    CornellBoxCam(render_context);
 
-//    auto w_ptr_tmp = CornellSmoke();
-//    auto c_ptr_tmp = CornellBoxCam(render_settings);
+//    CornellSmoke(render_context);
+//    CornellBoxCam(render_context);
 
-//    auto w_ptr_tmp = TestAllBook2();
-//    auto c_ptr_tmp = CornellBoxCam(render_context.render_settings);
+    TestAllBook2(render_context);
+    CornellBoxCam(render_context);
 
-//    auto w_ptr_tmp = TestRotYBoxes();
-//    auto c_ptr_tmp = CornellBoxCam(render_context.render_settings);
+//    TestRotYBoxes(render_context);
+//    CornellBoxCam(render_context);
 
-    auto w_ptr_tmp = TestRotBoxes2();
-    auto c_ptr_tmp = CornellBoxCam(render_context.render_settings);
-
-    render_context.world_ptr = std::move(w_ptr_tmp);
-    render_context.camera_ptr = std::move(c_ptr_tmp);
+//    TestRotBoxes2(render_context);
+//    CornellBoxCam(render_context);
 }

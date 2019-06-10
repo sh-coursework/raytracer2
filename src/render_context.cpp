@@ -4,10 +4,9 @@
 
 #include "render_context.h"
 
-RenderContext::RenderContext() {
+RenderContext::RenderContext() : hitable_light_list() {
   render_settings = RenderSettings();
   world_ptr = nullptr;
-  hitable_light_list_ptr = nullptr;
   camera_ptr = nullptr;
   // Can't think of a meaningful cam initialization.
 }

@@ -15,3 +15,11 @@ bool FlipNormals::Hit(const Ray &r, float t_min, float t_max, HitRecord &rec) co
 bool FlipNormals::BoundingBox(float t_min, float t_max, AABB &box) const {
     return child_hitable_->BoundingBox(t_min, t_max, box);
 }
+
+float FlipNormals::PDFValue(const Vec3 &origin, const Vec3 &direction, float time) const {
+  return child_hitable_->PDFValue(origin, direction, time);
+}
+
+Vec3 FlipNormals::Random(const Vec3 &origin) const {
+  return child_hitable_->Random(origin);
+}

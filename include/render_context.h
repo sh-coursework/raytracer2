@@ -17,8 +17,16 @@ class RenderContext {
 public:
   RenderContext();
   RenderSettings render_settings;
+
   std::unique_ptr<Hitable> world_ptr;
-  std::unique_ptr<HitableList> hitable_light_list_ptr;
+
+  // Initially, the only thing that actually uses this is
+  // the hitable pdf that is really only used in lambertian.
+  // Not sure if it's best to have this as a HitableList as
+  // opposed to the raw vector.  But I need to think through
+  // how many times that would get unnecessarily instantiated.
+  HitableList hitable_light_list;
+
   std::unique_ptr<Camera> camera_ptr;
   // How to represent dielectric list?
 

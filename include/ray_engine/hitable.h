@@ -24,11 +24,13 @@ class Hitable {
 public:
     virtual bool Hit(const Ray &r, float t_min, float t_max,
                      HitRecord &rec) const = 0;
+    // Note: BoundingBox really only comes into play in BVHNode.
     virtual bool BoundingBox(float t_min, float t_max, AABB &box) const = 0;
     virtual float PDFValue(const Vec3 &origin, const Vec3 &direction,
                            float time) const
             {return 0.0;}
-    virtual Vec3 Random(const Vec3 & origin) const {return {1, 0, 0}; }
+    virtual Vec3 Random(const Vec3 & origin) const
+            {return {1, 0, 0}; }
 };
 
 

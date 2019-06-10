@@ -19,6 +19,8 @@ public:
   HitableList() = default;
   explicit HitableList(std::vector<std::shared_ptr<Hitable>> &hitables)
           {vector_list_ = std::move(hitables); }
+  void push_back(const std::shared_ptr<Hitable> &new_hitable_ptr)  // includes ownership, not sure if it should
+    {vector_list_.push_back(new_hitable_ptr); }
   bool Hit(const Ray &r, float t_min, float t_max,
            HitRecord &rec) const override;
   bool BoundingBox(float t_min, float t_max, AABB &box) const override;

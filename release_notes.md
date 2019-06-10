@@ -145,9 +145,16 @@ totally breaks backward compatibility, renaming all the functions.
 * 6/1/2019 Added scene for rotate test - a bunch of rotated cubes.
     * Moved rotate to template.
     * Rotate-X, rotate-Z
+* 6/9/2019 move light list definition from main to scene generation.
+* 6/9/2019 Implement Random for XY, YZ
+* 6/9/2019 Refactor scene generation to modify incoming render context.
+  No longer has return values.
 
 ## Stuff I plan to work on:
 * Use smart pointers for all ownership / audit pointers - materials.
+* extend lambertian constructors to make mixture pdf optional
+* separate dielectrics and lights, extend mixture to be optional, and
+  be able to assign weights.
 * Clean up variable names to more descriptive.
   * All the names of aabb, including aabb itself, are not very descriptive.
 * Look for more std container usage.
@@ -156,10 +163,9 @@ totally breaks backward compatibility, renaming all the functions.
   
 # Phase 3 - depart from book
 * scale / generalize transform
-* should I really be float(M_PI)ing all over the place or is there
-  a more c++y way to use math constants in floats?
 * External definition of scene - USD?
 * OSL shaders?
+* Autodesk implementations of OSL for common materials?
 * Better De-NaN - maybe partial averaging along the way?
 * Add pdf stuff to other oriented rectangles and other geometry.
 * Are there better ways to find min,max of a vector/bounding box?
@@ -170,6 +176,7 @@ totally breaks backward compatibility, renaming all the functions.
   my material to accept a hit record and maybe the incoming ray
   instead of just (u, v, p) for future flexibility in generalizing
   material definitions.
+* AOVs - like max bounces
 * scanline and tile output/traversal, with work-in-progress outputs.
 * shader binding - separate material definition from scene geom
 * Comment/Document
