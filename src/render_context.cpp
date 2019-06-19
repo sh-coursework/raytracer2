@@ -4,9 +4,12 @@
 
 #include "render_context.h"
 
-RenderContext::RenderContext() : hitable_light_list() {
+RenderContext::RenderContext() : hitable_light_list(),
+                                 texture_lists_(),
+                                 material_lists_()
+{
   render_settings = RenderSettings();
   world_ptr = nullptr;
   camera_ptr = nullptr;
-  // Can't think of a meaningful cam initialization.
+  skydome_geo_ptr = nullptr;
 }

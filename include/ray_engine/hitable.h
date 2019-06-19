@@ -11,6 +11,7 @@
 
 class Material;  // avoid circular Hitable / material
 
+// TODO: Do I get a move assign for free?  Note the pointer.
 struct HitRecord {
     float t;
     Vec3 p;

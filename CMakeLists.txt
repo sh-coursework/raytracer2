@@ -26,6 +26,7 @@ set(SOURCE_CPPS
         src/scene_geometry/rect.cpp
         src/scene_geometry/box.cpp
         src/scene_geometry/volumes/constant_medium.cpp
+        src/scene_geometry/skydome_geo.cpp
 
         src/materials/pdf_base.cpp
         src/materials/cosine_pdf.cpp
@@ -33,6 +34,7 @@ set(SOURCE_CPPS
         src/materials/random_sphere_pdf.cpp
         src/materials/hitable_pdf.cpp
         src/materials/mixture_pdf.cpp
+        src/materials/material_list.cpp
 
 #        src/materials/constant_material.cpp
         src/materials/lambertian.cpp
@@ -46,9 +48,11 @@ set(SOURCE_CPPS
         src/materials/diffuse_light.cpp
 
         src/textures/checker_texture.cpp
+        src/textures/ramp_texture.cpp
         src/textures/perlin_noise.cpp
         src/textures/noise_texture.cpp
         src/textures/image_texture.cpp
+        src/textures/texture_list.cpp
 
         src/camera.cpp
         src/render_settings.cpp

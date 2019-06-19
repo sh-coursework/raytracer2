@@ -149,17 +149,25 @@ totally breaks backward compatibility, renaming all the functions.
 * 6/9/2019 Implement Random for XY, YZ
 * 6/9/2019 Refactor scene generation to modify incoming render context.
   No longer has return values.
+* 6/18/2019 Audit for smart pointers to manage ownership in materials.
+  Note that this does not mean the elimination of raw pointers. For instance,
+  materials and textures are managed by lists in the render context, so
+  those use smart pointers.  But in geometry, I consider the material
+  binding to be just a reference, and is not managing lifetime.A
+* 6/18/2019 Expanded on the render context for material and texture lists.  
+* 6/18/2019 Added skydome to support old tests
+* 6/18/2019 Added check to lambertian - make sure hitable list is populated
+  to use HitablePdf.
 
 ## Stuff I plan to work on:
-* Use smart pointers for all ownership / audit pointers - materials.
+* Is there a more native c++ way to handle random numbers with a
+  probability distribution?
 * extend lambertian constructors to make mixture pdf optional
 * separate dielectrics and lights, extend mixture to be optional, and
   be able to assign weights.
 * Clean up variable names to more descriptive.
   * All the names of aabb, including aabb itself, are not very descriptive.
 * Look for more std container usage.
-* Is there a more native c++ way to handle random numbers with a
-  probability distribution?
   
 # Phase 3 - depart from book
 * scale / generalize transform

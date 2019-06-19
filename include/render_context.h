@@ -6,11 +6,14 @@
 #define RAYTRACER2_RENDERCONTEXT_H
 
 #include <memory>
+#include <vector>
 
 #include "camera.h"
 #include "ray_engine/hitable.h"
 #include "ray_engine/hitable_list.h"
 #include "render_settings.h"
+#include "textures/texture_list.h"
+#include "materials/material_list.h"
 
 
 class RenderContext {
@@ -26,10 +29,13 @@ public:
   // opposed to the raw vector.  But I need to think through
   // how many times that would get unnecessarily instantiated.
   HitableList hitable_light_list;
+  // How to represent dielectric list?
+  std::unique_ptr<Hitable> skydome_geo_ptr;
 
   std::unique_ptr<Camera> camera_ptr;
-  // How to represent dielectric list?
 
+  std::vector<std::unique_ptr<TextureList>> texture_lists_;
+  std::vector<std::unique_ptr<MaterialList>> material_lists_;
 
 };
 

@@ -10,7 +10,6 @@
 #include <boost/range/irange.hpp>
 #include <boost/program_options.hpp>
 #include <OpenImageIO/imageio.h>
-#include <ray_engine/hitable_list.h>
 
 #include "camera.h"
 #include "ray_engine/ray.h"
@@ -18,9 +17,6 @@
 #include "render_settings.h"
 #include "scene_generation.h"
 #include "render_context.h"
-// TODO: Would rather have a part of world id the lights)
-#include "scene_geometry/rect.h"
-#include "scene_geometry/sphere.h"
 
 namespace
 {

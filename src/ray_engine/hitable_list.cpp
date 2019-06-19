@@ -15,7 +15,7 @@ bool HitableList::Hit(const Ray &r, float t_min, float t_max,
         if (curr_hitable->Hit(r, t_min, closest_so_far, temp_rec)) {
             hit_anything = true;
             closest_so_far = temp_rec.t;
-            rec = temp_rec;
+            rec = temp_rec;  // TODO: Can I move?  Would it matter?
         }
     }
     return hit_anything;

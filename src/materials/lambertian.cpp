@@ -29,17 +29,22 @@ std::tuple<Ray, float> Lambertian::ScatteringContribution(const RenderContext &r
                                                           const Ray &r_in,
                                                           const HitRecord &hit_record) const {
   auto cosine_pdf = CosinePDF(hit_record.normal);
-  auto hitable_pdf = HitablePDF(&render_context.hitable_light_list, hit_record.p);
-  auto mixture_pdf = MixturePDF(&hitable_pdf, &cosine_pdf);
-  auto scattered = Ray(hit_record.p, mixture_pdf.Generate(), r_in.time());
-  float coefficient =
-      ScatteringPdf(r_in, hit_record, scattered)
-          / mixture_pdf.Value(scattered.direction(), r_in.time());
+  if (render_context.hitable_light_list.size() > 0) {
+    auto hitable_pdf = HitablePDF(&render_context.hitable_light_list, hit_record.p);
+    auto mixture_pdf = MixturePDF(&hitable_pdf, &cosine_pdf);
+    auto scattered = Ray(hit_record.p, mixture_pdf.Generate(), r_in.time());
+    float coefficient =
+        ScatteringPdf(r_in, hit_record, scattered)
+            / mixture_pdf.Value(scattered.direction(), r_in.time());
+    return std::make_tuple(scattered, coefficient);
+  } else {  // no light hitables, or just don't want to use mixture
+    // Uncomment to skip mixture_pdf
+    auto scattered = Ray(hit_record.p, cosine_pdf.Generate(), r_in.time());
+    float coefficient =
+        ScatteringPdf(r_in, hit_record, scattered)
+            / cosine_pdf.Value(scattered.direction(), r_in.time());
+    return std::make_tuple(scattered, coefficient);
+  }
 
-  // Uncomment to skip mixture_pdf
-//    auto scattered = Ray(hit_record.p, cosine_pdf.Generate(), r_in.time());
-//    float coefficient =
-//            ScatteringPdf(r_in, hit_record, scattered)
-//            / cosine_pdf.Value(scattered.direction(), r_in.time());
-  return std::make_tuple(scattered, coefficient);
+//  return std::make_tuple(scattered, coefficient);
 }
